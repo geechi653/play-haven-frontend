@@ -1,8 +1,8 @@
-function Categories() {
+function Profile() {
   return (
     <>
       <h1 className="text-center mt-5 text-body-secondary fw-bold">
-        Categories Page
+        Profile Page
       </h1>
       <div className="text-center">
       </div>
@@ -10,4 +10,4 @@ function Categories() {
   );
 }
 
-export default Categories;
+export default Profile;

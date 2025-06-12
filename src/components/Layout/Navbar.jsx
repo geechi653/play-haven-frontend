@@ -1,9 +1,9 @@
 function Navbar({children}) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white py-2 sticky-top shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-dark py-2 sticky-top shadow-sm">
       <div className="container">
         <a className="navbar-brand" href="#">
-          <span className="text-primary fw-bold">
+          <span className="text-primary fw-bold text-white">
             {" "}Play Heaven Logo Hear{" "}
           </span>
         </a>

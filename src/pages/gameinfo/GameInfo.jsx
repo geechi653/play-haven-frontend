@@ -1,8 +1,8 @@
-function News() {
+function GameInfo() {
   return (
     <>
       <h1 className="text-center mt-5 text-body-secondary fw-bold">
-        News Page
+        Game Info Page
       </h1>
       <div className="text-center">
       </div>
@@ -10,4 +10,4 @@ function News() {
   );
 }
 
-export default News;
+export default GameInfo;

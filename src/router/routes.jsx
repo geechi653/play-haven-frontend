@@ -3,8 +3,6 @@ import RootLayout from './RootLayout.jsx';
 import ErrorPage from './ErrorPage.jsx';
 import Home from '../pages/home/Home.jsx';
 import About from '../pages/about/About.jsx';
-import News from '../pages/news/News.jsx'
-import Categories from '../pages/categories/Categories.jsx';
 import Store from '../pages/store/Store.jsx';
 
 
@@ -19,9 +17,12 @@ export const router = createBrowserRouter([
       { path: '/home', element: <Home /> },
       { path: '/about', element: <About /> },
       { path: '/store', element: <Store /> },
-      { path: '/categories', element: <Categories /> },
-      { path: '/news', element: <News /> }
-      
+      { path: '/profile', element: <Profile /> },
+      { path: '/wishlist', element: <Wishlist /> },
+      { path: '/libraryPage', element: <Library /> },
+      { path: '/gameinfo', element: <GameInfo /> },
+      { path: '/cart', element: <Cart /> }
+
     ],
   },
 ]);

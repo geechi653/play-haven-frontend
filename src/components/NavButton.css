@@ -1,16 +1,16 @@
 a.active {
-    color: rgb(7, 7, 69) !important;
+    color: rgb(251, 251, 252) !important;
     text-decoration: none;
     margin-left: 1rem;
 }
 
 a.non-active {
-    color: rgb(25, 25, 167) !important;
+    color: rgb(204, 204, 245) !important;
     text-decoration: none;
     margin-left: 1rem;
 }
 
 a.active:hover,
 a.non-active:hover{
-    color: rgb(57, 57, 159) !important;
+    color: rgb(114, 114, 244) !important;
 }
