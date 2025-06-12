@@ -3,7 +3,10 @@ import RootLayout from './RootLayout.jsx';
 import ErrorPage from './ErrorPage.jsx';
 import Home from '../pages/home/Home.jsx';
 import About from '../pages/about/About.jsx';
-import Demo from '../pages/demo/Demo.jsx';
+import News from '../pages/news/News.jsx'
+import Categories from '../pages/categories/Categories.jsx';
+import Store from '../pages/store/Store.jsx';
+
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +18,10 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: '/home', element: <Home /> },
       { path: '/about', element: <About /> },
-      { path: '/demo', element: <Demo /> },
+      { path: '/store', element: <Store /> },
+      { path: '/categories', element: <Categories /> },
+      { path: '/news', element: <News /> }
+      
     ],
   },
 ]);

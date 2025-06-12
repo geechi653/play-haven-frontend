@@ -45,7 +45,7 @@ export const initialState = () => ({
   ],
   user: {
     isAuthenticated: false,
-    userId: null,
+    userId: 1,
   },
   // you can add here more slices (properties in the object) - user, theme, etc...
 });
