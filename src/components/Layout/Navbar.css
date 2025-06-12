@@ -1,0 +1,70 @@
+/* Main navbar container */
+.playheaven-navbar {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+/* Logo styling */
+.playheaven-logo {
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+/* Mobile toggle button */
+.playheaven-toggler {
+  border: 0;
+}
+
+/* Navigation container */
+.playheaven-nav-container {
+  /* Inherits Bootstrap flex properties */
+}
+
+/* Navigation items - styling moved to NavButton.css */
+
+/* Icon buttons */
+.playheaven-icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.playheaven-icon-btn:hover {
+  color: #ccc;
+}
+
+/* Cart button specific spacing */
+.playheaven-cart-btn {
+  margin-right: 0.5rem;
+}
+
+/* Library button specific spacing */
+.playheaven-library-btn {
+  margin-right: 1rem;
+}
+
+/* User profile section */
+.playheaven-user-profile {
+  /* Inherits Bootstrap flex properties */
+}
+
+/* User avatar */
+.playheaven-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  margin-right: 0.5rem;
+}
+
+/* Username */
+.playheaven-username {
+  color: white;
+  font-size: 0.875rem;
+}

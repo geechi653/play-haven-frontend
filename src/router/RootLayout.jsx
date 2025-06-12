@@ -9,7 +9,10 @@ function RootLayout() {
       <Navbar>
         <NavButton to ='/home' text='Home'/>
         <NavButton to ='/store' text='Store'/>
-        <NavButton to ='/libraryPage' text='Library'/>
+        <NavButton to ='/news' text='News'/>
+        <NavButton to ='/about' text='About'/>
+        <NavButton to ='/wishlist' text='Wishlist'/>
+        <NavButton to ='/cart' text='Cart'/>
         <NavButton to ='/about' text='About'/>
       </Navbar>
       

@@ -1,4 +1,4 @@
-a.active {
+/* a.active {
     color: rgb(251, 251, 252) !important;
     text-decoration: none;
     margin-left: 1rem;
@@ -13,4 +13,38 @@ a.non-active {
 a.active:hover,
 a.non-active:hover{
     color: rgb(114, 114, 244) !important;
+} */
+
+/* Active navigation link */
+a.nav-link.active {
+    color: #ffffff !important;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.25rem;
+}
+
+/* Non-active navigation link */
+a.nav-link.non-active {
+    color: #cccccc !important;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Hover effects */
+a.nav-link.active:hover,
+a.nav-link.non-active:hover {
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+/* Additional spacing and styling to match PlayHeaven theme */
+.playheaven-nav-item {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+
+.playheaven-nav-item .nav-link {
+    transition: all 0.2s ease;
+    padding: 0.5rem 0;
 }

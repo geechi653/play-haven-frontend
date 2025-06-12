@@ -9,6 +9,8 @@ import Wishlist from '../pages/wishlist/Wishlist.jsx';
 import Library from '../pages/libraryPage/Library.jsx';
 import GameInfo from '../pages/gameinfo/GameInfo.jsx';
 import Cart from '../pages/cart/Cart.jsx';
+import News from '../pages/news/News.jsx';
+import Categories from '../pages/categories/Categories.jsx';
 
 
 export const router = createBrowserRouter([
@@ -23,6 +25,8 @@ export const router = createBrowserRouter([
       { path: '/about', element: <About /> },
       { path: '/store', element: <Store /> },
       { path: '/profile', element: <Profile /> },
+      { path: '/news', element: <News /> },
+      { path: '/categories', element: <Categories /> },
       { path: '/wishlist', element: <Wishlist /> },
       { path: '/libraryPage', element: <Library /> },
       { path: '/gameinfo', element: <GameInfo /> },
