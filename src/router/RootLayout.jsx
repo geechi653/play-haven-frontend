@@ -7,8 +7,9 @@ function RootLayout() {
   return (
     <div className='min-vh-100 d-flex flex-column'>
       <Navbar>
+        <NavButton to ='/home' text='Home'/>
         <NavButton to ='/store' text='Store'/>
-        <NavButton to ='/library' text='Library'/>
+        <NavButton to ='/libraryPage' text='Library'/>
         <NavButton to ='/about' text='About'/>
       </Navbar>
       

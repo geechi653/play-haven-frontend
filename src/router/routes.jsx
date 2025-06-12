@@ -4,6 +4,11 @@ import ErrorPage from './ErrorPage.jsx';
 import Home from '../pages/home/Home.jsx';
 import About from '../pages/about/About.jsx';
 import Store from '../pages/store/Store.jsx';
+import Profile from '../pages/profile/Profile.jsx';
+import Wishlist from '../pages/wishlist/Wishlist.jsx';
+import Library from '../pages/libraryPage/Library.jsx';
+import GameInfo from '../pages/gameinfo/GameInfo.jsx';
+import Cart from '../pages/cart/Cart.jsx';
 
 
 export const router = createBrowserRouter([
