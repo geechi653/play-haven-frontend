@@ -11,6 +11,13 @@
   font-size: 1.25rem;
 }
 
+/* SVG Logo styling */
+.playheaven-logo-img {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
+}
+
 /* Mobile toggle button */
 .playheaven-toggler {
   border: 0;
@@ -20,8 +27,6 @@
 .playheaven-nav-container {
   /* Inherits Bootstrap flex properties */
 }
-
-/* Navigation items - styling moved to NavButton.css */
 
 /* Icon buttons */
 .playheaven-icon-btn {

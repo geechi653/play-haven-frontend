@@ -1,52 +1,20 @@
+ import { Link } from 'react-router';
 import './Navbar.css';
 import { TbBooks } from "react-icons/tb";
 import { IoCartOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 
-// function Navbar({children}) {
-//   return (
-//     <nav className="navbar navbar-expand-lg navbar-light bg-dark py-2 sticky-top shadow-sm">
-//       <div className="container">
-//         <a className="navbar-brand" href="#">
-//           <span className="text-primary fw-bold text-white">
-//             {" "}Play Heaven Logo Hear{" "}
-//           </span>
-//         </a>
-//         <button
-//           className="navbar-toggler"
-//           type="button"
-//           data-bs-toggle="collapse"
-//           data-bs-target="#navbarNavDropdown"
-//           aria-controls="navbarNavDropdown"
-//           aria-expanded="false"
-//           aria-label="Toggle navigation"
-//         >
-//           <span className="navbar-toggler-icon"></span>
-//         </button>
-
-//         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-//           <ul className='navbar-nav justify-content-center mb-2 mb-lg-0'>
-//             {children}
-
-//           </ul>
-
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// }
 
 function Navbar() {
-   return (
+  return (
     <nav className="playheaven-navbar navbar navbar-expand-lg navbar-dark">
       <div className="container-fluid px-4">
-        {/* Left Section - Logo */}
-        <a className="navbar-brand d-flex align-items-center" href="#">
+
+        <a className="navbar-brand d-flex align-items-center" href="home">
           <span className="playheaven-logo">Logo</span>
         </a>
 
-        {/* Mobile Toggle Button */}
         <button
           className="navbar-toggler playheaven-toggler"
           type="button"
@@ -59,57 +27,49 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Collapsible Content */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <div className="playheaven-nav-container d-flex w-100 align-items-center">
-            {/* Left spacer */}
+
             <div className="flex-fill"></div>
             
-            {/* Center Section - Navigation Links */}
             <div className="flex-fill d-flex justify-content-center">
               <ul className="navbar-nav">
                 <li className="nav-item playheaven-nav-item">
-                  <a className="nav-link playheaven-nav-link" href="#">Store</a>
+                  <a className="nav-link playheaven-nav-link" href="store">Store</a>
                 </li>
                 <li className="nav-item playheaven-nav-item">
-                  <a className="nav-link playheaven-nav-link" href="#">Categories</a>
+                  <a className="nav-link playheaven-nav-link" href="categories">Categories</a>
                 </li>
                 <li className="nav-item playheaven-nav-item">
-                  <a className="nav-link playheaven-nav-link" href="#">News</a>
+                  <a className="nav-link playheaven-nav-link" href="news">News</a>
                 </li>
                 <li className="nav-item playheaven-nav-item">
-                  <a className="nav-link playheaven-nav-link" href="#">About</a>
+                  <a className="nav-link playheaven-nav-link" href="about">About</a>
                 </li>
               </ul>
             </div>
             
-            {/* Right Section - Icons and User */}
             <div className="flex-fill d-flex justify-content-end align-items-center">
-              {/* Search Icon */}
-              <button className="playheaven-icon-btn">
+              <Link to="/store" className="playheaven-icon-btn text-decoration-none">
                 <IoSearch />
-              </button>
+              </Link>
               
-              {/* Heart/Wishlist Icon */}
-              <button className="playheaven-icon-btn">
+              <Link to="/wishlist" className="playheaven-icon-btn text-decoration-none">
                 <FaRegHeart />
-              </button>
+              </Link>
               
-              {/* Shopping Cart Icon */}
-              <button className="playheaven-icon-btn">
+              <Link to="/cart" className="playheaven-icon-btn text-decoration-none">
                 <IoCartOutline />
-              </button>
+              </Link>
               
-              {/* Library Icon */}
-              <button className="playheaven-icon-btn playheaven-library-btn">
+              <Link to="/libraryPage" className="playheaven-icon-btn playheaven-library-btn text-decoration-none">
                 <TbBooks />
-              </button>
+              </Link>
               
-              {/* User Profile */}
-              <div className="playheaven-user-profile d-flex align-items-center">
+              <Link to="/profile" className="playheaven-user-profile d-flex align-items-center text-decoration-none">
                 <div className="playheaven-avatar"></div>
                 <span className="playheaven-username">PlayerOne</span>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

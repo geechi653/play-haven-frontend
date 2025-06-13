@@ -22,6 +22,8 @@ a.nav-link.active {
     font-weight: 600;
     border-bottom: 2px solid #007bff;
     padding-bottom: 0.25rem;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 /* Non-active navigation link */
@@ -29,6 +31,8 @@ a.nav-link.non-active {
     color: #cccccc !important;
     text-decoration: none;
     font-weight: 500;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 /* Hover effects */
@@ -42,9 +46,12 @@ a.nav-link.non-active:hover {
 .playheaven-nav-item {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .playheaven-nav-item .nav-link {
     transition: all 0.2s ease;
     padding: 0.5rem 0;
+    display: block;
 }

@@ -13,7 +13,7 @@ function RootLayout() {
         <NavButton to ='/about' text='About'/>
         <NavButton to ='/wishlist' text='Wishlist'/>
         <NavButton to ='/cart' text='Cart'/>
-        <NavButton to ='/about' text='About'/>
+        <NavButton to ='/categories' text='Categories'/>
       </Navbar>
       
       <main className='flex-grow-1'>
