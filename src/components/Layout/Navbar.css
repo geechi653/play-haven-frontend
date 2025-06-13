@@ -1,31 +1,20 @@
 /* Main navbar container */
 .playheaven-navbar {
-  background-color: #1a1a1a;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   border-bottom: 1px solid #333;
-}
-
-/* Logo styling */
-.playheaven-logo {
-  color: white;
-  font-weight: bold;
-  font-size: 1.25rem;
 }
 
 /* SVG Logo styling */
 .playheaven-logo-img {
-  height: 40px;
+  height: 30px;
   width: auto;
   max-width: 200px;
+  object-fit: contain;
 }
 
 /* Mobile toggle button */
 .playheaven-toggler {
   border: 0;
-}
-
-/* Navigation container */
-.playheaven-nav-container {
-  /* Inherits Bootstrap flex properties */
 }
 
 /* Icon buttons */
@@ -52,11 +41,6 @@
 /* Library button specific spacing */
 .playheaven-library-btn {
   margin-right: 1rem;
-}
-
-/* User profile section */
-.playheaven-user-profile {
-  /* Inherits Bootstrap flex properties */
 }
 
 /* User avatar */
