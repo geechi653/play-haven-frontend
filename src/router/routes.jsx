@@ -4,6 +4,7 @@ import ErrorPage from './ErrorPage.jsx';
 import Home from '../pages/home/Home.jsx';
 import About from '../pages/about/About.jsx';
 import Demo from '../pages/demo/Demo.jsx';
+import SignUp from '../pages/signup/SignUp.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: '/home', element: <Home /> },
       { path: '/about', element: <About /> },
       { path: '/demo', element: <Demo /> },
+      { path: '/signup', element: <SignUp /> },
     ],
   },
 ]);
