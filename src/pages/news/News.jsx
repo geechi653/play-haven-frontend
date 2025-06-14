@@ -1,10 +1,8 @@
-
-
-function About() {
+function News() {
   return (
     <>
       <h1 className="text-center mt-5 text-body-secondary fw-bold">
-        About Page
+        News Page
       </h1>
       <div className="text-center">
       </div>
@@ -12,4 +10,4 @@ function About() {
   );
 }
 
-export default About;
+export default News;

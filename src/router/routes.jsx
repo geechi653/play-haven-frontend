@@ -3,6 +3,15 @@ import RootLayout from './RootLayout.jsx';
 import ErrorPage from './ErrorPage.jsx';
 import Home from '../pages/home/Home.jsx';
 import About from '../pages/about/About.jsx';
+import Store from '../pages/store/Store.jsx';
+import Profile from '../pages/profile/Profile.jsx';
+import Wishlist from '../pages/wishlist/Wishlist.jsx';
+import Library from '../pages/libraryPage/Library.jsx';
+import GameInfo from '../pages/gameinfo/GameInfo.jsx';
+import Cart from '../pages/cart/Cart.jsx';
+import News from '../pages/news/News.jsx';
+import Categories from '../pages/categories/Categories.jsx';
+
 import Demo from '../pages/demo/Demo.jsx';
 import SignUp from '../pages/signup/SignUp.jsx';
 
@@ -16,7 +25,14 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: '/home', element: <Home /> },
       { path: '/about', element: <About /> },
-      { path: '/demo', element: <Demo /> },
+      { path: '/store', element: <Store /> },
+      { path: '/profile', element: <Profile /> },
+      { path: '/news', element: <News /> },
+      { path: '/categories', element: <Categories /> },
+      { path: '/wishlist', element: <Wishlist /> },
+      { path: '/libraryPage', element: <Library /> },
+      { path: '/gameinfo', element: <GameInfo /> },
+      { path: '/cart', element: <Cart /> },
       { path: '/signup', element: <SignUp /> },
     ],
   },

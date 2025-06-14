@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <!-- Background and effects -->
+  <defs>
+    <linearGradient id="playGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#5B73FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B59B6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="heavenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="heavenGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Gaming controller icon -->
+  <g transform="translate(30, 50)">
+    <!-- Controller body -->
+    <rect x="0" y="0" width="40" height="20" rx="10" ry="10" fill="#1A1A2E" stroke="#00D4FF" stroke-width="2"/>
+    <!-- D-pad -->
+    <rect x="6" y="5" width="8" height="2" fill="#5B73FF"/>
+    <rect x="9" y="2" width="2" height="8" fill="#5B73FF"/>
+    <!-- Action buttons -->
+    <circle cx="30" cy="6" r="2" fill="#FF6B6B"/>
+    <circle cx="26" cy="10" r="2" fill="#FFD93D"/>
+    <circle cx="34" cy="10" r="2" fill="#6BCF7F"/>
+    <circle cx="30" cy="14" r="2" fill="#4ECDC4"/>
+  </g>
+  
+  <!-- Main text "PLAY HEAVEN" inline -->
+  <text x="90" y="70" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="url(#playGradient)" filter="url(#glow)">PLAY</text>
+  <text x="190" y="70" font-family="Arial, sans-serif" font-size="32" font-weight="normal" fill="url(#heavenGradient)" filter="url(#heavenGlow)">HEAVEN</text>
+  
+  <!-- Sparkle effects -->
+  <g fill="#00D4FF" opacity="0.8">
+    <polygon points="350,45 352,50 357,48 352,53 350,58 348,53 343,48 348,50" transform="scale(0.5)"/>
+    <polygon points="80,25 82,30 87,28 82,33 80,38 78,33 73,28 78,30" transform="scale(0.4)"/>
+  </g>
+  <g fill="#9B59B6" opacity="0.7">
+    <polygon points="340,90 342,95 347,93 342,98 340,103 338,98 333,93 338,95" transform="scale(0.3)"/>
+  </g>
+</svg>
