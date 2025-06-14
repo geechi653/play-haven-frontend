@@ -1,0 +1,220 @@
+.playheaven-footer {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  color: #e2e8f0;
+  padding: 3rem 0 1rem;
+  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  margin-top: auto;
+}
+
+/* Footer Brand Section */
+.playheaven-footer-brand {
+  margin-bottom: 2rem;
+}
+
+.playheaven-footer-logo {
+  height: 50px;
+  width: auto;
+  margin-bottom: 1rem;
+  filter: brightness(1.1);
+}
+
+.playheaven-footer-description {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Social Links */
+.playheaven-social-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.playheaven-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.playheaven-social-link:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* Footer Titles */
+.playheaven-footer-title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Footer Links */
+.playheaven-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playheaven-footer-links li {
+  margin-bottom: 0.75rem;
+}
+
+.playheaven-footer-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.playheaven-footer-links a:hover {
+  color: #3b82f6;
+}
+
+/* Contact Info */
+.playheaven-contact-info {
+  margin-bottom: 2rem;
+}
+
+.playheaven-contact-info p {
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.playheaven-contact-info i {
+  color: #3b82f6;
+  margin-right: 0.5rem;
+  width: 16px;
+}
+
+/* Newsletter Section */
+.playheaven-newsletter {
+  margin-top: 2rem;
+}
+
+.playheaven-newsletter-title {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.playheaven-newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.playheaven-newsletter-input {
+  flex: 1;
+  padding: 0.75rem;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.playheaven-newsletter-input::placeholder {
+  color: #64748b;
+}
+
+.playheaven-newsletter-input:focus {
+  border-color: #3b82f6;
+}
+
+.playheaven-newsletter-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.playheaven-newsletter-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  transform: translateY(-1px);
+}
+
+/* Footer Bottom */
+.playheaven-footer-bottom {
+  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+}
+
+.playheaven-copyright {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.playheaven-footer-bottom-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
+.playheaven-footer-bottom-links a {
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.playheaven-footer-bottom-links a:hover {
+  color: #3b82f6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .playheaven-footer {
+    padding: 2rem 0 1rem;
+  }
+  
+  .playheaven-newsletter-form {
+    flex-direction: column;
+  }
+  
+  .playheaven-newsletter-btn {
+    align-self: stretch;
+  }
+  
+  .playheaven-footer-bottom-links {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  
+  .playheaven-social-links {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .playheaven-footer-bottom-links {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}
