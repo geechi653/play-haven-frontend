@@ -37,7 +37,7 @@ function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <div
-            className={`playheaven-nav-container d-flex w-100 align-items-center ${
+            className={`playheaven-nav-container d-flex w-100 ${
               isSignUpPage ? "justify-content-end" : "justify-content-start"
             }`}
           >
