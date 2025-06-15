@@ -8,6 +8,7 @@ import { IoSearch } from "react-icons/io5";
 function Navbar() {
   const location = useLocation();
   const isSignUpPage = location.pathname === "/signup";
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <nav className="playheaven-navbar navbar navbar-expand-lg navbar-dark">
@@ -38,7 +39,7 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <div
             className={`playheaven-nav-container d-flex w-100 ${
-              isSignUpPage ? "justify-content-end" : "justify-content-start"
+              isSignUpPage || isLoginPage ? "justify-content-end" : "justify-content-start"
             }`}
           >
             <ul className="navbar-nav d-flex">
@@ -64,7 +65,7 @@ function Navbar() {
               </li>
             </ul>
 
-            {!isSignUpPage && (
+            {!isSignUpPage && !isLoginPage && (
               <div className="flex-fill d-flex justify-content-end align-items-center">
                 <Link
                   to="/store"

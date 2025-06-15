@@ -87,7 +87,7 @@ function Footer() {
           <div className="row align-items-center">
             <div className="col-md-6">
               <p className="playheaven-copyright">
-                © 2024 Play Heaven. All rights reserved.
+                © {new Date().getFullYear()} Play Heaven. All rights reserved.
               </p>
             </div>
             <div className="col-md-6">

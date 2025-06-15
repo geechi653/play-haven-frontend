@@ -12,6 +12,7 @@ import Cart from '../pages/cart/Cart.jsx';
 import News from '../pages/news/News.jsx';
 import Categories from '../pages/categories/Categories.jsx';
 import SignUp from '../pages/signup/SignUp.jsx';
+import Login from '../pages/login/Login.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
       { path: '/gameinfo', element: <GameInfo /> },
       { path: '/cart', element: <Cart /> },
       { path: '/signup', element: <SignUp /> },
+      { path: '/login', element: <Login /> },
     ],
   },
 ]);
