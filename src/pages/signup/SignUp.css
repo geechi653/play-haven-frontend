@@ -6,10 +6,10 @@
   background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
   color: rgb(234, 228, 228);
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 0.5rem 1.5rem;
+  padding: 0.75rem 1.5rem;
 }
 
 .custom-button:hover {
@@ -22,6 +22,7 @@
   color: rgb(169, 169, 169);
   border: solid 1px rgb(3, 3, 79);
   padding: 0.5rem 1.5rem;
+  height: 55px;
 }
 
 .custom-input::placeholder {

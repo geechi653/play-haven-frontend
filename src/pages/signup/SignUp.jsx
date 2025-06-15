@@ -33,7 +33,7 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-container d-flex align-items-center justify-content-center py-3">
+    <div className="signup-container d-flex align-items-center justify-content-center py-4">
       <Glass>
         <form onSubmit={handleOnSubmit}>
           <h3 className="fw-bolder mb-3 text-center custom-text">
