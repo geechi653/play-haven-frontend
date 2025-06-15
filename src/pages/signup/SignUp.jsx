@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import Glass from "../../components/glass/Glass";
+import "./SignUp.css";
 import { useState } from "react";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
 import { ALL_COUNTRIES } from "../../constants/countries";
@@ -32,24 +33,23 @@ function SignUp() {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center my-3 py-4">
+    <div className="signup-container d-flex align-items-center justify-content-center py-3">
       <Glass>
         <form onSubmit={handleOnSubmit}>
-          <h3 className="fw-bolder mb-4 text-center">Create Account</h3>
+          <h3 className="fw-bolder mb-3 text-center custom-text">
+            Create Account
+          </h3>
 
           <div className="mb-2 fw-bold">
-            <label htmlFor="inputState" className="form-label">
-              Country
-            </label>
             <select
               id="inputState"
-              className="form-select"
+              className="form-select rounded-4 custom-input"
               value={userInputs.country}
               onChange={(e) =>
                 setUserInput({ ...userInputs, country: e.target.value })
               }
             >
-              <option value="">Choose...</option>
+              <option value="">Select a country...</option>
               {ALL_COUNTRIES.map((country) => (
                 <option key={country.value} value={country.value}>
                   {country.label}
@@ -59,13 +59,11 @@ function SignUp() {
           </div>
 
           <div className="mb-2 fw-bold">
-            <label htmlFor="inputEmail" className="form-label">
-              Email Address
-            </label>
             <input
               type="email"
-              className="form-control"
+              className="form-control rounded-4 custom-input"
               id="inputEmail"
+              placeholder="Email Address"
               onChange={(e) =>
                 setUserInput({ ...userInputs, email: e.target.value })
               }
@@ -73,44 +71,40 @@ function SignUp() {
             />
           </div>
 
-          <div className="mb-2 fw-bold">
-            <label htmlFor="input-first-name" className="form-label">
-              First Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="input-first-name"
-              onChange={(e) =>
-                setUserInput({ ...userInputs, first_name: e.target.value })
-              }
-              value={userInputs.first_name}
-            />
+          <div className="d-flex">
+            <div className="mb-2 fw-bold col-6 pe-1">
+              <input
+                type="text"
+                className="form-control rounded-4 custom-input"
+                id="input-first-name"
+                placeholder="First Name"
+                onChange={(e) =>
+                  setUserInput({ ...userInputs, first_name: e.target.value })
+                }
+                value={userInputs.first_name}
+              />
+            </div>
+
+            <div className="mb-2 fw-bold col-6 ps-1">
+              <input
+                type="text"
+                className="form-control rounded-4 custom-input"
+                id="input-last-name"
+                placeholder="Last Name"
+                onChange={(e) =>
+                  setUserInput({ ...userInputs, last_name: e.target.value })
+                }
+                value={userInputs.last_name}
+              />
+            </div>
           </div>
 
           <div className="mb-2 fw-bold">
-            <label htmlFor="input-last-name" className="form-label">
-              Last Name
-            </label>
             <input
               type="text"
-              className="form-control"
-              id="input-last-name"
-              onChange={(e) =>
-                setUserInput({ ...userInputs, last_name: e.target.value })
-              }
-              value={userInputs.last_name}
-            />
-          </div>
-
-          <div className="mb-2 fw-bold">
-            <label htmlFor="input-username" className="form-label">
-              Username
-            </label>
-            <input
-              type="text"
-              className="form-control"
+              className="form-control rounded-4 custom-input"
               id="input-username"
+              placeholder="Username"
               onChange={(e) =>
                 setUserInput({ ...userInputs, username: e.target.value })
               }
@@ -118,14 +112,12 @@ function SignUp() {
             />
           </div>
 
-          <div className="mb-4 fw-bold">
-            <label htmlFor="input-password" className="form-label">
-              Password
-            </label>
+          <div className="mb-2 fw-bold">
             <input
               type="password"
-              className="form-control"
+              className="form-control rounded-4 custom-input"
               id="input-password"
+              placeholder="Password"
               onChange={(e) =>
                 setUserInput({ ...userInputs, password: e.target.value })
               }
@@ -136,22 +128,25 @@ function SignUp() {
           {error ? (
             <>
               <p className="text-center text-danger fw-bold">
-                Something wrong happened! Try again...
+                Something wrong happened! Please try again...
               </p>
             </>
           ) : (
             <></>
           )}
 
-          <p className="text-center fw-bold">
+          <p className="text-center fw-bold custom-text">
             Already have an account?{" "}
-            <Link className="text-decoration-none fw-bold" to="/login">
+            <Link className="fw-bolder custom-text" to="/login">
               Login
             </Link>
           </p>
 
-          <div className="mb-3">
-            <button type="submit" className="btn btn-primary col-12 fw-bolder">
+          <div className="mb-1">
+            <button
+              type="submit"
+              className="btn custom-button fs-4 col-12 fw-bolder rounded-5"
+            >
               Continue
             </button>
           </div>

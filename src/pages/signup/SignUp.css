@@ -1,0 +1,54 @@
+.signup-container {
+  background: linear-gradient(to right, rgb(9, 28, 61), rgb(48, 66, 97));
+}
+
+.custom-button {
+  background-color: rgb(29, 29, 110);
+  color: rgb(176, 175, 178);
+}
+
+.custom-button:hover {
+  background-color: rgb(20, 20, 81);
+  color: rgb(125, 124, 127);
+}
+
+.custom-input {
+  background-color: rgba(71, 113, 186, 0.296);
+  color: rgb(169, 169, 169);
+  border: solid 1px rgb(3, 3, 79);
+}
+
+.custom-input::placeholder {
+  color: rgb(169, 169, 169); /* Change this color to your desired color */
+  opacity: 1;
+}
+
+.custom-input:focus {
+  background-color: rgba(71, 109, 174, 0.296);
+  color: rgb(169, 169, 169);
+  border-color: rgb(3, 3, 79);
+  box-shadow: 0 0 0 0.25rem rgba(3, 3, 79, 0.322);
+  outline: 0;
+}
+
+.custom-input:focus::placeholder {
+  color: rgb(169, 169, 169);
+  opacity: 1;
+}
+
+.form-select.custom-input {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='rgb(169,169,169)' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-position: right 1rem center;
+  background-size: 1.5em;
+  padding-right: 2.5em;
+}
+
+.form-select.custom-input:focus {
+  border-color: rgb(3, 3, 79);
+  box-shadow: 0 0 0 0.25rem rgba(3, 3, 79, 0.322);
+  outline: 0;
+}
+
+.custom-text {
+    color: rgb(190, 199, 199);
+}

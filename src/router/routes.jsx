@@ -11,8 +11,6 @@ import GameInfo from '../pages/gameinfo/GameInfo.jsx';
 import Cart from '../pages/cart/Cart.jsx';
 import News from '../pages/news/News.jsx';
 import Categories from '../pages/categories/Categories.jsx';
-
-import Demo from '../pages/demo/Demo.jsx';
 import SignUp from '../pages/signup/SignUp.jsx';
 
 export const router = createBrowserRouter([
