@@ -33,7 +33,7 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-container d-flex align-items-center justify-content-center py-4">
+    <div className="signup-container d-flex align-items-center justify-content-center py-3">
       <Glass>
         <form onSubmit={handleOnSubmit}>
           <h3 className="fw-bolder mb-3 text-center custom-text">
@@ -137,7 +137,7 @@ function SignUp() {
 
           <p className="text-center fw-bold custom-text">
             Already have an account?{" "}
-            <Link className="fw-bolder custom-text" to="/login">
+            <Link className="fw-bolder text-link" to="/login">
               Login
             </Link>
           </p>
@@ -145,7 +145,7 @@ function SignUp() {
           <div className="mb-1">
             <button
               type="submit"
-              className="btn custom-button fs-4 col-12 fw-bolder rounded-5"
+              className="custom-button fs-4 col-12 fw-bolder rounded-5"
             >
               Continue
             </button>

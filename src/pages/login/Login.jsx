@@ -67,7 +67,7 @@ function Login() {
 
           <p className="text-center fw-bold custom-text">
             New to Play Heaven?{" "}
-            <Link className="fw-bolder custom-text" to="/signup">
+            <Link className="fw-bolder text-link" to="/signup">
               Sign Up
             </Link>
           </p>
@@ -75,7 +75,7 @@ function Login() {
           <div className="mb-1">
             <button
               type="submit"
-              className="btn custom-button fs-4 col-12 fw-bolder rounded-5"
+              className="custom-button fs-4 col-12 fw-bolder rounded-5"
             >
               Continue
             </button>

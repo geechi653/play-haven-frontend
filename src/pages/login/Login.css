@@ -3,19 +3,25 @@
 }
 
 .custom-button {
-  background-color: rgb(29, 29, 110);
-  color: rgb(176, 175, 178);
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  color: rgb(234, 228, 228);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1.5rem;
 }
 
 .custom-button:hover {
-  background-color: rgb(20, 20, 81);
-  color: rgb(125, 124, 127);
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  transform: translateY(-1px);
 }
 
 .custom-input {
   background-color: rgba(139, 151, 173, 0.296);
   color: rgb(169, 169, 169);
   border: solid 1px rgb(3, 3, 79);
+  padding: 0.5rem 1.5rem;
 }
 
 .custom-input::placeholder {
@@ -37,5 +43,21 @@
 }
 
 .custom-text {
-    color: rgb(190, 199, 199);
+  color: rgb(190, 199, 199);
+}
+
+.text-link {
+    color: rgb(190, 199, 199) !important;
+    text-decoration: none;
+    border-bottom: 1px solid rgb(190, 199, 199);
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.text-link:hover {
+    color: #ffffff !important;
+    text-decoration: none;
+    border-bottom: 1px solid #ffffff;
+    cursor: pointer;
+    pointer-events: auto;
 }
