@@ -243,27 +243,4 @@ export const initialState = () => ({
       isOpen: false
     }
   },
-
-  // Game categories for navigation
-  categories: [
-    { id: "action", name: "Action", icon: "🎯" },
-    { id: "adventure", name: "Adventure", icon: "🗺️" },
-    { id: "rpg", name: "RPG", icon: "⚔️" },
-    { id: "strategy", name: "Strategy", icon: "🧠" },
-    { id: "simulation", name: "Simulation", icon: "🎮" },
-    { id: "racing", name: "Racing", icon: "🏎️" },
-    { id: "sports", name: "Sports", icon: "⚽" },
-    { id: "puzzle", name: "Puzzle", icon: "🧩" },
-    { id: "horror", name: "Horror", icon: "👻" },
-    { id: "sci-fi", name: "Sci-Fi", icon: "🚀" }
-  ],
-
-  // Platform options
-  platforms: [
-    { id: "windows", name: "Windows", icon: "🪟" },
-    { id: "mac", name: "macOS", icon: "🍎" },
-    { id: "linux", name: "Linux", icon: "🐧" },
-    { id: "ios", name: "iOS", icon: "📱" },
-    { id: "android", name: "Android", icon: "🤖" }
-  ]
 });

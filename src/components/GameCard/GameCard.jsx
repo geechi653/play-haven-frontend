@@ -6,24 +6,25 @@ import './GameCard.css';
 
 function GameCard({ 
   game, 
-  cardType = 'featured', // 'featured', 'new-release', 'horizontal'
+  cardType = 'featured',
   isUserLoggedIn = false 
 }) {
   const [isWishlisted, setIsWishlisted] = useState(game.isWishlisted || false);
-  const [isInCart, setIsInCart] = useState(false); // Add cart state
+  const [isInCart, setIsInCart] = useState(false);
 
   const handleWishlistToggle = () => {
     if (isUserLoggedIn) {
       setIsWishlisted(!isWishlisted);
-      // Here you would typically call an API to update wishlist
-      console.log(`${isWishlisted ? 'Removed from' : 'Added to'} wishlist: ${game.title}`);
+      // This is a shell call an API to update wishlist
+      // TODO update call
     }
   };
 
   const handleAddToCart = () => {
-    setIsInCart(!isInCart); // Toggle cart state
-    console.log(`${isInCart ? 'Removed from' : 'Added to'} cart: ${game.title}`);
-    // Here you would typically call an API to add/remove from cart
+    setIsInCart(!isInCart); 
+    
+    // This is shell call an API to add/remove from cart
+    // TODO update it here
   };
 
   const getPlatformIcon = (platform) => {
@@ -31,7 +32,7 @@ function GameCard({
       windows: 'windows',
       linux: 'linux',
       ios: 'ios',
-      mac: 'ios-mobile',
+      mac: 'ios',
       android: 'android'
     };
     return icons[platform.toLowerCase()] || '🎮';
