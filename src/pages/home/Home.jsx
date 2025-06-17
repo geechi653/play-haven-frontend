@@ -1,9 +1,11 @@
 
 import GameCard from '../../components/GameCard/GameCard.jsx';
 import { initialState } from '../../store/initialStore.js';
+import './Home.css';
+
 
 function Home() {
-  // Get data from initial state
+
   const storeData = initialState();
   const { games, user, categories } = storeData;
   
@@ -12,10 +14,10 @@ function Home() {
   const newReleases = games.allGames.filter(game => game.new_release).slice(0, 4);
   const specialOffers = games.allGames.filter(game => game.discount && game.discount > 0);
 
-  // Check if user is authenticated
+  // Checking if user is authenticated
   const isUserLoggedIn = user.isAuthenticated;
   
-  // Add wishlist status to games based on user's wishlist
+  // Adding wishlist status to games based on user's wishlist
   const addWishlistStatus = (gamesList) => {
     return gamesList.map(game => ({
       ...game,
@@ -53,10 +55,10 @@ function Home() {
         <section className="featured-games mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Featured Games</h2>
-            <a href="/store" className="btn btn-outline-primary">View All</a>
+            <a href="/store" className="btn btn-custom">View All</a>
           </div>
           
-          <div className="row g-4 justify-content-center">
+          <div className="row justify-content-center">
             {featuredGamesWithWishlist.map(game => (
               <div key={game.id} className="col-lg-4 col-md-6 col-sm-8 col-10">
                 <div className="d-flex justify-content-center">
@@ -75,7 +77,7 @@ function Home() {
         <section className="new-releases mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">New Releases</h2>
-            <a href="/store" className="btn btn-outline-primary">View All</a>
+            <a href="/store" className="btn btn-custom">View All</a>
           </div>
           
           <div className="row g-4">
@@ -95,7 +97,7 @@ function Home() {
         <section className="special-offers mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Special Offers</h2>
-            <a href="/store" className="btn btn-outline-primary">View All</a>
+            <a href="/store" className="btn btn-custom">View All</a>
           </div>
           
           <div className="row">

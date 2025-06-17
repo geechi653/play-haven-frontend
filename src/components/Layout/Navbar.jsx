@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 
 function Navbar() {
   return (
-    <nav className="playheaven-navbar navbar navbar-expand-lg navbar-dark">
+    <nav className="playheaven-navbar navbar navbar-expand-lg navbar-dark sticky-top">
       <div className="container-fluid px-4">
         <Link
           to="/home"
