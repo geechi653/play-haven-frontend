@@ -1,5 +1,4 @@
 
-import React from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
 import { initialState } from '../../store/initialStore.js';
 
@@ -31,7 +30,7 @@ function Home() {
   return (
     <div className="home-page">
       {/* Hero Section */}
-      <section className="hero-section bg-primary text-white py-5 mb-5">
+      <section className="hero-section text-white py-5 mb-5">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-8">
@@ -41,8 +40,8 @@ function Home() {
                 Your gaming paradise awaits!
               </p>
               <div className="d-flex gap-3">
-                <button className="btn btn-light btn-lg">Explore Store</button>
-                <button className="btn btn-outline-light btn-lg">Latest News</button>
+                <a href="/store" className="btn btn-light btn-lg">Explore Store</a>
+                <a href="/news" className="btn btn-outline-light btn-lg">Latest News</a>
               </div>
             </div>
           </div>
