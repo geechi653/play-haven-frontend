@@ -36,7 +36,6 @@ function Library() {
     return matchesSearch && matchesGenre && matchesPlatform;
   });
 
-  // Sort games
   const sortedGames = [...filteredGames].sort((a, b) => {
     switch (sortBy) {
       case 'alphabetical':
@@ -50,14 +49,13 @@ function Library() {
     }
   });
 
-  // Get unique genres and platforms for filters
   const allGenres = [...new Set(displayGames.flatMap(game => game.genres || []))];
   const allPlatforms = [...new Set(displayGames.flatMap(game => game.platform || []))];
 
   return (
     <div className="library-page">
       <div className="container">
-        {/* Page Header */}
+
         <div className="library-header">
           <h1 className="library-title">Your Library</h1>
           <p className="library-subtitle">
@@ -65,7 +63,6 @@ function Library() {
           </p>
         </div>
 
-        {/* Search and Filters */}
         <div className="library-controls">
           <div className="row g-3 align-items-end">
             {/* Search Bar */}
@@ -145,7 +142,7 @@ function Library() {
           </div>
         </div>
 
-        {/* Games Grid */}
+
         <div className="library-games">
           {!user.isAuthenticated ? (
             <div className="no-games-message">
@@ -192,40 +189,6 @@ function Library() {
             </div>
           )}
         </div>
-
-        {/* Quick Stats */}
-        {sortedGames.length > 0 && (
-          <div className="library-stats">
-            <div className="row g-4">
-              <div className="col-md-3">
-                <div className="stat-card">
-                  <div className="stat-number">{sortedGames.length}</div>
-                  <div className="stat-label">Games Owned</div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stat-card">
-                  <div className="stat-number">{allGenres.length}</div>
-                  <div className="stat-label">Genres</div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stat-card">
-                  <div className="stat-number">{allPlatforms.length}</div>
-                  <div className="stat-label">Platforms</div>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stat-card">
-                  <div className="stat-number">
-                    {Math.round(sortedGames.reduce((acc, game) => acc + (game.playtime || 0), 0))}h
-                  </div>
-                  <div className="stat-label">Total Playtime</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
