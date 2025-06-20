@@ -1,0 +1,64 @@
+.login-container {
+    height: 50vh;
+  background: linear-gradient(to right, rgb(9, 28, 61), rgb(48, 66, 97));
+}
+
+/* .custom-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  color: rgb(234, 228, 228);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1.5rem;
+} */
+
+/* .custom-button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  transform: translateY(-1px);
+} */
+
+/* .custom-input {
+  background-color: rgba(139, 151, 173, 0.296);
+  color: rgb(169, 169, 169);
+  border: solid 1px rgb(3, 3, 79);
+  padding: 0.5rem 1.5rem;
+} */
+
+/* .custom-input::placeholder {
+  color: rgb(169, 169, 169); /* Change this color to your desired color */
+  /* opacity: 1; */
+/* } */ 
+
+/* .custom-input:focus {
+  background-color: rgba(71, 109, 174, 0.296);
+  color: rgb(169, 169, 169);
+  border-color: rgb(3, 3, 79);
+  box-shadow: 0 0 0 0.25rem rgba(3, 3, 79, 0.322);
+  outline: 0;
+} */
+/* 
+.custom-input:focus::placeholder {
+  color: rgb(169, 169, 169);
+  opacity: 1;
+} */
+
+/* .custom-text {
+  color: rgb(190, 199, 199);
+} */
+
+/* .text-link {
+    color: rgb(190, 199, 199) !important;
+    text-decoration: none;
+    border-bottom: 1px solid rgb(190, 199, 199);
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.text-link:hover {
+    color: #ffffff !important;
+    text-decoration: none;
+    border-bottom: 1px solid #ffffff;
+    cursor: pointer;
+    pointer-events: auto;
+} */

@@ -1,0 +1,5 @@
+.glass-card {
+    z-index: 10;
+    background: linear-gradient(135deg, #83a1bcec 0%, #02132fef 50%, #5e697a 100%);
+    border-radius: 2rem;
+}
