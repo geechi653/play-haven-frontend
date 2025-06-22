@@ -157,10 +157,8 @@
   hyphens: auto;
 }
 
-/* Ensure ellipsis works in all browsers */
 .game-card-description {
-  /* Fallback for non-webkit browsers */
-  max-height: calc(1.4em * 2); /* line-height * number of lines */
+  max-height: calc(1.4em * 2); 
   overflow: hidden;
   position: relative;
 }
@@ -176,7 +174,6 @@
   pointer-events: none;
 }
 
-/* Actions container */
 .game-card-actions {
   display: flex !important;
   gap: 0.5rem;
@@ -185,13 +182,11 @@
   visibility: visible;
 }
 
-/* Make sure horizontal cards show buttons */
 .game-card-horizontal .game-card-actions {
   position: relative;
   z-index: 10;
 }
 
-/* Price Styling */
 .game-card-price {
   display: flex;
   align-items: center;
@@ -217,7 +212,6 @@
   font-size: 1.1rem;
 }
 
-/* Footer */
 .game-card-footer {
   display: flex;
   justify-content: space-between;
@@ -225,7 +219,6 @@
   margin-top: auto;
 }
 
-/* Add to Cart Button - Icon Only */
 .add-to-cart-btn {
   background: rgba(51, 65, 85, 0.8);
   border: 1px solid rgba(59, 130, 246, 0.3);
@@ -266,7 +259,6 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
 
-/* FEATURED CARD (Square) */
 .game-card-featured {
   width: 100%;
   max-width: 320px;
@@ -309,7 +301,7 @@
   margin-bottom: 1rem;
   font-size: 0.85rem;
   line-height: 1.3;
-  max-height: calc(1.3em * 3); /* line-height * number of lines */
+  max-height: calc(1.3em * 3);
   word-wrap: break-word;
   hyphens: auto;
 }
@@ -327,7 +319,6 @@
   align-items: center;
 }
 
-/* NEW RELEASE CARD (Vertical Rectangle) */
 .game-card-new-release {
   max-width: 250px;
   height: 380px;
@@ -365,7 +356,6 @@
   margin-top: auto;
 }
 
-/* HORIZONTAL CARD */
 .game-card-horizontal {
   height: 180px;
   margin-bottom: 1rem;
@@ -415,7 +405,6 @@
   margin-left: 1rem;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .game-card-featured,
   .game-card-new-release {
