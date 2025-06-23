@@ -1,0 +1,80 @@
+.profile-page {
+  background: linear-gradient(135deg, #0e1015 0%, #263242 100%);
+}
+
+.profile-title {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #d6d6d67b 0%, #d6d6d6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.info-label {
+  background: linear-gradient(135deg, #41a4f5 20%, #8b5cf6 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.info-input {
+    background: linear-gradient(135deg, #fef5a1 20%, #ffd501 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-size: 23px !important;
+}
+
+.button-profile {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  color: rgb(234, 228, 228);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1.5rem;
+}
+
+.button-profile:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: rgb(234, 228, 228);
+  transform: translateY(-1px);
+}
+
+.profile-image {
+width: 230px;
+height: 230px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 230px;
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 50%;
+  transition: opacity 0.2s;
+  z-index: 2;
+}
+
+.profile-image-container:hover .profile-image-overlay {
+  opacity: 1;
+  cursor: pointer;
+}

@@ -72,12 +72,18 @@ function Navbar() {
                 <Link
                   to="/store"
                   className="playheaven-icon-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Search"
                 >
                   <IoSearch />
                 </Link>
                 <Link
                   to="/wishlist"
                   className="playheaven-icon-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Wishlist"
                 >
                   <FaRegHeart />
                 </Link>
@@ -85,6 +91,9 @@ function Navbar() {
                 <Link
                   to="/cart"
                   className="playheaven-icon-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Cart"
                 >
                   <IoCartOutline />
                 </Link>
@@ -92,6 +101,9 @@ function Navbar() {
                 <Link
                   to="/libraryPage"
                   className="playheaven-icon-btn playheaven-library-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Library"
                 >
                   <TbBooks />
                 </Link>
