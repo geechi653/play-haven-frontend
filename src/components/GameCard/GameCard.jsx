@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link } from "react-router";
-import { IoCartOutline, IoPlayOutline, IoDownloadOutline } from "react-icons/io5";
+import { Link, useNavigate } from "react-router";
+import { IoCartOutline, IoPlayOutline, IoDownloadOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
 import './GameCard.css';
 
@@ -11,13 +11,14 @@ function GameCard({
 }) {
   const [isWishlisted, setIsWishlisted] = useState(game.isWishlisted || false);
   const [isInCart, setIsInCart] = useState(false);
+  const navigate = useNavigate();
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (isUserLoggedIn) {
       setIsWishlisted(!isWishlisted);
-      // TODO: possibly add API call to update wishlist
+      // TODO: API call to update wishlist
     }
   };
 
@@ -25,20 +26,23 @@ function GameCard({
     e.preventDefault();
     e.stopPropagation();
     setIsInCart(!isInCart); 
-    // TODO: potentially add API call to add/remove from cart
+    // TODO: API call to add/remove from cart
   };
 
   const handlePlayGame = (e) => {
-    // dummy function for launching the game
+    e.preventDefault();
+    e.stopPropagation();
+    // game launch logic is hear (we are not implementing that though)
     console.log('Playing game:', game.title);
   };
 
   const handleDownloadGame = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Create and download a dummy text file
+    
+    // Creates and downloads a dummy text file
     const gameFileName = `${game.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_installer.txt`;
-    const fileContent = `Game Installer for ${game.title}\n\nDownload initiated on: ${new Date().toLocaleString()}\n\nThis is a dummy download file for demonstration purposes.\n\nGame Details:\n- Title: ${game.title}\n- Description: ${game.description}\n- Price: ${getCurrentPrice()}\n\nThank you for choosing Play Heaven!`;
+    const fileContent = `Game Installer for ${game.title}\n\nDownload initiated on: ${new Date().toLocaleString()}\n\nThis is a dummy download file for demonstration purposes.\n\nGame Details:\n- Title: ${game.title}\n- Description: ${game.description}\n- Price: $${getCurrentPrice()}\n\nThank you for choosing Play Heaven!`;
     
     const blob = new Blob([fileContent], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
@@ -51,6 +55,34 @@ function GameCard({
     window.URL.revokeObjectURL(url);
     
     console.log('Downloaded game installer:', game.title);
+  };
+
+  const handleMoveToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Adds game to cart and navigate to cart page
+    setIsInCart(true);
+    // TODO: API call to add to cart
+    console.log('Moving game to cart:', game.title);
+    navigate('/cart');
+  };
+
+  const handleRemoveFromWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isUserLoggedIn) {
+      setIsWishlisted(false);
+      
+      // Force render by updating the parent component
+      // This simulates removing the game from the user.wishlist array
+      // TODO: Replace with actual API call to update user.wishlist
+      const event = new CustomEvent('wishlistUpdated', { 
+        detail: { gameId: game.id, action: 'remove' } 
+      });
+      window.dispatchEvent(event);
+      
+      console.log('Removing from wishlist:', game.title);
+    }
   };
 
   const getPlatformIcon = (platform) => {
@@ -70,6 +102,7 @@ function GameCard({
       : parseFloat(game.price).toFixed(2);
   };
 
+  // Shared Components
   const renderPlatformBadges = () => (
     <div className="platform-badges">
       {game.platform.map((platform, index) => (
@@ -122,6 +155,66 @@ function GameCard({
     </div>
   );
 
+  const renderWishlistCard = () => (
+    <div className="game-card game-card-horizontal">
+      <div className="row g-0 h-100">
+        <div className="col-md-4">
+          <div className="game-card-image-container">
+            <img 
+              src={game.image_url} 
+              alt={game.title}
+              className="game-card-image"
+            />
+            {renderPlatformBadges()}
+            {renderDiscountBadge()}
+          </div>
+        </div>
+        
+        <div className="col-md-8">
+          <div className="game-card-content">
+            <div className="content-top">
+              <h5 className="game-card-title">{game.title}</h5>
+              <p className="game-card-description">{game.description}</p>
+            </div>
+            
+            <div className="game-card-footer">
+              {renderPrice()}
+              
+              <div className="game-card-actions">
+                <button 
+                  className="wishlist-action-btn move-to-cart-btn"
+                  onClick={handleMoveToCart}
+                  title="Move to Cart"
+                >
+                  <IoCartOutline />
+                  Move to Cart
+                </button>
+                
+                <Link 
+                  to="/gameinfo" 
+                  className="wishlist-action-btn more-info-btn"
+                  title="More Info"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <FaRegEye />
+                  More Info
+                </Link>
+                
+                <button 
+                  className="wishlist-action-btn remove-btn"
+                  onClick={handleRemoveFromWishlist}
+                  title="Remove from Wishlist"
+                >
+                  <IoHeartDislikeOutline />
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderLibraryCard = () => (
     <div className="game-card game-card-horizontal">
@@ -134,7 +227,6 @@ function GameCard({
               className="game-card-image"
             />
             {renderPlatformBadges()}
-            {/* Remove discount badge for library cards since game is already owned */}
           </div>
         </div>
         
@@ -146,7 +238,6 @@ function GameCard({
             </div>
             
             <div className="game-card-footer">
-              {/* Remove price display for library cards since game is already owned */}
               
               <div className="game-card-actions">
                 <button 
@@ -185,7 +276,7 @@ function GameCard({
   );
 
   const renderFeaturedCard = () => (
-    <Link to="/gameInfo" className="game-card-link">
+    <Link to="/gameinfo" className="game-card-link">
       <div className="game-card game-card-featured">
         <div className="game-card-image-container">
           <img 
@@ -211,7 +302,7 @@ function GameCard({
   );
 
   const renderNewReleaseCard = () => (
-    <Link to="/gameInfo" className="game-card-link">
+    <Link to="/gameinfo" className="game-card-link">
       <div className="game-card game-card-new-release">
         <div className="game-card-image-container">
           <img 
@@ -237,7 +328,7 @@ function GameCard({
   );
 
   const renderHorizontalCard = () => (
-    <Link to="/gameInfo" className="game-card-link">
+    <Link to="/gameinfo" className="game-card-link">
       <div className="game-card game-card-horizontal">
         <div className="row g-0 h-100">
           <div className="col-md-4">
@@ -271,6 +362,8 @@ function GameCard({
   );
 
   switch (cardType) {
+    case 'wishlist':
+      return renderWishlistCard();
     case 'library':
       return renderLibraryCard();
     case 'new-release':
