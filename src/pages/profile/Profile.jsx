@@ -4,9 +4,24 @@ import { useGlobalStore } from "../../hooks/useGlobalStore";
 import { ALL_COUNTRIES } from "../../constants/countries";
 
 function Profile({ id }) {
-  const [image, setImage] = useState("https://picsum.photos/id/22/150/250");
-  const [user, setUser] = useState(null);
+  const [image, setImage] = useState("https://picsum.photos/id/203/150/250");
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    username: "",
+    address: "",
+    city: "",
+    state: "",
+    zip_code: "",
+    country: "",
+  });
   const fileInputRef = useRef(null);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const { store, dispatch } = useGlobalStore();
 
   const handleUpdate = async (e) => {
@@ -24,9 +39,47 @@ function Profile({ id }) {
       zip_code: user.zip_code,
       country: user.country,
     };
+
+    setUser({
+      first_name: "",
+      last_name: "",
+      email: "",
+      username: "",
+      address: "",
+      city: "",
+      state: "",
+      zip_code: "",
+      country: "",
+    });
   };
 
   const getUser = async (id) => {};
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+
+    // Validate passwords match
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert("New passwords don't match!");
+      return;
+    }
+
+    const body = {
+      user_id: store.user.user_id,
+      current_password: passwordData.currentPassword,
+      new_password: passwordData.newPassword,
+    };
+
+    // Add password change API call here
+    console.log("Password change data:", body);
+
+    // Reset form after submission
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
 
   useEffect(() => {
     getUser(id);
@@ -101,7 +154,7 @@ function Profile({ id }) {
                     </h1>
                     <button
                       type="button"
-                      className="btn-close"
+                      className="btn-close btn-close-white"
                       data-bs-dismiss="modal"
                       aria-label="Close"
                     ></button>
@@ -141,7 +194,7 @@ function Profile({ id }) {
                         </label>
                         <input
                           onChange={(e) =>
-                            setUser({ ...user, last_name_name: e.target.value })
+                            setUser({ ...user, last_name: e.target.value })
                           }
                           type="text"
                           className="form-control custom-input"
@@ -212,7 +265,7 @@ function Profile({ id }) {
                             required
                           />
                           <div className="invalid-feedback">
-                            Please add a phone number.
+                            Please add your address.
                           </div>
                         </div>
                       </div>
@@ -235,7 +288,7 @@ function Profile({ id }) {
                           required
                         />
                         <div className="invalid-feedback">
-                          Please provide a valid street.
+                          Please add your city.
                         </div>
                       </div>
 
@@ -257,7 +310,7 @@ function Profile({ id }) {
                           required
                         />
                         <div className="invalid-feedback">
-                          Please provide a valid city.
+                          Please add you state.
                         </div>
                       </div>
 
@@ -329,9 +382,143 @@ function Profile({ id }) {
 
             <button
               className="button-profile"
+              data-bs-toggle="modal"
+              data-bs-target={`#passwordModal-${id}`}
             >
               Change Password
             </button>
+
+            {/* Change Password Modal */}
+            <div
+              className="modal fade"
+              id={`passwordModal-${id}`}
+              tabIndex="-1"
+              aria-labelledby={`passwordModalLabel-${id}`}
+              aria-hidden="true"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content profile-modal">
+                  <div className="modal-header">
+                    <h1
+                      className="modal-title fs-4 fw-bold text-white"
+                      id={`passwordModalLabel-${id}`}
+                    >
+                      Change Password
+                    </h1>
+                    <button
+                      type="button"
+                      className="btn-close btn-close-white"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <form
+                      onSubmit={handlePasswordChange}
+                      className="row g-3 needs-validation"
+                      noValidate
+                    >
+                      <div className="col-md-12">
+                        <label htmlFor="currentPassword" className="form-label">
+                          Current Password
+                        </label>
+                        <input
+                          onChange={(e) =>
+                            setPasswordData({
+                              ...passwordData,
+                              currentPassword: e.target.value,
+                            })
+                          }
+                          type="password"
+                          className="form-control custom-input"
+                          id="currentPassword"
+                          value={passwordData.currentPassword}
+                          required
+                        />
+                        <div className="invalid-feedback">
+                          Please enter your current password.
+                        </div>
+                      </div>
+
+                      <div className="col-md-12">
+                        <label htmlFor="newPassword" className="form-label">
+                          New Password
+                        </label>
+                        <input
+                          onChange={(e) =>
+                            setPasswordData({
+                              ...passwordData,
+                              newPassword: e.target.value,
+                            })
+                          }
+                          type="password"
+                          className="form-control custom-input"
+                          id="newPassword"
+                          value={passwordData.newPassword}
+                          required
+                        />
+                        <div className="invalid-feedback">
+                          Please enter a new password.
+                        </div>
+                      </div>
+
+                      <div className="col-md-12">
+                        <label htmlFor="confirmPassword" className="form-label">
+                          Confirm New Password
+                        </label>
+                        <input
+                          onChange={(e) =>
+                            setPasswordData({
+                              ...passwordData,
+                              confirmPassword: e.target.value,
+                            })
+                          }
+                          type="password"
+                          className="form-control custom-input"
+                          id="confirmPassword"
+                          value={passwordData.confirmPassword}
+                          required
+                        />
+                        <div className="invalid-feedback">
+                          Please confirm your new password.
+                        </div>
+                        {passwordData.newPassword &&
+                          passwordData.confirmPassword &&
+                          passwordData.newPassword !==
+                            passwordData.confirmPassword && (
+                            <div className="text-danger mt-1">
+                              Passwords don't match!
+                            </div>
+                          )}
+                      </div>
+
+                      <hr />
+
+                      <div className="d-flex justify-content-center gap-3 p-1 mt-0">
+                        <button
+                          data-bs-dismiss="modal"
+                          type="submit"
+                          className="custom-button col-4 py-0"
+                          disabled={
+                            passwordData.newPassword !==
+                            passwordData.confirmPassword
+                          }
+                        >
+                          Change
+                        </button>
+                        <button
+                          type="button"
+                          className="cancel-button col-4"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="d-flex justify-content-center align-items-center ms-4">

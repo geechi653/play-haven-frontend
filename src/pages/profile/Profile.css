@@ -14,7 +14,7 @@
 }
 
 .info-label {
-  background: linear-gradient(135deg, #41a4f5 20%, #8b5cf6 80%);
+  background: linear-gradient(135deg, #80bff2 30%, #7440ee 70%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -22,7 +22,7 @@
 }
 
 .info-input {
-  background: linear-gradient(135deg, #fef5a1 20%, #ffd501 80%);
+  background: linear-gradient(135deg, #f7ea74 30%, #ffd500 70%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
