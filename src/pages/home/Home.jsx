@@ -59,7 +59,7 @@ function Home() {
           <div className="row justify-content-center">
             {featuredGamesWithWishlist.map(game => (
               <div key={game.id} className="col-lg-4 col-md-6 col-sm-8 col-10">
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center m-2">
                   <GameCard 
                     game={game} 
                     cardType="featured" 
