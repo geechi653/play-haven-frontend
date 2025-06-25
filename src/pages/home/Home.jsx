@@ -31,7 +31,6 @@ function Home() {
 
   return (
     <div className="home-page">
-      {/* Hero Section */}
       <section className="hero-section text-white py-5 mb-5">
         <div className="container">
           <div className="row align-items-center">
@@ -51,7 +50,6 @@ function Home() {
       </section>
 
       <div className="container">
-        {/* Featured Games Section */}
         <section className="featured-games mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Featured Games</h2>
@@ -73,7 +71,6 @@ function Home() {
           </div>
         </section>
 
-        {/* New Releases Section */}
         <section className="new-releases mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">New Releases</h2>
@@ -93,7 +90,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Special Offers Section - Horizontal Cards */}
         <section className="special-offers mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Special Offers</h2>

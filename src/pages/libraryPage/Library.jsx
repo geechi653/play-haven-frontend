@@ -65,7 +65,7 @@ function Library() {
 
         <div className="library-controls">
           <div className="row g-3 align-items-end">
-            {/* Search Bar */}
+
             <div className="col-md-4">
               <label htmlFor="search" className="form-label">Search Games</label>
               <input
@@ -78,7 +78,6 @@ function Library() {
               />
             </div>
 
-            {/* Genre Filter */}
             <div className="col-md-2">
               <label htmlFor="genre" className="form-label">Genre</label>
               <select
@@ -94,7 +93,6 @@ function Library() {
               </select>
             </div>
 
-            {/* Platform Filter */}
             <div className="col-md-2">
               <label htmlFor="platform" className="form-label">Platform</label>
               <select
@@ -110,7 +108,6 @@ function Library() {
               </select>
             </div>
 
-            {/* Sort Options */}
             <div className="col-md-2">
               <label htmlFor="sort" className="form-label">Sort By</label>
               <select
@@ -125,7 +122,6 @@ function Library() {
               </select>
             </div>
 
-            {/* Clear Filters */}
             <div className="col-md-2">
               <button
                 className="btn btn-outline-secondary w-100"
