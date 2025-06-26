@@ -5,8 +5,6 @@
 .profile-title {
   color: #ffffff;
   font-weight: 700;
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, #d6d6d67b 0%, #d6d6d6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -19,11 +17,12 @@ background: linear-gradient(135deg, #f59e0b 30%, #d97706 70%);
 -webkit-text-fill-color: transparent;
 background-clip: text;
 color: transparent;
+font-size: 18px;
 }
 
 .info-input {
-color: #7c3aed;
-font-size: 23px !important;
+color: #c3bec9;
+font-size: 19px !important;
 }
 
 .button-profile {
@@ -43,8 +42,8 @@ font-size: 23px !important;
 }
 
 .profile-image {
-  width: 230px;
-  height: 230px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -52,18 +51,19 @@ font-size: 23px !important;
 .profile-image-container {
   position: relative;
   display: inline-block;
+  height: 130px;
 }
 
 .profile-image-overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 230px;
-  height: 230px;
+  width: 130px;
+  height: 130px;
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: bold;
   border-radius: 50%;
   transition: opacity 0.2s;
