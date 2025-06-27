@@ -1,6 +1,7 @@
 .login-container {
-    height: 50vh;
-  background: linear-gradient(to right, rgb(9, 28, 61), rgb(48, 66, 97));
+  height: 50vh;
+  background: linear-gradient(135deg, #0e1015 0%, #263242 100%);
+  padding: 6rem;
 }
 
 /* .custom-button {
@@ -27,8 +28,8 @@
 
 /* .custom-input::placeholder {
   color: rgb(169, 169, 169); /* Change this color to your desired color */
-  /* opacity: 1; */
-/* } */ 
+/* opacity: 1; */
+/* } */
 
 /* .custom-input:focus {
   background-color: rgba(71, 109, 174, 0.296);

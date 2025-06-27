@@ -142,7 +142,7 @@ function SignUp() {
             </Link>
           </p>
 
-          <div className="mb-1">
+          <div className="mb-2">
             <button
               type="submit"
               className="custom-button fs-4 col-12 fw-bolder rounded-5"
