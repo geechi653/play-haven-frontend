@@ -5,7 +5,7 @@
 .profile-title {
   color: #ffffff;
   font-weight: 700;
-  background: linear-gradient(135deg, #d6d6d67b 0%, #d6d6d6 100%);
+  background: linear-gradient(135deg, #ffffff80 0%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -42,8 +42,8 @@ font-size: 19px !important;
 }
 
 .profile-image {
-  width: 130px;
-  height: 130px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -58,8 +58,8 @@ font-size: 19px !important;
   position: absolute;
   top: 0;
   left: 0;
-  width: 130px;
-  height: 130px;
+  width: 180px;
+  height: 180px;
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;

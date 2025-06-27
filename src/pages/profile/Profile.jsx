@@ -445,11 +445,11 @@ function Profile({ id }) {
 
                 <hr />
 
-                <div className="d-flex justify-content-center gap-3 p-1 mt-0">
+                <div className="d-flex justify-content-center gap-3 p-0 mt-0">
                   <button
                     data-bs-dismiss="modal"
                     type="submit"
-                    className="custom-button col-4 py-0"
+                    className="custom-button col-4 p-3"
                     disabled={
                       passwordData.newPassword !== passwordData.confirmPassword
                     }
@@ -526,15 +526,15 @@ function Profile({ id }) {
         </div>
       </div>
 
-      <div className="profile-page d-flex justify-content-center py-3">
+      <div className="profile-page d-flex justify-content-center py-4">
         <Glass>
           <h2 className="text-center text-light fw-bolder profile-title mb-3">
             My Profile
           </h2>
           <hr />
-          <div className="d-flex ms-3 gap-5">
+          <div className="d-flex justify-content-around">
 
-            <div className="d-flex flex-column align-items-center gap-3">
+            <div className="d-flex flex-column align-items-center gap-4">
             <div
               className="profile-image-container position-relative"
               onClick={handleImageClick}
@@ -552,14 +552,14 @@ function Profile({ id }) {
               />
             </div>
 
-            <div> <button className="btn btn-outline-danger border-0"
+            <div> <button className="btn btn-outline-danger border-0 mt-5"
             data-bs-toggle="modal"
             data-bs-target={`#deleteModal-${id}`}
             >Delete Account</button></div>
 
             </div>
 
-            <div className="ms-2">
+            <div className="ms-3">
               <div className="fs-4 fw-bold mb-2">
                 <span className="info-label">First Name: </span>{" "}
                 <span className="ms-2 info-input">
