@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchGameDetails, addToCart, downloadGame } from '../../utils/api.js';
+import { fetchGameDetails } from '../../utils/api.js';
 import { initialState } from '../../store/initialStore.js';
 import './GameInfo.css';
 
@@ -17,55 +17,36 @@ function GameInfo() {
   const isUserLoggedIn = user.isAuthenticated;
   const isWishlisted = user.wishlist.includes(Number(gameId));
 
-  const handleDownloadGame = async () => {
+  const handleDownloadGame = () => {
     if (!game) return;
     
-    // Check authentication first - if not logged in, show login modal
-    if (!isUserLoggedIn) {
-      setShowLoginModal(true);
-      return;
-    }
+    // Create a blob with game data to simulate a download
+    const gameData = {
+      name: game.title,
+      platform: game.platform,
+      id: game.id,
+      downloadedAt: new Date().toISOString()
+    };
     
-    try {
-      // Call the secure download API
-      const gameData = await downloadGame(game.id, user.userId);
-      
-      // Create a blob with game data to simulate a download
-      const downloadInfo = {
-        name: game.title,
-        platform: game.platform,
-        id: game.id,
-        downloadedAt: new Date().toISOString(),
-        downloadDetails: gameData.download_info
-      };
-      
-      const blob = new Blob([JSON.stringify(downloadInfo, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      
-      // Set up download attributes
-      link.href = url;
-      link.download = `${game.title.replace(/[^a-zA-Z0-9]/g, '_')}_install.json`;
-      document.body.appendChild(link);
-      
-      // Trigger download and clean up
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      
-      // Show a success message or trigger additional actions
-      alert(`Download started for ${game.title}. Check your downloads folder.`);
-    } catch (error) {
-      console.error('Error downloading game:', error);
-      if (error.message.includes('Authentication required')) {
-        setShowLoginModal(true);
-      } else {
-        alert('Failed to download game. Please try again later.');
-      }
-    }
+    const blob = new Blob([JSON.stringify(gameData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    // Set up download attributes
+    link.href = url;
+    link.download = `${game.title.replace(/[^a-zA-Z0-9]/g, '_')}_install.json`;
+    document.body.appendChild(link);
+    
+    // Trigger download and clean up
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    // Show a success message or trigger additional actions
+    alert(`Download started for ${game.title}. Check your downloads folder.`);
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!isUserLoggedIn) {
       setShowLoginModal(true);
       return;
@@ -77,22 +58,12 @@ function GameInfo() {
       return;
     }
     
-    try {
-      // Add to cart through API
-      const response = await addToCart(game.id, user.userId);
-      
-      // Show success message
-      alert(`${game.title} has been added to your cart.`);
-      
-      // If we wanted to update the cart state immediately, we could do so here
-      // This would typically be handled by a global state manager like Redux
-    } catch (error) {
-      console.error('Error adding game to cart:', error);
-      alert('Failed to add game to cart. Please try again.');
-    }
+    // For paid games, add to cart logic would go here
+    // Since we're simplifying, just show a message
+    alert(`${game.title} has been added to your cart.`);
   };
   
-  const handleBuyNow = async () => {
+  const handleBuyNow = () => {
     if (!isUserLoggedIn) {
       setShowLoginModal(true);
       return;
@@ -100,20 +71,12 @@ function GameInfo() {
     
     // For free games, download directly
     if (game.status === "Free" || parseFloat(game.price) === 0) {
-      await handleDownloadGame();
+      handleDownloadGame();
       return;
     }
     
-    try {
-      // Add to cart first
-      await addToCart(game.id, user.userId);
-      
-      // Redirect to checkout page
-      navigate('/cart');
-    } catch (error) {
-      console.error('Error proceeding to checkout:', error);
-      alert('Failed to proceed to checkout. Please try again.');
-    }
+    // For paid games, hypothetically go to checkout
+    alert(`Proceeding to checkout for ${game.title}.`);
   };
   
   const closeLoginModal = () => {
@@ -212,20 +175,11 @@ function GameInfo() {
             <h1 className="game-title">{game.title}</h1>
             
             <div className="game-meta mb-4">
-              {game.category && game.category.split(', ').map((cat, index) => (
-                <span key={index} className="badge bg-primary">{cat}</span>
-              ))}
-              
-              {typeof game.platform === 'string' && game.platform.split(', ').map((platform, index) => (
-                <span key={`platform-${index}`} className="badge bg-secondary">{platform}</span>
-              ))}
-              
-              {Array.isArray(game.platform) && game.platform.map((platform, index) => (
-                <span key={`platform-array-${index}`} className="badge bg-secondary">{platform}</span>
-              ))}
-              
-              <span className="badge bg-info">{game.release_year}</span>
-              
+              <span className="badge bg-primary me-2">{game.category}</span>
+              <span className="badge bg-secondary me-2">
+                {typeof game.platform === 'string' ? game.platform : Array.isArray(game.platform) ? game.platform.join(', ') : 'Unknown Platform'}
+              </span>
+              <span className="badge bg-info me-2">{game.release_year}</span>
               {game.rating && (
                 <span className="badge bg-warning text-dark">
                   Rating: {game.rating}/10
@@ -273,8 +227,8 @@ function GameInfo() {
       {showLoginModal && (
         <div className="login-modal-overlay">
           <div className="login-modal">
-            <h4>Authentication Required</h4>
-            <p>You need to be logged in to {game && game.status === "Free" ? "download this game" : "add this game to your cart"}.</p>
+            <h4>Please Log In</h4>
+            <p>You need to be logged in to perform this action.</p>
             <div className="login-modal-buttons">
               <button 
                 className="btn btn-primary"

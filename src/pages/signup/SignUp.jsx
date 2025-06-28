@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import Glass from "../../components/glass/Glass";
 import "./SignUp.css";
 import { useState } from "react";

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { IoCartOutline, IoPlayOutline, IoDownloadOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
 import './GameCard.css';
@@ -86,6 +86,8 @@ function GameCard({
   };
 
   const getPlatformIcon = (platform) => {
+    if (!platform) return '🎮';
+    
     const icons = {
       windows: 'windows',
       linux: 'linux',
@@ -97,42 +99,79 @@ function GameCard({
   };
 
   const getCurrentPrice = () => {
-    return game.discount && game.original_price 
-      ? (parseFloat(game.original_price) * (100 - game.discount) / 100).toFixed(2)
-      : parseFloat(game.price).toFixed(2);
+    // Check if the game is free
+    if (game.status === "Free" || game.price === 0 || game.price === "0" || game.price === "0.00") {
+      return "0.00";
+    }
+    
+    // If there's a discount and original price, calculate the discounted price
+    if (game.discount && game.discount > 0 && game.original_price) {
+      const originalPrice = typeof game.original_price === 'string' 
+        ? parseFloat(game.original_price) 
+        : game.original_price;
+      return ((originalPrice * (100 - game.discount)) / 100).toFixed(2);
+    }
+    
+    // Otherwise return the regular price or 0 if price is not available
+    // Ensure price is treated as a number and not a string
+    const price = typeof game.price === 'string' ? parseFloat(game.price) : game.price || 0;
+    return price.toFixed(2);
   };
 
   // Shared Components
-  const renderPlatformBadges = () => (
-    <div className="platform-badges">
-      {game.platform.map((platform, index) => (
-        <span key={index} className="platform-badge" title={platform}>
-          {getPlatformIcon(platform)}
-        </span>
-      ))}
-    </div>
-  );
-
-  const renderDiscountBadge = () => (
-    game.discount && (
-      <div className="discount-badge">
-        -{game.discount}%
+  const renderPlatformBadges = () => {
+    // Handle platform as a string (e.g., "Windows, Mac") or as an array
+    const platforms = typeof game.platform === 'string' 
+      ? game.platform.split(', ') 
+      : Array.isArray(game.platform) 
+        ? game.platform 
+        : [];
+    
+    return (
+      <div className="platform-badges">
+        {platforms.map((platform, index) => (
+          <span key={index} className="platform-badge" title={platform}>
+            {getPlatformIcon(platform)}
+          </span>
+        ))}
       </div>
-    )
-  );
+    );
+  };
 
-  const renderPrice = () => (
-    <div className="game-card-price">
-      {game.discount && game.original_price ? (
-        <>
-          <span className="original-price">${parseFloat(game.original_price).toFixed(2)}</span>
-          <span className="discounted-price">${getCurrentPrice()}</span>
-        </>
-      ) : (
-        <span className="current-price">${parseFloat(game.price).toFixed(2)}</span>
-      )}
-    </div>
-  );
+  const renderDiscountBadge = () => {
+    // Check if there's a valid discount percentage
+    const discountPercentage = game.discount || 0;
+    return discountPercentage > 0 ? (
+      <div className="discount-badge">
+        -{discountPercentage}%
+      </div>
+    ) : null;
+  };
+
+  const renderPrice = () => {
+    if (game.status === "Free" || game.price === 0 || game.price === "0" || game.price === "0.00") {
+      return (
+        <div className="game-card-price">
+          <span className="free-price">Free</span>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="game-card-price">
+        {game.discount && game.original_price ? (
+          <>
+            <span className="original-price">${typeof game.original_price === 'string' 
+              ? parseFloat(game.original_price).toFixed(2) 
+              : game.original_price.toFixed(2)}</span>
+            <span className="discounted-price">${getCurrentPrice()}</span>
+          </>
+        ) : (
+          <span className="current-price">${getCurrentPrice()}</span>
+        )}
+      </div>
+    );
+  };
 
   const renderStandardActions = () => (
     <div className="game-card-actions">
@@ -191,7 +230,7 @@ function GameCard({
                 </button>
                 
                 <Link 
-                  to="/gameinfo" 
+                  to={`/gameinfo/${game.id}`} 
                   className="wishlist-action-btn more-info-btn"
                   title="More Info"
                   onClick={(e) => e.stopPropagation()}
@@ -259,7 +298,7 @@ function GameCard({
                 </button>
                 
                 <Link 
-                  to="/gameinfo" 
+                  to={`/gameinfo/${game.id}`} 
                   className="library-action-btn info-btn"
                   title="Game Info"
                   onClick={(e) => e.stopPropagation()}
@@ -276,7 +315,7 @@ function GameCard({
   );
 
   const renderFeaturedCard = () => (
-    <Link to="/gameinfo" className="game-card-link">
+    <Link to={`/gameinfo/${game.id}`} className="game-card-link">
       <div className="game-card game-card-featured">
         <div className="game-card-image-container">
           <img 
@@ -302,7 +341,7 @@ function GameCard({
   );
 
   const renderNewReleaseCard = () => (
-    <Link to="/gameinfo" className="game-card-link">
+    <Link to={`/gameinfo/${game.id}`} className="game-card-link">
       <div className="game-card game-card-new-release">
         <div className="game-card-image-container">
           <img 
@@ -328,7 +367,7 @@ function GameCard({
   );
 
   const renderHorizontalCard = () => (
-    <Link to="/gameinfo" className="game-card-link">
+    <Link to={`/gameinfo/${game.id}`} className="game-card-link">
       <div className="game-card game-card-horizontal">
         <div className="row g-0 h-100">
           <div className="col-md-4">

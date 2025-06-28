@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { TbBooks } from "react-icons/tb";
 import { IoCartOutline } from "react-icons/io5";
@@ -44,24 +44,19 @@ function Navbar() {
           >
             <ul className="navbar-nav d-flex">
               <li className="nav-item playheaven-nav-item">
-                <a className="nav-link playheaven-nav-link" href="store">
+                <Link className="nav-link playheaven-nav-link" to="/store">
                   Store
-                </a>
+                </Link>
               </li>
               <li className="nav-item playheaven-nav-item">
-                <a className="nav-link playheaven-nav-link" href="categories">
-                  Categories
-                </a>
-              </li>
-              <li className="nav-item playheaven-nav-item">
-                <a className="nav-link playheaven-nav-link" href="news">
+                <Link className="nav-link playheaven-nav-link" to="/news">
                   News
-                </a>
+                </Link>
               </li>
               <li className="nav-item playheaven-nav-item">
-                <a className="nav-link playheaven-nav-link" href="about">
+                <Link className="nav-link playheaven-nav-link" to="/about">
                   About
-                </a>
+                </Link>
               </li>
             </ul>
 

@@ -1,7 +1,7 @@
 /* Base Game Card Styles */
 .game-card {
-  background: linear-gradient(135deg, #1e293b 0%, #2f363f 100%);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, #1e1e2c 0%, #2a274d 100%);
+  border: 1px solid rgba(124, 58, 237, 0.3);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -11,8 +11,8 @@
 
 .game-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
 }
 
 /* Image Container */
@@ -196,6 +196,12 @@
 
 .current-price {
   color: #10b981;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.free-price {
+  color: #60a5fa;
   font-weight: 700;
   font-size: 1.1rem;
 }

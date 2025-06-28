@@ -1,0 +1,171 @@
+.store-page {
+  min-height: calc(100vh - 150px);
+  background: linear-gradient(135deg, #0e1015 0%, #263242 100%);
+  color: #e0e0e0;
+}
+
+.store-page h1, .store-page h2, .store-page h3 {
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+  color: #a78bfa;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.search-bar {
+  background: rgba(61, 18, 94, 0.3);
+  border: 1px solid rgba(124, 58, 237, 0.5);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar .form-control {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.5);
+  color: white;
+}
+
+.search-bar .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-bar .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.25);
+  color: white;
+}
+
+.category-filter button {
+  background-color: rgba(61, 18, 94, 0.2);
+  color: #e0e0e0;
+  border: 1px solid rgba(124, 58, 237, 0.5);
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.category-filter button:hover,
+.category-filter button.active {
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.4);
+}
+
+.game-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Pagination styles */
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pagination .page-link {
+  color: #a78bfa;
+  border-color: rgba(124, 58, 237, 0.3);
+  background-color: rgba(61, 18, 94, 0.2);
+  border-radius: 4px;
+  margin: 0 3px;
+  transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: rgba(124, 58, 237, 0.4);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+  color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #cfcfcf;
+}
+
+/* Infinite scroll trigger */
+#infinite-scroll-trigger {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Game stats container */
+.game-stats-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.stats-pill {
+  background: rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(124, 58, 237, 0.5);
+  border-radius: 30px;
+  padding: 0.5rem 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stats-label {
+  color: #d8b4fe;
+  font-size: 0.9rem;
+}
+
+.stats-value {
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.stats-separator {
+  color: #a78bfa;
+  margin: 0 0.25rem;
+}
+
+.store-loading {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(61, 18, 94, 0.2);
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.store-loading .spinner-border {
+  color: #a78bfa;
+  width: 3rem;
+  height: 3rem;
+}
+
+.store-error {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  color: #fca5a5;
+}

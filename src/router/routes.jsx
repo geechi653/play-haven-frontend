@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from './RootLayout.jsx';
 import ErrorPage from './ErrorPage.jsx';
 import Home from '../pages/home/Home.jsx';
@@ -30,10 +30,12 @@ export const router = createBrowserRouter([
       { path: '/categories', element: <Categories /> },
       { path: '/wishlist', element: <Wishlist /> },
       { path: '/libraryPage', element: <Library /> },
-      { path: '/gameinfo', element: <GameInfo /> },
+      { path: '/gameinfo/:gameId', element: <GameInfo /> },
       { path: '/cart', element: <Cart /> },
       { path: '/signup', element: <SignUp /> },
       { path: '/login', element: <Login /> },
+      // Catch-all route to redirect to home
+      { path: '*', element: <Home /> },
     ],
   },
 ]);
