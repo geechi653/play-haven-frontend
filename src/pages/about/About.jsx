@@ -19,7 +19,7 @@ function About() {
             <li>💜 Built by gamers, for gamers</li>
           </ul>
           <p className="mt-3">
-            <em>Thank you for being part of the Play Haven community!</em>
+            <em>Thank you for being part of the Play Haven community!!</em>
           </p>
         </div>
       </div>
