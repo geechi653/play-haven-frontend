@@ -98,7 +98,7 @@ function Store() {
   if (loading) {
     return (
       <div className="store-page">
-        <div className="container mt-5">
+        <div className="container">
           <div className="store-loading">
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -208,7 +208,7 @@ function Store() {
               onClick={() => setPage(prev => prev + 1)}
               disabled={loadingMore}
             >
-              {loadingMore ? 'Loading...' : 'Next Page'}
+              {loadingMore ? 'Loading...' : 'More'}
             </button>
           </div>
         )}

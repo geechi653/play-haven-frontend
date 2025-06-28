@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Glass from "../../components/glass/Glass";
 import { useState } from "react";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
@@ -11,16 +11,35 @@ function Login() {
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    const user = {
-      username: userInputs.username,
-      password: userInputs.password,
-    };
-
-    // api call
+    setError(false);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userInputs.username,
+          password: userInputs.password,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok && data && data.token) {
+        dispatch({
+          type: "LOGIN",
+          payload: { token: data.token, user: data.user },
+        });
+        navigate("/home");
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      setError(true);
+    }
   };
 
   return (

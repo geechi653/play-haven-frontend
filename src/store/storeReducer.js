@@ -19,15 +19,24 @@
  */
 export function storeReducer(state, action) {
   switch (action.type) {
-    case 'ADD_TASK':
+    case 'LOGIN':
       return {
         ...state,
-        todos: [...state.todos, action.payload.task],
+        user: {
+          ...action.payload.user,
+          isAuthenticated: true,
+        },
       };
-    case 'DELETE_TASK':
-      return state.todos.filter((todo) => todo !== action.payload.id);
-    case 'SET_TODOS':
-      return { ...state, todos: action.payload.todos };
+    case 'LOGOUT':
+      return {
+        ...state,
+        user: {
+          isAuthenticated: false,
+          username: '',
+          email: '',
+          avatar: '',
+        },
+      };
     default:
       return state;
   }

@@ -6,7 +6,7 @@ function About() {
   return (
     <div className="about-page">
       <div className="container py-5">
-        <h1 className="mb-4 text-center">About Play Haven</h1>
+        <h1 className="mb-4 text-center">About Us</h1>
         <div className="about-content p-4 rounded shadow-sm">
           <p>
             <strong>Play Haven</strong> is your ultimate destination for discovering, buying, and playing the best PC games. Our mission is to bring gamers together and make gaming accessible, fun, and social for everyone.
