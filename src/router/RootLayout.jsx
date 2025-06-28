@@ -14,6 +14,7 @@ function RootLayout() {
         <NavButton to ='/wishlist' text='Wishlist'/>
         <NavButton to ='/cart' text='Cart'/>
         <NavButton to ='/categories' text='Categories'/>
+        <NavButton to ='/profile' text='Profile'/>
       </Navbar>
       
       <main className='flex-grow-1'>

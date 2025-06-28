@@ -57,3 +57,30 @@
   color: white;
   font-size: 0.875rem;
 }
+
+.playheaven-navbar .dropdown-menu {
+  position: absolute !important;
+  right: 0;
+  left: auto;
+  min-width: 180px;
+  width: auto;
+  background-color: #23272f;
+  color: #fff;              
+  border: none;
+}
+
+
+.playheaven-navbar .dropdown-item,.nav-link.dropdown-toggle {
+  color: #fff;
+}
+
+.playheaven-navbar .dropdown-item:hover,
+.playheaven-navbar .dropdown-item:focus {
+  background-color: #3a3f47; 
+  color: #ffd700;            
+}
+
+.playheaven-navbar .dropdown-divider {
+  border-top: 1px solid #444;
+}
+

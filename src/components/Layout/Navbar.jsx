@@ -39,7 +39,9 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <div
             className={`playheaven-nav-container d-flex w-100 ${
-              isSignUpPage || isLoginPage ? "justify-content-end" : "justify-content-start"
+              isSignUpPage || isLoginPage
+                ? "justify-content-end"
+                : "justify-content-start"
             }`}
           >
             <ul className="navbar-nav d-flex">
@@ -65,12 +67,18 @@ function Navbar() {
                 <Link
                   to="/store"
                   className="playheaven-icon-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Search"
                 >
                   <IoSearch />
                 </Link>
                 <Link
                   to="/wishlist"
                   className="playheaven-icon-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Wishlist"
                 >
                   <FaRegHeart />
                 </Link>
@@ -78,6 +86,9 @@ function Navbar() {
                 <Link
                   to="/cart"
                   className="playheaven-icon-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Cart"
                 >
                   <IoCartOutline />
                 </Link>
@@ -85,17 +96,39 @@ function Navbar() {
                 <Link
                   to="/libraryPage"
                   className="playheaven-icon-btn playheaven-library-btn text-decoration-none"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Library"
                 >
                   <TbBooks />
                 </Link>
 
-                <Link
-                  to="/profile"
-                  className="playheaven-user-profile d-flex align-items-center text-decoration-none"
-                >
-                  <div className="playheaven-avatar"></div>
-                  <span className="playheaven-username">PlayerOne</span>
-                </Link>
+                <div className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle d-flex align-items-center"
+                    data-bs-toggle="dropdown"
+                    role="button"
+                    aria-expanded="false"
+                  >
+                    <div className="playheaven-avatar"></div>
+                    <span className="playheaven-username">PlayerOne</span>
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <Link className="dropdown-item" to="/profile">
+                        My Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="#">
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               </div>
             )}
           </div>
