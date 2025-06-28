@@ -1,4 +1,4 @@
-// filepath: /home/ragil/Desktop/zaza/play-haven-frontend/src/pages/about/About.jsx
+
 import React from 'react';
 import './About.css';
 

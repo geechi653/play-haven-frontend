@@ -1,5 +1,6 @@
 .signup-container {
-  background: linear-gradient(to right, rgb(9, 28, 61), rgb(48, 66, 97));
+  background: linear-gradient(135deg, #0e1015 0%, #263242 100%);
+  padding: 4rem
 }
 
 .custom-button {
