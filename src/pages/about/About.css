@@ -1,0 +1,49 @@
+.about-page {
+  background: linear-gradient(135deg, #0e1015 0%, #263242 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.about-content {
+  background: rgba(61, 18, 94, 0.15);
+  border-left: 5px solid #7c3aed;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 2rem 3vw;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.about-page h1 {
+  color: #a78bfa;
+  font-weight: 700;
+  margin-top: 2rem;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.about-content ul {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.about-content li {
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.about-content p {
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.about-content strong {
+  color: #a78bfa;
+}

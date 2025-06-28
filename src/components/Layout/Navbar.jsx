@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { TbBooks } from "react-icons/tb";
 import { IoCartOutline } from "react-icons/io5";
@@ -48,11 +48,6 @@ function Navbar() {
               <li className="nav-item playheaven-nav-item">
                 <Link className="nav-link playheaven-nav-link" to="/store">
                   Store
-                </Link>
-              </li>
-              <li className="nav-item playheaven-nav-item">
-                <Link className="nav-link playheaven-nav-link" to="/categories">
-                  Categories
                 </Link>
               </li>
               <li className="nav-item playheaven-nav-item">

@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import Glass from "../../components/glass/Glass";
 import { useState } from "react";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
