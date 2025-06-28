@@ -1,24 +1,52 @@
 
+import { useState, useEffect } from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
 import { initialState } from '../../store/initialStore.js';
+import { fetchFeaturedGames, fetchTopGames, fetchDiscountedGames } from '../../utils/api.js';
 import './Home.css';
 
 
 function Home() {
+  const [featuredGames, setFeaturedGames] = useState([]);
+  const [topGames, setTopGames] = useState([]);
+  const [discountedGames, setDiscountedGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const storeData = initialState();
-  const { games, user, categories } = storeData;
+  const { user } = storeData;
   
-  // Filter games based on their properties
-  const featuredGames = games.allGames.filter(game => game.featured).slice(0, 3);
-  const newReleases = games.allGames.filter(game => game.new_release).slice(0, 4);
-  const specialOffers = games.allGames.filter(game => game.discount && game.discount > 0);
+  useEffect(() => {
+    const loadGames = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch games from Steam API
+        const featured = await fetchFeaturedGames();
+        const top = await fetchTopGames();
+        const discounted = await fetchDiscountedGames();
+        
+        setFeaturedGames(featured || []);
+        setTopGames(top || []);
+        setDiscountedGames(discounted || []);
+        
+        setLoading(false);
+      } catch (err) {
+        console.error('Error loading games:', err);
+        setError('Failed to load games. Please try again later.');
+        setLoading(false);
+      }
+    };
+    
+    loadGames();
+  }, []);
 
   // Checking if user is authenticated
   const isUserLoggedIn = user.isAuthenticated;
   
   // Adding wishlist status to games based on user's wishlist
   const addWishlistStatus = (gamesList) => {
+    if (!gamesList) return [];
     return gamesList.map(game => ({
       ...game,
       isWishlisted: user.wishlist.includes(game.id)
@@ -26,8 +54,29 @@ function Home() {
   };
 
   const featuredGamesWithWishlist = addWishlistStatus(featuredGames);
-  const newReleasesWithWishlist = addWishlistStatus(newReleases);
-  const specialOffersWithWishlist = addWishlistStatus(specialOffers);
+  const topGamesWithWishlist = addWishlistStatus(topGames.slice(0, 4));
+  const discountedGamesWithWishlist = addWishlistStatus(discountedGames);
+
+  if (loading) {
+    return (
+      <div className="container mt-5 text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Loading games...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mt-5 text-center">
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home-page">
@@ -57,7 +106,7 @@ function Home() {
           </div>
           
           <div className="row justify-content-center">
-            {featuredGamesWithWishlist.map(game => (
+            {featuredGamesWithWishlist.slice(0, 3).map(game => (
               <div key={game.id} className="col-lg-4 col-md-6 col-sm-8 col-10">
                 <div className="d-flex justify-content-center m-2">
                   <GameCard 
@@ -73,12 +122,12 @@ function Home() {
 
         <section className="new-releases mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="section-title">New Releases</h2>
+            <h2 className="section-title">Top Games</h2>
             <a href="/store" className="btn btn-custom">View All</a>
           </div>
           
           <div className="row g-4">
-            {newReleasesWithWishlist.map(game => (
+            {topGamesWithWishlist.map(game => (
               <div key={game.id} className="col-xl-3 col-lg-4 col-md-6 d-flex justify-content-center">
                 <GameCard 
                   game={game} 
@@ -92,13 +141,13 @@ function Home() {
 
         <section className="special-offers mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="section-title">Special Offers</h2>
+            <h2 className="section-title">Discounted Games</h2>
             <a href="/store" className="btn btn-custom">View All</a>
           </div>
           
           <div className="row">
             <div className="col-12">
-              {specialOffersWithWishlist.map(game => (
+              {discountedGamesWithWishlist.slice(0, 5).map(game => (
                 <GameCard 
                   key={game.id}
                   game={game} 

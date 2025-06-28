@@ -190,6 +190,32 @@ export const initialState = () => ({
         image_url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=250&fit=crop",
         discount: 30,
         original_price: "52.99"
+      },
+      {
+        id: 11,
+        title: "Counter Strike 2",
+        price: "29.99",
+        release_year: 2024,
+        status: "released",
+        category: "FPS, Multiplayer",
+        description: "The next evolution of the iconic competitive shooter. New graphics, improved gameplay, and enhanced matchmaking.",
+        platform: ["windows", "mac"],
+        rating: 9.7,
+        image_url: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=250&fit=crop"
+      },
+      {
+        id: 12,
+        title: "Dead by Daylight",
+        price: "19.99",
+        release_year: 2023,
+        status: "released",
+        category: "Horror, Multiplayer",
+        description: "A multiplayer horror game where one player takes on the role of a brutal killer and the others play as survivors trying to escape.",
+        platform: ["windows", "mac", "linux"],
+        rating: 8.8,
+        image_url: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&h=250&fit=crop",
+        discount: 50,
+        original_price: "39.99"
       }
     ],
     
