@@ -89,10 +89,10 @@ function GameCard({
     if (!platform) return '🎮';
     
     const icons = {
-      windows: 'windows',
-      linux: 'linux',
+      windows: 'Windows',
+      linux: 'Linux',
       ios: 'ios',
-      mac: 'ios',
+      mac: 'Mac',
       android: 'android'
     };
     return icons[platform.toLowerCase()] || '🎮';
