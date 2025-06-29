@@ -54,8 +54,17 @@
 
 /* Username */
 .playheaven-username {
-  color: #dfb9f9;
-  font-size: 0.875rem;
+  /* color: #dfb9f9; */
+  color: #f7f7f7;
+}
+
+.playheaven-username.btn {
+  border: 1px solid #f7f7f7;
+  border-radius: 20px;
+}
+.playheaven-username.btn:hover {
+  border: 1px solid #dedede;
+  color: #cecece;
 }
 
 .playheaven-navbar .dropdown-menu {
@@ -67,16 +76,6 @@
   background-color: #23272f;
   color: #fff;
   border: none;
-}
-
-.playheaven-navbar .dropdown-item,
-.nav-link.dropdown-toggle {
-  color: #dfb9f9; 
-}
-
-.playheaven-navbar .dropdown-item:hover,
-.playheaven-navbar .dropdown-item:focus {
-  background-color: #3a3f47;
 }
 
 .playheaven-navbar .dropdown-divider {

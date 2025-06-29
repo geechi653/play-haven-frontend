@@ -6,6 +6,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
 import { useNavigate } from "react-router-dom";
+import { MdExpandMore } from "react-icons/md";
 
 function Navbar() {
   const { store, dispatch } = useGlobalStore();
@@ -116,18 +117,28 @@ function Navbar() {
                 <div className="d-flex justify-content-center align-items-center gap-3">
                   <div className="nav-item dropdown">
                     <a
-                      className="nav-link dropdown-toggle d-flex align-items-center"
+                      className="nav-link d-flex align-items-center"
                       data-bs-toggle="dropdown"
                       role="button"
                       aria-expanded="false"
                     >
-                      <span className="playheaven-username fs-6">
-                        {username || "Profile"}
+                      <span className="btn playheaven-username fs-6">
+                        <div className="d-flex justify-content-center align-items-center">
+                          <span className="fw-bolder">
+                            {username || "Profile"}
+                          </span>
+                          <span>
+                            <MdExpandMore className="fs-5 ms-1 fw-bolder" />
+                          </span>
+                        </div>
                       </span>
                     </a>
                     <ul className="dropdown-menu">
                       <li>
-                        <Link className="dropdown-item text-white" to="/profile">
+                        <Link
+                          className="dropdown-item text-white"
+                          to="/profile"
+                        >
                           My Profile
                         </Link>
                       </li>
