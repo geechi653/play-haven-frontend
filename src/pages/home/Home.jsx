@@ -1,55 +1,44 @@
-
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import { useGlobalStore } from '../../hooks/useGlobalStore';
 import GameCard from '../../components/GameCard/GameCard.jsx';
-import { initialState } from '../../store/initialStore.js';
 import { fetchFeaturedGames, fetchTopGames, fetchDiscountedGames } from '../../utils/api.js';
 import './Home.css';
 
-
 function Home() {
+  const { store } = useGlobalStore();
+  const isUserLoggedIn = store.user && store.user.isAuthenticated;
   const [featuredGames, setFeaturedGames] = useState([]);
   const [topGames, setTopGames] = useState([]);
   const [discountedGames, setDiscountedGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const user = store.user || {};
 
-  const storeData = initialState();
-  const { user } = storeData;
-  
   useEffect(() => {
     const loadGames = async () => {
       try {
         setLoading(true);
-        
-        // Fetch games from Steam API
         const featured = await fetchFeaturedGames();
         const top = await fetchTopGames();
         const discounted = await fetchDiscountedGames();
-        
         setFeaturedGames(featured || []);
         setTopGames(top || []);
         setDiscountedGames(discounted || []);
-        
         setLoading(false);
       } catch (err) {
-        console.error('Error loading games:', err);
         setError('Failed to load games. Please try again later.');
         setLoading(false);
       }
     };
-    
     loadGames();
   }, []);
 
-  // Checking if user is authenticated
-  const isUserLoggedIn = user.isAuthenticated;
-  
-  // Adding wishlist status to games based on user's wishlist
   const addWishlistStatus = (gamesList) => {
     if (!gamesList) return [];
     return gamesList.map(game => ({
       ...game,
-      isWishlisted: user.wishlist.includes(game.id)
+      isWishlisted: user.wishlist ? user.wishlist.includes(game.id) : false
     }));
   };
 
@@ -89,9 +78,10 @@ function Home() {
                 Discover amazing games, connect with fellow gamers, and embark on epic adventures. 
                 Your gaming paradise awaits!
               </p>
-              <div className="d-flex gap-3">
+              <div className="d-flex gap-3 flex-wrap">
                 <a href="/store" className="btn btn-light btn-lg">Explore Store</a>
                 <a href="/news" className="btn btn-outline-light btn-lg">Latest News</a>
+                
               </div>
             </div>
           </div>
@@ -104,7 +94,6 @@ function Home() {
             <h2 className="section-title">Featured Games</h2>
             <a href="/store" className="btn btn-custom">View All</a>
           </div>
-          
           <div className="row justify-content-center">
             {featuredGamesWithWishlist.slice(0, 3).map(game => (
               <div key={game.id} className="col-lg-4 col-md-6 col-sm-8 col-10">
@@ -119,13 +108,11 @@ function Home() {
             ))}
           </div>
         </section>
-
         <section className="new-releases mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Top Games</h2>
             <a href="/store" className="btn btn-custom">View All</a>
           </div>
-          
           <div className="row g-4">
             {topGamesWithWishlist.map(game => (
               <div key={game.id} className="col-xl-3 col-lg-4 col-md-6 d-flex justify-content-center">
@@ -138,13 +125,11 @@ function Home() {
             ))}
           </div>
         </section>
-
         <section className="special-offers mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Discounted Games</h2>
             <a href="/store" className="btn btn-custom">View All</a>
           </div>
-          
           <div className="row">
             <div className="col-12">
               {discountedGamesWithWishlist.slice(0, 5).map(game => (

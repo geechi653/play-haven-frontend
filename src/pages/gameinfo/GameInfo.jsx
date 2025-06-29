@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchGameDetails, addToCart, downloadGame } from '../../utils/api.js';
-import { initialState } from '../../store/initialStore.js';
+import { useGlobalStore } from '../../hooks/useGlobalStore';
 import './GameInfo.css';
 
 function GameInfo() {
@@ -12,10 +12,11 @@ function GameInfo() {
   const [error, setError] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const storeData = initialState();
-  const { user } = storeData;
+  const { store } = useGlobalStore();
+  const user = store.user;
+  const wishlist = store.wishlist.items;
   const isUserLoggedIn = user.isAuthenticated;
-  const isWishlisted = user.wishlist.includes(Number(gameId));
+  const isWishlisted = wishlist.includes(Number(gameId));
 
   const handleDownloadGame = async () => {
     if (!game) return;
