@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchTopGames, fetchDiscountedGames, searchGames } from '../../utils/api.js';
 import GameCard from '../../components/GameCard/GameCard.jsx';
-import { initialState } from '../../store/initialStore.js';
+import { useGlobalStore } from '../../hooks/useGlobalStore';
 import './Store.css';
 
 function Store() {
@@ -18,8 +18,9 @@ function Store() {
   const GAMES_PER_PAGE = 20;
   const MAX_GAMES = 50;
 
-  const storeData = initialState();
-  const { user } = storeData;
+  const { store } = useGlobalStore();
+  const user = store.user;
+  const wishlist = store.wishlist.items;
   const isUserLoggedIn = user.isAuthenticated;
 
   // Fetch games in pages
@@ -65,7 +66,7 @@ function Store() {
     if (!gamesList) return [];
     return gamesList.map(game => ({
       ...game,
-      isWishlisted: user.wishlist.includes(game.id)
+      isWishlisted: wishlist.includes(game.id)
     }));
   };
 
@@ -90,7 +91,7 @@ function Store() {
   useEffect(() => {
     const filtered = addWishlistStatus(getFilteredGames());
     setVisibleGames(filtered.slice(0, Math.min(games.length, MAX_GAMES)));
-  }, [games, searchQuery, activeCategory, user.wishlist]);
+  }, [games, searchQuery, activeCategory, wishlist]);
 
   // Categories
   const categories = [...new Set(games.flatMap(game => game.category ? game.category.split(', ') : []))].filter(Boolean);

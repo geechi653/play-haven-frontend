@@ -1,13 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Glass from "../../components/glass/Glass";
 import "./SignUp.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
 import { ALL_COUNTRIES } from "../../constants/countries";
+import { registerUser } from "../../utils/api";
+import {
+  validateUsername,
+  validatePassword,
+  validateEmail,
+  validateRequiredField,
+  validateConfirmPassword,
+} from "../../utils/helpers";
 
 function SignUp() {
   const { store, dispatch } = useGlobalStore();
-  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [userInputs, setUserInput] = useState({
     country: "",
     email: "",
@@ -15,10 +24,58 @@ function SignUp() {
     last_name: "",
     username: "",
     password: "",
+    confirmPassword: "",
   });
+
+  useEffect(() => {
+    if (store.user.isAuthenticated) {
+      navigate("/home", { replace: true });
+    }
+  }, [store.user.isAuthenticated, navigate]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    const requiredFields = [
+      { value: userInputs.country, name: "Country" },
+      { value: userInputs.email, name: "Email" },
+      { value: userInputs.first_name, name: "First Name" },
+      { value: userInputs.last_name, name: "Last Name" },
+      { value: userInputs.username, name: "Username" },
+      { value: userInputs.password, name: "Password" },
+      { value: userInputs.confirmPassword, name: "Confirm Password" },
+    ];
+    for (const field of requiredFields) {
+      const err = validateRequiredField(field.value, field.name);
+      if (err) {
+        setError(err);
+        return;
+      }
+    }
+    const emailError = validateEmail(userInputs.email);
+    if (emailError) {
+      setError(emailError);
+      return;
+    }
+    const usernameError = validateUsername(userInputs.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+    const passwordError = validatePassword(userInputs.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+    const confirmPasswordError = validateConfirmPassword(
+      userInputs.password,
+      userInputs.confirmPassword
+    );
+    if (confirmPasswordError) {
+      setError(confirmPasswordError);
+      return;
+    }
 
     const user = {
       country: userInputs.country,
@@ -29,7 +86,17 @@ function SignUp() {
       password: userInputs.password,
     };
 
-    // api call
+    try {
+      const data = await registerUser(user);
+      dispatch({
+        type: "LOGIN",
+        payload: { token: data.token, user: data.user },
+      });
+      setError("");
+      navigate("/home");
+    } catch (err) {
+      setError(err.message || "Something wrong happened! Please try again...");
+    }
   };
 
   return (
@@ -125,14 +192,21 @@ function SignUp() {
             />
           </div>
 
-          {error ? (
-            <>
-              <p className="text-center text-danger fw-bold">
-                Something wrong happened! Please try again...
-              </p>
-            </>
-          ) : (
-            <></>
+          <div className="mb-2 fw-bold">
+            <input
+              type="password"
+              className="form-control rounded-4 custom-input"
+              id="input-confirm-password"
+              placeholder="Confirm Password"
+              onChange={(e) =>
+                setUserInput({ ...userInputs, confirmPassword: e.target.value })
+              }
+              value={userInputs.confirmPassword}
+            />
+          </div>
+
+          {error && (
+            <p className="text-center text-danger fw-bold">{error}</p>
           )}
 
           <p className="text-center fw-bold custom-text">
