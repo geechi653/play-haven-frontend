@@ -4,15 +4,25 @@ import { TbBooks } from "react-icons/tb";
 import { IoCartOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
+import { useGlobalStore } from "../../hooks/useGlobalStore";
+import { useNavigate } from "react-router-dom";
+import { MdExpandMore } from "react-icons/md";
 
 function Navbar() {
-  const location = useLocation();
-  const isSignUpPage = location.pathname === "/signup";
-  const isLoginPage = location.pathname === "/login";
+  const { store, dispatch } = useGlobalStore();
+  const isUserLoggedIn = store.user && store.user.isAuthenticated;
+  const username = isUserLoggedIn ? store.user.username : null;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    localStorage.removeItem("playheaven-store");
+    navigate("/home");
+  };
 
   return (
     <nav className="playheaven-navbar navbar navbar-expand-lg navbar-dark sticky-top">
-      <div className="container-fluid px-4">
+      <div className="container-fluid px-4 d-flex justify-content-between align-items-center">
         <Link
           to="/home"
           className="navbar-brand d-flex align-items-center text-decoration-none"
@@ -37,99 +47,122 @@ function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
-          <div
-            className={`playheaven-nav-container d-flex w-100 ${
-              isSignUpPage || isLoginPage
-                ? "justify-content-end"
-                : "justify-content-start"
-            }`}
-          >
-            <ul className="navbar-nav d-flex">
-              <li className="nav-item playheaven-nav-item">
-                <Link className="nav-link playheaven-nav-link" to="/store">
-                  Store
+          <div className="d-flex align-items-center gap-4 navbar-left-links">
+            {isUserLoggedIn && (
+              <div className="d-flex gap-4">
+                <Link to="/store" className="login-button">
+                  STORE
                 </Link>
-              </li>
-              <li className="nav-item playheaven-nav-item">
-                <Link className="nav-link playheaven-nav-link" to="/news">
-                  News
+                <Link to="/news" className="login-button">
+                  NEWS
                 </Link>
-              </li>
-              <li className="nav-item playheaven-nav-item">
-                <Link className="nav-link playheaven-nav-link" to="/about">
-                  About
+                <Link to="/about" className="login-button">
+                  ABOUT
                 </Link>
-              </li>
-            </ul>
-
-            {!isSignUpPage && !isLoginPage && (
-              <div className="flex-fill d-flex justify-content-end align-items-center">
-                <Link
-                  to="/store"
-                  className="playheaven-icon-btn text-decoration-none"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Search"
-                >
-                  <IoSearch />
-                </Link>
-                <Link
-                  to="/wishlist"
-                  className="playheaven-icon-btn text-decoration-none"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Wishlist"
-                >
-                  <FaRegHeart />
-                </Link>
-
-                <Link
-                  to="/cart"
-                  className="playheaven-icon-btn text-decoration-none"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Cart"
-                >
-                  <IoCartOutline />
-                </Link>
-
-                <Link
-                  to="/libraryPage"
-                  className="playheaven-icon-btn playheaven-library-btn text-decoration-none"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Library"
-                >
-                  <TbBooks />
-                </Link>
-
-                <div className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle d-flex align-items-center"
-                    data-bs-toggle="dropdown"
-                    role="button"
-                    aria-expanded="false"
-                  >
-                    <div className="playheaven-avatar"></div>
-                    <span className="playheaven-username">PlayerOne</span>
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <Link className="dropdown-item" to="/profile">
-                        My Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <hr className="dropdown-divider" />
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="#">
-                        Logout
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
               </div>
+            )}
+          </div>
+          <div className="d-flex gap-2 ms-auto align-items-center">
+            {!isUserLoggedIn && (
+              <div className="d-flex gap-4">
+                <Link to="/store" className="login-button">
+                  STORE
+                </Link>
+                <Link to="/news" className="login-button">
+                  NEWS
+                </Link>
+                <Link to="/about" className="login-button">
+                  ABOUT
+                </Link>
+                <Link to="/login" className="login-button">
+                  LOGIN
+                </Link>
+                <Link to="/signup" className="signup-button">
+                  SIGNUP
+                </Link>
+              </div>
+            )}
+            {isUserLoggedIn && (
+              <>
+                <div className="d-flex justify-content-center align-items-center">
+                  <Link
+                    to="/store"
+                    className="playheaven-icon-btn text-decoration-none"
+                    title="Search"
+                  >
+                    <IoSearch />
+                  </Link>
+                  <Link
+                    to="/wishlist"
+                    className="playheaven-icon-btn text-decoration-none"
+                    title="Wishlist"
+                  >
+                    <FaRegHeart />
+                  </Link>
+                  <Link
+                    to="/cart"
+                    className="playheaven-icon-btn text-decoration-none"
+                    title="Cart"
+                  >
+                    <IoCartOutline />
+                  </Link>
+                  <Link
+                    to="/libraryPage"
+                    className="playheaven-icon-btn playheaven-library-btn text-decoration-none"
+                    title="Library"
+                  >
+                    <TbBooks />
+                  </Link>
+                </div>
+                <div className="d-flex justify-content-center align-items-center gap-3">
+                  <div className="nav-item dropdown">
+                    <a
+                      className="nav-link d-flex align-items-center"
+                      data-bs-toggle="dropdown"
+                      role="button"
+                      aria-expanded="false"
+                    >
+                      <span className="btn playheaven-username fs-6">
+                        <div className="d-flex justify-content-center align-items-center">
+                          <span className="fw-bolder">
+                            {username || "Profile"}
+                          </span>
+                          <span>
+                            <MdExpandMore className="fs-5 ms-1 fw-bolder" />
+                          </span>
+                        </div>
+                      </span>
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <Link
+                          className="dropdown-item text-white"
+                          to="/profile"
+                        >
+                          My Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item text-white"
+                          to="#"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <img
+                    className="playheaven-avatar"
+                    src="https://picsum.photos/id/203/150/250"
+                    alt="image"
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>

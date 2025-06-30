@@ -37,14 +37,15 @@
 export const initialState = () => ({
   // User authentication and profile data
   user: {
-    isAuthenticated: true, // Default should be false, set to true for demo
-    userId: 1,
-    username: "PlayerOne",
-    email: "player@playheaven.com",
-    avatar: "/assets/avatar-placeholder.png",
-    wishlist: [2, 5, 8], // Array of game IDs in user's wishlist
-    cart: [], // Array of game IDs in cart
-    library: [1, 3], // Array of owned game IDs
+    isAuthenticated: false, // Default is guest (not authenticated)
+    userId: null,
+    username: null,
+    email: null,
+    avatar: null,
+    is_active: null,
+    is_admin: null,
+    created_at: null,
+    updated_at: null,
   },
 
   // Games catalog data - matches backend structure

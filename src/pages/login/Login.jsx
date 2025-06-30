@@ -1,26 +1,52 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Glass from "../../components/glass/Glass";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
+import { loginUser } from "../../utils/api";
+import { validateUsername, validatePassword } from "../../utils/helpers";
 import "./Login.css";
 
 function Login() {
   const { store, dispatch } = useGlobalStore();
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [userInputs, setUserInput] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (store.user.isAuthenticated) {
+      navigate("/home", { replace: true });
+    }
+  }, [store.user.isAuthenticated, navigate]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    const user = {
-      username: userInputs.username,
-      password: userInputs.password,
-    };
-
-    // api call
+    setError("");
+    const usernameError = validateUsername(userInputs.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+    const passwordError = validatePassword(userInputs.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+    try {
+      const data = await loginUser({
+        username: userInputs.username,
+        password: userInputs.password,
+      });
+      dispatch({
+        type: "LOGIN",
+        payload: { token: data.token, user: data.user },
+      });
+      navigate("/home");
+    } catch (err) {
+      setError(err.message || "Something wrong happened! Please try again...");
+    }
   };
 
   return (
@@ -55,14 +81,8 @@ function Login() {
             />
           </div>
 
-          {error ? (
-            <>
-              <p className="text-center text-danger fw-bold">
-                Something wrong happened! Please try again...
-              </p>
-            </>
-          ) : (
-            <></>
+          {error && (
+            <p className="text-center text-danger fw-bold">{error}</p>
           )}
 
           <p className="text-center fw-bold custom-text">
