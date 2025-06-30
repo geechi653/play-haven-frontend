@@ -2,37 +2,76 @@ import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { IoCartOutline, IoPlayOutline, IoDownloadOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
+import { addGameToWishlist, removeGameFromWishlist, addGameToCart, removeGameFromCart } from '../../utils/api.js';
 import './GameCard.css';
 
 function GameCard({ 
   game, 
   cardType = 'featured',
-  isUserLoggedIn = false 
+  isUserLoggedIn = false,
+  userId = null,
+  isWishlisted = false,
+  isInCart = false,
+  onWishlistChange = () => {},
+  onCartChange = () => {}
 }) {
-  const [isWishlisted, setIsWishlisted] = useState(game.isWishlisted || false);
-  const [isInCart, setIsInCart] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleWishlistToggle = (e) => {
+  const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isUserLoggedIn) {
-      setIsWishlisted(!isWishlisted);
-      // TODO: API call to update wishlist
+    
+    if (!isUserLoggedIn || !userId) {
+      alert('Please log in to add games to your wishlist');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (isWishlisted) {
+        await removeGameFromWishlist(userId, game.id);
+      } else {
+        await addGameToWishlist(userId, game.id);
+      }
+      onWishlistChange(game.id, !isWishlisted);
+    } catch (error) {
+      console.error('Error updating wishlist:', error);
+      alert('Failed to update wishlist. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsInCart(!isInCart); 
-    // TODO: API call to add/remove from cart
+    
+    if (!userId) {
+      alert('Please log in to add games to your cart');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (isInCart) {
+        await removeGameFromCart(userId, game.id);
+      } else {
+        await addGameToCart(userId, game.id);
+      }
+      onCartChange(game.id, !isInCart);
+    } catch (error) {
+      console.error('Error updating cart:', error);
+      alert('Failed to update cart. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePlayGame = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // game launch logic is hear (we are not implementing that though)
+    // game launch logic is here (we are not implementing that though)
     console.log('Playing game:', game.title);
   };
 
@@ -57,31 +96,50 @@ function GameCard({
     console.log('Downloaded game installer:', game.title);
   };
 
-  const handleMoveToCart = (e) => {
+  const handleMoveToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Adds game to cart and navigate to cart page
-    setIsInCart(true);
-    // TODO: API call to add to cart
-    console.log('Moving game to cart:', game.title);
-    navigate('/cart');
+    
+    if (!userId) {
+      alert('Please log in to add games to your cart');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Add to cart
+      await addGameToCart(userId, game.id);
+      // Remove from wishlist (since it's being moved to cart)
+      if (isWishlisted) {
+        await removeGameFromWishlist(userId, game.id);
+      }
+      
+      console.log('Moving game to cart:', game.title);
+      navigate('/cart');
+    } catch (error) {
+      console.error('Error moving to cart:', error);
+      alert('Failed to move game to cart. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRemoveFromWishlist = (e) => {
+  const handleRemoveFromWishlist = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isUserLoggedIn) {
-      setIsWishlisted(false);
-      
-      // Force render by updating the parent component
-      // This simulates removing the game from the user.wishlist array
-      // TODO: Replace with actual API call to update user.wishlist
-      const event = new CustomEvent('wishlistUpdated', { 
-        detail: { gameId: game.id, action: 'remove' } 
-      });
-      window.dispatchEvent(event);
-      
+    
+    if (!isUserLoggedIn || !userId) return;
+
+    setLoading(true);
+    try {
+      await removeGameFromWishlist(userId, game.id);
+      onWishlistChange(game.id, false);
       console.log('Removing from wishlist:', game.title);
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+      alert('Failed to remove from wishlist. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -177,17 +235,19 @@ function GameCard({
     <div className="game-card-actions">
       {isUserLoggedIn && (
         <button 
-          className={`wishlist-btn ${isWishlisted ? 'wishlisted' : ''}`}
+          className={`wishlist-btn ${isWishlisted ? 'wishlisted' : ''} ${loading ? 'loading' : ''}`}
           onClick={handleWishlistToggle}
           title={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          disabled={loading}
         >
           <FaRegHeart />
         </button>
       )}
       <button 
-        className={`add-to-cart-btn ${isInCart ? 'in-cart' : ''}`} 
+        className={`add-to-cart-btn ${isInCart ? 'in-cart' : ''} ${loading ? 'loading' : ''}`} 
         onClick={handleAddToCart} 
         title={isInCart ? 'Remove from Cart' : 'Add to Cart'}
+        disabled={loading}
       >
         <IoCartOutline />
       </button>
@@ -221,12 +281,13 @@ function GameCard({
               
               <div className="game-card-actions">
                 <button 
-                  className="wishlist-action-btn move-to-cart-btn"
+                  className={`wishlist-action-btn move-to-cart-btn ${loading ? 'loading' : ''}`}
                   onClick={handleMoveToCart}
                   title="Move to Cart"
+                  disabled={loading}
                 >
                   <IoCartOutline />
-                  Move to Cart
+                  {loading ? 'Moving...' : 'Move to Cart'}
                 </button>
                 
                 <Link 
@@ -240,12 +301,13 @@ function GameCard({
                 </Link>
                 
                 <button 
-                  className="wishlist-action-btn remove-btn"
+                  className={`wishlist-action-btn remove-btn ${loading ? 'loading' : ''}`}
                   onClick={handleRemoveFromWishlist}
                   title="Remove from Wishlist"
+                  disabled={loading}
                 >
                   <IoHeartDislikeOutline />
-                  Remove
+                  {loading ? 'Removing...' : 'Remove'}
                 </button>
               </div>
             </div>
@@ -409,6 +471,8 @@ function GameCard({
       return renderNewReleaseCard();
     case 'horizontal':
       return renderHorizontalCard();
+    case 'store':
+      return renderFeaturedCard();
     case 'featured':
     default:
       return renderFeaturedCard();

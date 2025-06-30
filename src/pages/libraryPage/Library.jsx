@@ -1,5 +1,8 @@
-import { useState } from 'react';
+// 
+
+import { useState, useEffect } from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
+import { getLibrary } from '../../utils/api.js';
 import { initialState } from '../../store/initialStore.js';
 import './Library.css';
 
@@ -11,12 +14,58 @@ function Library() {
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
+  const [userLibrary, setUserLibrary] = useState([]);
+
+  // Load user's library from localStorage on component mount
+  useEffect(() => {
+    const loadUserLibrary = async () => {
+      try {
+        // Try to get library from API first
+        const userId = 1; // Using userId = 1 for demo - replace with actual user ID
+        const storedLibrary = await getLibrary(userId);
+        setUserLibrary(Array.isArray(storedLibrary) ? storedLibrary : []);
+      } catch (error) {
+        console.error('Error loading user library from API:', error);
+        
+        // Fallback to localStorage
+        try {
+          const localLibrary = JSON.parse(localStorage.getItem('userLibrary') || '[]');
+          setUserLibrary(localLibrary);
+        } catch (localError) {
+          console.error('Error loading user library from localStorage:', error);
+          setUserLibrary([]);
+        }
+      }
+    };
+
+    loadUserLibrary();
+
+    // Listen for storage changes to update library in real-time
+    const handleStorageChange = (e) => {
+      if (e.key === 'userLibrary') {
+        loadUserLibrary();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom events (for same-tab updates)
+    const handleLibraryUpdate = () => {
+      loadUserLibrary();
+    };
+    
+    window.addEventListener('libraryUpdated', handleLibraryUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('libraryUpdated', handleLibraryUpdate);
+    };
+  }, []);
 
   // Get user's library games (games that have been purchased)
-  // Expected user.library structure: [gameId1, gameId2, gameId3, ...]
-  // This array gets populated when user completes purchase through Cart -> Checkout process
+  // Filter games based on stored library IDs
   const libraryGames = games.allGames.filter(game => 
-    user.isAuthenticated && user.library && user.library.includes(game.id)
+    userLibrary.includes(game.id)
   );
 
   // Show purchased games only - if no games purchased, show empty state
@@ -51,6 +100,13 @@ function Library() {
 
   const allGenres = [...new Set(displayGames.flatMap(game => game.genres || []))];
   const allPlatforms = [...new Set(displayGames.flatMap(game => game.platform || []))];
+
+  // Clear library function (for testing/demo purposes)
+  const clearLibrary = () => {
+    localStorage.removeItem('userLibrary');
+    setUserLibrary([]);
+    window.dispatchEvent(new Event('libraryUpdated'));
+  };
 
   return (
     <div className="library-page">
@@ -138,29 +194,15 @@ function Library() {
           </div>
         </div>
 
-
         <div className="library-games">
-          {!user.isAuthenticated ? (
-            <div className="no-games-message">
-              <div className="no-games-content">
-                <h3>Please Log In</h3>
-                <p>
-                  You need to be logged in to view your game library. 
-                  Please log in to see your purchased games.
-                </p>
-                <a href="/login" className="btn btn-primary">
-                  Log In
-                </a>
-              </div>
-            </div>
-          ) : sortedGames.length > 0 ? (
+          {sortedGames.length > 0 ? (
             <div className="games-list">
               {sortedGames.map(game => (
                 <div key={game.id} className="library-game-item">
                   <GameCard 
                     game={game} 
                     cardType="library" 
-                    isUserLoggedIn={user.isAuthenticated}
+                    isUserLoggedIn={true}
                   />
                 </div>
               ))}
@@ -180,6 +222,15 @@ function Library() {
                   <a href="/cart" className="btn btn-outline-primary">
                     View Cart
                   </a>
+                </div>
+                {/* Debug button for testing */}
+                <div style={{ marginTop: '2rem', opacity: 0.7 }}>
+                  <button 
+                    onClick={clearLibrary}
+                    className="btn btn-outline-secondary btn-sm"
+                  >
+                    Clear Library (Debug)
+                  </button>
                 </div>
               </div>
             </div>
