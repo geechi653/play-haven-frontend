@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { IoTrashOutline, IoStorefrontOutline } from 'react-icons/io5';
 import { FaRegEye } from 'react-icons/fa6';
 import './Cart.css';
@@ -37,7 +37,7 @@ function Cart() {
   const getPlatformIcon = (platform) => {
     const icons = {
       windows: 'Windows',
-      linux: 'Linux',
+      linux: 'Linus',
       ios: 'iOS',
       mac: 'iOS',
       android: 'Android'
@@ -145,7 +145,7 @@ function Cart() {
             
             <div className="cart-item-buttons">
               <Link 
-                to="/gameinfo" 
+                to="/gameinfo/:gameId" 
                 className="cart-action-btn info-btn"
                 title="More Info"
               >
