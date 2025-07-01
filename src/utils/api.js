@@ -1,9 +1,11 @@
 // Import initialState for mock data
 import { initialState } from '../store/initialStore.js';
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 // Base API functions for todos
 export async function fetchTodos(userId) {
-  const response = await fetch(`/api/todos?user_id=${userId}`);
+  const response = await fetch(`${API_BASE}/api/todos?user_id=${userId}`);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
@@ -18,7 +20,7 @@ export async function addTodo(todo) {
     },
     body: JSON.stringify(todo),
   };
-  const response = await fetch('/api/todos', options);
+  const response = await fetch(`${API_BASE}/api/todos`, options);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
@@ -30,7 +32,7 @@ export async function deleteTodo(todoId, userId) {
     method: 'DELETE',
   };
   const response = await fetch(
-    `/api/todos/${todoId}?user_id=${userId}`,
+    `${API_BASE}/api/todos/${todoId}?user_id=${userId}`,
     options
   );
   if (!response.ok) {
@@ -43,7 +45,7 @@ export async function deleteTodo(todoId, userId) {
 export async function fetchTopGames(limit = 15, offset = 0) {
   try {
     // Try to fetch from the API
-    const response = await fetch(`/api/steam/top-games?limit=${limit}&offset=${offset}`);
+    const response = await fetch(`${API_BASE}/api/steam/top-games?limit=${limit}&offset=${offset}`);
     if (!response.ok) {
       console.error('Error fetching top games:', response.status, response.statusText);
       throw new Error(`Failed to fetch top games: ${response.statusText}`);
@@ -64,7 +66,7 @@ export async function fetchTopGames(limit = 15, offset = 0) {
 
 export async function fetchDiscountedGames(limit = 15, offset = 0) {
   try {
-    const response = await fetch(`/api/steam/discounted-games?limit=${limit}&offset=${offset}`);
+    const response = await fetch(`${API_BASE}/api/steam/discounted-games?limit=${limit}&offset=${offset}`);
     if (!response.ok) {
       console.error('Error fetching discounted games:', response.status, response.statusText);
       throw new Error(`Failed to fetch discounted games: ${response.statusText}`);
@@ -85,7 +87,7 @@ export async function fetchDiscountedGames(limit = 15, offset = 0) {
 
 export async function fetchFeaturedGames(limit = 10, offset = 0) {
   try {
-    const response = await fetch(`/api/steam/featured-games?limit=${limit}&offset=${offset}`);
+    const response = await fetch(`${API_BASE}/api/steam/featured-games?limit=${limit}&offset=${offset}`);
     if (!response.ok) {
       console.error('Error fetching featured games:', response.status, response.statusText);
       throw new Error(`Failed to fetch featured games: ${response.statusText}`);
@@ -108,7 +110,7 @@ export async function fetchMoreGames(page = 1, limit = 12, category = 'all') {
     const offset = (page - 1) * limit;
     // Try to fetch from API
     try {
-      const response = await fetch(`/api/steam/games?limit=${limit}&offset=${offset}&category=${encodeURIComponent(category)}`);
+      const response = await fetch(`${API_BASE}/api/steam/games?limit=${limit}&offset=${offset}&category=${encodeURIComponent(category)}`);
       if (response.ok) {
         return await response.json();
       }
@@ -135,7 +137,7 @@ export async function fetchMoreGames(page = 1, limit = 12, category = 'all') {
 
 export async function fetchGameDetails(appId) {
   try {
-    const response = await fetch(`/api/steam/games/${appId}`);
+    const response = await fetch(`${API_BASE}/api/steam/games/${appId}`);
     if (!response.ok) {
       console.error('Error fetching game details:', response.status, response.statusText);
       throw new Error(`Failed to fetch game details: ${response.statusText}`);
@@ -155,7 +157,7 @@ export async function searchGames(query, limit = 20) {
     
     // Try to fetch from the API first
     try {
-      const response = await fetch(`/api/steam/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+      const response = await fetch(`${API_BASE}/api/steam/search?q=${encodeURIComponent(query)}&limit=${limit}`);
       if (response.ok) {
         return await response.json();
       }
@@ -241,7 +243,7 @@ export async function addToCart(gameId, userId) {
       }),
     };
     
-    const response = await fetch('/api/cart/add', options);
+    const response = await fetch(`${API_BASE}/api/cart/add`, options);
     
     if (!response.ok) {
       console.error('Error adding to cart:', response.status, response.statusText);
@@ -269,7 +271,7 @@ export async function removeFromCart(gameId, userId) {
       },
     };
     
-    const response = await fetch(`/api/cart/remove/${gameId}?userId=${userId}`, options);
+    const response = await fetch(`${API_BASE}/api/cart/remove/${gameId}?userId=${userId}`, options);
     
     if (!response.ok) {
       console.error('Error removing from cart:', response.status, response.statusText);
@@ -290,7 +292,7 @@ export async function getCart(userId) {
       throw new Error('User must be logged in to view cart');
     }
     
-    const response = await fetch(`/api/cart?userId=${userId}`);
+    const response = await fetch(`${API_BASE}/api/cart?userId=${userId}`);
     
     if (!response.ok) {
       console.error('Error fetching cart:', response.status, response.statusText);
@@ -311,7 +313,7 @@ export async function downloadGame(gameId, userId) {
       throw new Error('User must be logged in to download games');
     }
     
-    const response = await fetch(`/api/steam/download/${gameId}?userId=${userId}`);
+    const response = await fetch(`${API_BASE}/api/steam/download/${gameId}?userId=${userId}`);
     
     if (!response.ok) {
       console.error('Error downloading game:', response.status, response.statusText);
@@ -328,7 +330,7 @@ export async function downloadGame(gameId, userId) {
 
 // User authentication API
 export async function loginUser({ username, password }) {
-  const response = await fetch("/api/auth/login", {
+  const response = await fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -345,7 +347,7 @@ export async function loginUser({ username, password }) {
 
 // User registration API
 export async function registerUser(user) {
-  const response = await fetch("/api/auth/register", {
+  const response = await fetch(`${API_BASE}/api/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
