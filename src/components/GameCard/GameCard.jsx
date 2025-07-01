@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { IoCartOutline, IoPlayOutline, IoDownloadOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
+import { useGlobalStore } from '../../hooks/useGlobalStore';
+import { addToWishlist, removeFromWishlist } from '../../utils/api';
 import './GameCard.css';
 
 function GameCard({ 
@@ -9,16 +11,29 @@ function GameCard({
   cardType = 'featured',
   isUserLoggedIn = false 
 }) {
+  const { store, dispatch } = useGlobalStore();
+  const user = store.user;
   const [isWishlisted, setIsWishlisted] = useState(game.isWishlisted || false);
   const [isInCart, setIsInCart] = useState(false);
+  const [isInLibrary, setIsInLibrary] = useState(game.isInLibrary || false);
   const navigate = useNavigate();
 
-  const handleWishlistToggle = (e) => {
+  const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isUserLoggedIn) {
-      setIsWishlisted(!isWishlisted);
-      // TODO: API call to update wishlist
+    if (isUserLoggedIn && user.userId && user.token) {
+      try {
+        if (!isWishlisted) {
+          await addToWishlist(user.userId, game.id, user.token);
+          dispatch({ type: 'ADD_TO_WISHLIST', payload: { gameId: game.id } });
+        } else {
+          await removeFromWishlist(user.userId, game.id, user.token);
+          dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: { gameId: game.id } });
+        }
+        setIsWishlisted(!isWishlisted);
+      } catch (err) {
+        // Optionally show error to user
+      }
     }
   };
 
@@ -27,6 +42,15 @@ function GameCard({
     e.stopPropagation();
     setIsInCart(!isInCart); 
     // TODO: API call to add/remove from cart
+  };
+
+  const handleAddToLibrary = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isUserLoggedIn && user.userId && user.token) {
+      // TODO: Call backend API to add to library
+      setIsInLibrary(true);
+    }
   };
 
   const handlePlayGame = (e) => {
@@ -39,12 +63,20 @@ function GameCard({
   const handleDownloadGame = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // Creates and downloads a dummy text file
-    const gameFileName = `${game.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_installer.txt`;
-    const fileContent = `Game Installer for ${game.title}\n\nDownload initiated on: ${new Date().toLocaleString()}\n\nThis is a dummy download file for demonstration purposes.\n\nGame Details:\n- Title: ${game.title}\n- Description: ${game.description}\n- Price: $${getCurrentPrice()}\n\nThank you for choosing Play Heaven!`;
-    
-    const blob = new Blob([fileContent], { type: 'text/plain' });
+    if (!isInLibrary && (game.status === "Free" || game.price === 0 || game.price === "0" || game.price === "0.00")) {
+      // Prevent download if not in library
+      return;
+    }
+    // Download JSON file with game details
+    const gameFileName = `${game.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_details.json`;
+    const fileContent = JSON.stringify({
+      title: game.title,
+      description: game.description,
+      price: getCurrentPrice(),
+      status: game.status,
+      id: game.id
+    }, null, 2);
+    const blob = new Blob([fileContent], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -53,8 +85,7 @@ function GameCard({
     link.click();
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
-    
-    console.log('Downloaded game installer:', game.title);
+    console.log('Downloaded game details:', game.title);
   };
 
   const handleMoveToCart = (e) => {
@@ -67,21 +98,17 @@ function GameCard({
     navigate('/cart');
   };
 
-  const handleRemoveFromWishlist = (e) => {
+  const handleRemoveFromWishlist = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isUserLoggedIn) {
-      setIsWishlisted(false);
-      
-      // Force render by updating the parent component
-      // This simulates removing the game from the user.wishlist array
-      // TODO: Replace with actual API call to update user.wishlist
-      const event = new CustomEvent('wishlistUpdated', { 
-        detail: { gameId: game.id, action: 'remove' } 
-      });
-      window.dispatchEvent(event);
-      
-      console.log('Removing from wishlist:', game.title);
+    if (isUserLoggedIn && user.userId && user.token) {
+      try {
+        await removeFromWishlist(user.userId, game.id, user.token);
+        dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: { gameId: game.id } });
+        setIsWishlisted(false);
+      } catch (err) {
+        // Optionally show error to user
+      }
     }
   };
 
@@ -184,13 +211,25 @@ function GameCard({
           <FaRegHeart />
         </button>
       )}
-      <button 
-        className={`add-to-cart-btn ${isInCart ? 'in-cart' : ''}`} 
-        onClick={handleAddToCart} 
-        title={isInCart ? 'Remove from Cart' : 'Add to Cart'}
-      >
-        <IoCartOutline />
-      </button>
+      {game.status === "Free" || game.price === 0 || game.price === "0" || game.price === "0.00" ? (
+        isInLibrary ? (
+          <button className="download-btn" onClick={handleDownloadGame} title="Download Game">
+            <IoDownloadOutline /> Download Free
+          </button>
+        ) : (
+          <button className="add-to-library-btn" onClick={handleAddToLibrary} title="Add to Library">
+            + Add to Library
+          </button>
+        )
+      ) : (
+        <button 
+          className={`add-to-cart-btn ${isInCart ? 'in-cart' : ''}`} 
+          onClick={handleAddToCart} 
+          title={isInCart ? 'Remove from Cart' : 'Add to Cart'}
+        >
+          <IoCartOutline />
+        </button>
+      )}
     </div>
   );
 

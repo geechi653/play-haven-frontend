@@ -37,6 +37,30 @@ export function storeReducer(state, action) {
           avatar: '',
         },
       };
+    case 'SET_WISHLIST':
+      return {
+        ...state,
+        wishlist: {
+          ...state.wishlist,
+          items: action.payload.items,
+        },
+      };
+    case 'ADD_TO_WISHLIST':
+      return {
+        ...state,
+        wishlist: {
+          ...state.wishlist,
+          items: [...state.wishlist.items, action.payload.gameId],
+        },
+      };
+    case 'REMOVE_FROM_WISHLIST':
+      return {
+        ...state,
+        wishlist: {
+          ...state.wishlist,
+          items: state.wishlist.items.filter(id => id !== action.payload.gameId),
+        },
+      };
     default:
       return state;
   }

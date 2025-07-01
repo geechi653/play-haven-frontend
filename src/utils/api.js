@@ -362,3 +362,48 @@ export async function registerUser(user) {
   }
 }
 
+// Wishlist API functions
+export async function fetchUserWishlist(userId, token) {
+  const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch wishlist');
+  }
+  const data = await response.json();
+  // Assuming backend returns { success: true, data: [game objects] }
+  return data.data ? data.data.map(game => game.id) : [];
+}
+
+export async function addToWishlist(userId, gameId, token) {
+  const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist/add`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ game_id: gameId }),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to add to wishlist');
+  }
+  return await response.json();
+}
+
+export async function removeFromWishlist(userId, gameId, token) {
+  const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist/game/${gameId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to remove from wishlist');
+  }
+  return await response.json();
+}
+

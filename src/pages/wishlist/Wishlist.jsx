@@ -1,17 +1,32 @@
 import { useState, useEffect } from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
-import { initialState } from '../../store/initialStore.js';
+import { useGlobalStore } from '../../hooks/useGlobalStore';
+import { fetchUserWishlist } from '../../utils/api';
 import './Wishlist.css';
 
 function Wishlist() {
-  const storeData = initialState();
-  const { games, user } = storeData;
-  
+  const { store, dispatch } = useGlobalStore();
+  const games = store.games.allGames;
+  const user = store.user;
+  const wishlist = store.wishlist.items;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
   const [removedGames, setRemovedGames] = useState(new Set());
+
+  useEffect(() => {
+    if (user.isAuthenticated && user.userId && user.token) {
+      fetchUserWishlist(user.userId, user.token)
+        .then(ids => {
+          dispatch({ type: 'SET_WISHLIST', payload: { items: ids } });
+        })
+        .catch(() => {
+          dispatch({ type: 'SET_WISHLIST', payload: { items: [] } });
+        });
+    }
+  }, [user.isAuthenticated, user.userId, user.token, dispatch]);
 
   useEffect(() => {
     const handleWishlistUpdate = (event) => {
@@ -20,39 +35,29 @@ function Wishlist() {
         setRemovedGames(prev => new Set([...prev, gameId]));
       }
     };
-
     window.addEventListener('wishlistUpdated', handleWishlistUpdate);
     return () => window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
   }, []);
 
-  // Get user's wishlist games (games that have been wishlisted)
-  // Expected user.wishlist structure: [gameId1, gameId2, gameId3, ...]
-  // This array gets populated when user clicks the heart/wishlist button on game cards
-  const wishlistGames = games.allGames.filter(game => 
-    user.isAuthenticated && 
-    user.wishlist && 
-    user.wishlist.includes(game.id) &&
+  const wishlistGames = games.filter(game =>
+    user.isAuthenticated &&
+    wishlist &&
+    wishlist.includes(game.id) &&
     !removedGames.has(game.id)
   );
 
-  // Show wishlisted games only - if no games wishlisted, show empty state
   const displayGames = wishlistGames;
 
-  // Filter and search logic
   const filteredGames = displayGames.filter(game => {
     const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         game.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesGenre = selectedGenre === 'all' || 
-                        (game.genres && game.genres.includes(selectedGenre));
-    
-    const matchesPlatform = selectedPlatform === 'all' || 
-                           game.platform.some(p => p.toLowerCase() === selectedPlatform.toLowerCase());
-    
+      game.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGenre = selectedGenre === 'all' ||
+      (game.genres && game.genres.includes(selectedGenre));
+    const matchesPlatform = selectedPlatform === 'all' ||
+      (game.platform && game.platform.some(p => p.toLowerCase() === selectedPlatform.toLowerCase()));
     return matchesSearch && matchesGenre && matchesPlatform;
   });
 
-  // Sort games
   const sortedGames = [...filteredGames].sort((a, b) => {
     switch (sortBy) {
       case 'alphabetical':
@@ -68,7 +73,6 @@ function Wishlist() {
     }
   });
 
-  // Get unique genres and platforms for filters
   const allGenres = [...new Set(displayGames.flatMap(game => game.genres || []))];
   const allPlatforms = [...new Set(displayGames.flatMap(game => game.platform || []))];
 
