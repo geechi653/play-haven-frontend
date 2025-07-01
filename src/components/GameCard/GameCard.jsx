@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoCartOutline, IoPlayOutline, IoDownloadOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
 import { useGlobalStore } from '../../hooks/useGlobalStore';
-import { addToWishlist, removeFromWishlist } from '../../utils/api';
+import { addToWishlist, removeFromWishlist, addToLibrary } from '../../utils/api';
 import './GameCard.css';
 
 function GameCard({ 
@@ -48,8 +48,13 @@ function GameCard({
     e.preventDefault();
     e.stopPropagation();
     if (isUserLoggedIn && user.userId && user.token) {
-      // TODO: Call backend API to add to library
-      setIsInLibrary(true);
+      try {
+        await addToLibrary(user.userId, game.id, user.token);
+        setIsInLibrary(true);
+        // Optionally, update global store if you want to reflect in library page
+      } catch (err) {
+        // Optionally show error to user
+      }
     }
   };
 
@@ -218,7 +223,7 @@ function GameCard({
           </button>
         ) : (
           <button className="add-to-library-btn" onClick={handleAddToLibrary} title="Add to Library">
-            + Add to Library
+            <span className="add-to-library-icon">+</span> Add to Library
           </button>
         )
       ) : (

@@ -61,6 +61,14 @@ export function storeReducer(state, action) {
           items: state.wishlist.items.filter(id => id !== action.payload.gameId),
         },
       };
+    case 'SET_LIBRARY':
+      return {
+        ...state,
+        library: {
+          ...state.library,
+          items: action.payload.items,
+        },
+      };
     default:
       return state;
   }

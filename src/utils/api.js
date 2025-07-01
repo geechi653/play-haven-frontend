@@ -407,3 +407,33 @@ export async function removeFromWishlist(userId, gameId, token) {
   return await response.json();
 }
 
+export async function addToLibrary(userId, gameId, token) {
+  const response = await fetch(`${API_BASE}/api/user/${userId}/library/add`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ game_id: gameId }),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to add to library');
+  }
+  return await response.json();
+}
+
+export async function fetchUserLibrary(userId, token) {
+  const response = await fetch(`${API_BASE}/api/user/${userId}/library`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch library');
+  }
+  const data = await response.json();
+  // Assuming backend returns { success: true, data: [game objects] }
+  return data.data ? data.data.map(game => game.id) : [];
+}
+

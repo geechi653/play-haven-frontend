@@ -1,28 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
-import { initialState } from '../../store/initialStore.js';
+import { useGlobalStore } from '../../hooks/useGlobalStore';
+import { fetchUserLibrary } from '../../utils/api';
 import './Library.css';
 
 function Library() {
-  const storeData = initialState();
-  const { games, user } = storeData;
-  
+  const { store, dispatch } = useGlobalStore();
+  const user = store.user;
+  const games = store.games;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
 
-  // Get user's library games (games that have been purchased)
-  // Expected user.library structure: [gameId1, gameId2, gameId3, ...]
-  // This array gets populated when user completes purchase through Cart -> Checkout process
+  useEffect(() => {
+    if (user.isAuthenticated && user.userId && user.token) {
+      fetchUserLibrary(user.userId, user.token).then(libraryIds => {
+        dispatch({ type: 'SET_LIBRARY', payload: { items: libraryIds } });
+      });
+    }
+  }, [user.isAuthenticated, user.userId, user.token, dispatch]);
+
   const libraryGames = games.allGames.filter(game => 
-    user.isAuthenticated && user.library && user.library.includes(game.id)
+    user.isAuthenticated && store.library.items && store.library.items.includes(game.id)
   );
 
-  // Show purchased games only - if no games purchased, show empty state
   const displayGames = libraryGames;
 
-  // Filter and search logic
   const filteredGames = displayGames.filter(game => {
     const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          game.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -143,10 +148,9 @@ function Library() {
           {!user.isAuthenticated ? (
             <div className="no-games-message">
               <div className="no-games-content">
-                <h3>Please Log In</h3>
+                <h3>Sign in to see your library</h3>
                 <p>
-                  You need to be logged in to view your game library. 
-                  Please log in to see your purchased games.
+                  Log in to view and manage your game library.
                 </p>
                 <a href="/login" className="btn btn-primary">
                   Log In
