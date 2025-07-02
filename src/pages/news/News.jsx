@@ -1,6 +1,7 @@
 // filepath: /home/ragil/Desktop/zaza/play-haven-frontend/src/pages/news/News.jsx
 import React, { useEffect, useState } from 'react';
 import './News.css';
+import { fetchGameNews } from '../../utils/api.js';
 
 function News() {
   const [news, setNews] = useState([]);
@@ -10,8 +11,7 @@ function News() {
   // Example: fetch news for Team Fortress 2 (appid 440)
   useEffect(() => {
     setLoading(true);
-    fetch('/api/steam/games/440/news?count=5&maxlength=500')
-      .then(res => res.json())
+    fetchGameNews(440, 5, 500)
       .then(data => {
         if (Array.isArray(data)) {
           setNews(data);
