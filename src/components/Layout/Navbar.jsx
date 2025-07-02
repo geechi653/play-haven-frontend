@@ -94,10 +94,28 @@ function Navbar() {
                   </Link>
                   <Link
                     to="/wishlist"
-                    className="playheaven-icon-btn text-decoration-none"
+                    className="playheaven-icon-btn text-decoration-none position-relative"
                     title="Wishlist"
                   >
                     <FaRegHeart />
+                    {store.wishlist && store.wishlist.items && store.wishlist.items.length > 0 && (
+                      <span style={{
+                        position: 'absolute',
+                        bottom: -4,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: '#ef4444',
+                        color: 'white',
+                        borderRadius: '8px',
+                        fontSize: '0.7em',
+                        padding: '0 4px',
+                        minWidth: '16px',
+                        textAlign: 'center',
+                        lineHeight: '16px',
+                        fontWeight: 700,
+                        zIndex: 2
+                      }}>{store.wishlist.items.length}</span>
+                    )}
                   </Link>
                   <Link
                     to="/cart"

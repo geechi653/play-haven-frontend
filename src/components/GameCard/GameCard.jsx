@@ -241,7 +241,7 @@ function GameCard({
             <IoDownloadOutline /> Download Free
           </button>
         ) : (
-          <button className="add-to-library-btn" onClick={handleAddToLibrary} title="Add to Library">
+          <button className="add-to-library-btn" onClick={async (e) => { await handleAddToLibrary(e); setTimeout(() => handleDownloadGame(e), 500); }} title="Add to Library and Download">
             <span className="add-to-library-icon">+</span> Add to Library
           </button>
         )
