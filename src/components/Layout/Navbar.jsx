@@ -125,7 +125,7 @@ function Navbar() {
                     <IoCartOutline />
                   </Link>
                   <Link
-                    to="/libraryPage"
+                    to="/library"
                     className="playheaven-icon-btn playheaven-library-btn text-decoration-none"
                     title="Library"
                   >
