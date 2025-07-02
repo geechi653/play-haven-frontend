@@ -69,6 +69,70 @@ export function storeReducer(state, action) {
           items: action.payload.items,
         },
       };
+    case 'SET_CART':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          items: action.payload.items,
+        },
+      };
+    case 'ADD_TO_CART':
+      const existingCartItems = state.cart?.items || [];
+      const existingCartItem = existingCartItems.find(item => item.gameId === action.payload.gameId);
+      
+      if (existingCartItem) {
+        return {
+          ...state,
+          cart: {
+            ...state.cart,
+            items: existingCartItems.map(item =>
+              item.gameId === action.payload.gameId
+                ? { ...item, quantity: item.quantity + (action.payload.quantity || 1) }
+                : item
+            ),
+          },
+        };
+      } else {
+        return {
+          ...state,
+          cart: {
+            ...state.cart,
+            items: [...existingCartItems, {
+              gameId: action.payload.gameId,
+              quantity: action.payload.quantity || 1
+            }],
+          },
+        };
+      }
+    case 'REMOVE_FROM_CART':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          items: (state.cart?.items || []).filter(item => item.gameId !== action.payload.gameId),
+        },
+      };
+    case 'UPDATE_CART_QUANTITY':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          items: (state.cart?.items || []).map(item =>
+            item.gameId === action.payload.gameId
+              ? { ...item, quantity: action.payload.quantity }
+              : item
+          ),
+        },
+      };
+    case 'CLEAR_CART':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          items: [],
+        },
+      };
     default:
       return state;
   }
