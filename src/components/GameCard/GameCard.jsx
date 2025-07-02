@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { IoCartOutline, IoPlayOutline, IoDownloadOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegEye } from "react-icons/fa6";
 import { useGlobalStore } from '../../hooks/useGlobalStore';
-import { addToWishlist, removeFromWishlist, addToLibrary } from '../../utils/api';
+import { addToWishlist, removeFromWishlist, addToLibrary, addToCart, removeFromCart } from '../../utils/api';
 import './GameCard.css';
 
 function GameCard({ 
@@ -17,6 +17,14 @@ function GameCard({
   const [isInCart, setIsInCart] = useState(false);
   const [isInLibrary, setIsInLibrary] = useState(game.isInLibrary || false);
   const navigate = useNavigate();
+
+ 
+  useEffect(() => {
+    if (store.cart?.items && game.id) {
+      const isGameInCart = store.cart.items.some(item => item.gameId === game.id);
+      setIsInCart(isGameInCart);
+    }
+  }, [store.cart?.items, game.id]);
 
   const handleWishlistToggle = async (e) => {
     e.preventDefault();
@@ -32,16 +40,29 @@ function GameCard({
         }
         setIsWishlisted(!isWishlisted);
       } catch (err) {
-        // Optionally show error to user
       }
     }
   };
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsInCart(!isInCart); 
-    // TODO: API call to add/remove from cart
+    
+    if (isUserLoggedIn && user.userId) {
+      try {
+        if (!isInCart) {
+          await addToCart(user.userId, game.id);
+          dispatch({ type: 'ADD_TO_CART', payload: { gameId: game.id, quantity: 1 } });
+          setIsInCart(true);
+        } else {
+          await removeFromCart(user.userId, game.id);
+          dispatch({ type: 'REMOVE_FROM_CART', payload: { gameId: game.id } });
+          setIsInCart(false);
+        }
+      } catch (error) {
+        console.error('Failed to update cart:', error);
+      }
+    }
   };
 
   const handleAddToLibrary = async (e) => {
@@ -51,9 +72,7 @@ function GameCard({
       try {
         await addToLibrary(user.userId, game.id, user.token);
         setIsInLibrary(true);
-        // Optionally, update global store if you want to reflect in library page
       } catch (err) {
-        // Optionally show error to user
       }
     }
   };
@@ -61,7 +80,6 @@ function GameCard({
   const handlePlayGame = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // game launch logic is hear (we are not implementing that though)
     console.log('Playing game:', game.title);
   };
 
@@ -69,10 +87,8 @@ function GameCard({
     e.preventDefault();
     e.stopPropagation();
     if (!isInLibrary && (game.status === "Free" || game.price === 0 || game.price === "0" || game.price === "0.00")) {
-      // Prevent download if not in library
       return;
     }
-    // Download JSON file with game details
     const gameFileName = `${game.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_details.json`;
     const fileContent = JSON.stringify({
       title: game.title,
@@ -93,14 +109,21 @@ function GameCard({
     console.log('Downloaded game details:', game.title);
   };
 
-  const handleMoveToCart = (e) => {
+  const handleMoveToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Adds game to cart and navigate to cart page
-    setIsInCart(true);
-    // TODO: API call to add to cart
-    console.log('Moving game to cart:', game.title);
-    navigate('/cart');
+    
+    if (isUserLoggedIn && user.userId) {
+      try {
+        await addToCart(user.userId, game.id);
+        dispatch({ type: 'ADD_TO_CART', payload: { gameId: game.id, quantity: 1 } });
+        setIsInCart(true);
+        console.log('Moving game to cart:', game.title);
+        navigate('/cart');
+      } catch (error) {
+        console.error('Failed to add to cart:', error);
+      }
+    }
   };
 
   const handleRemoveFromWishlist = async (e) => {
@@ -112,7 +135,6 @@ function GameCard({
         dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: { gameId: game.id } });
         setIsWishlisted(false);
       } catch (err) {
-        // Optionally show error to user
       }
     }
   };
@@ -131,7 +153,6 @@ function GameCard({
   };
 
   const getCurrentPrice = () => {
-    // Check if the game is free
     if (game.status === "Free" || game.price === 0 || game.price === "0" || game.price === "0.00") {
       return "0.00";
     }
@@ -150,9 +171,8 @@ function GameCard({
     return price.toFixed(2);
   };
 
-  // Shared Components
+
   const renderPlatformBadges = () => {
-    // Handle platform as a string (e.g., "Windows, Mac") or as an array
     const platforms = typeof game.platform === 'string' 
       ? game.platform.split(', ') 
       : Array.isArray(game.platform) 
@@ -171,7 +191,6 @@ function GameCard({
   };
 
   const renderDiscountBadge = () => {
-    // Check if there's a valid discount percentage
     const discountPercentage = game.discount || 0;
     return discountPercentage > 0 ? (
       <div className="discount-badge">
