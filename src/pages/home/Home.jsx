@@ -92,7 +92,7 @@ function Home() {
         <section className="featured-games mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Featured Games</h2>
-            <a href="/store" className="btn btn-custom">View All</a>
+            <Link to="/store" className="btn btn-custom">View All</Link>
           </div>
           <div className="row justify-content-center">
             {featuredGamesWithWishlist.slice(0, 3).map(game => (
@@ -111,7 +111,7 @@ function Home() {
         <section className="new-releases mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Top Games</h2>
-            <a href="/store" className="btn btn-custom">View All</a>
+            <Link to="/store" className="btn btn-custom">View All</Link>
           </div>
           <div className="row g-4">
             {topGamesWithWishlist.map(game => (
@@ -128,7 +128,7 @@ function Home() {
         <section className="special-offers mb-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="section-title">Discounted Games</h2>
-            <a href="/store" className="btn btn-custom">View All</a>
+            <Link to="/store" className="btn btn-custom">View All</Link>
           </div>
           <div className="row">
             <div className="col-12">
