@@ -224,88 +224,6 @@ export async function searchGames(query, limit = 20) {
   }
 }
 
-// Cart API functions
-export async function addToCart(gameId, userId) {
-  try {
-    // Ensure we have authentication
-    if (!userId) {
-      throw new Error('User must be logged in to add items to cart');
-    }
-    
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        gameId, 
-        userId 
-      }),
-    };
-    
-    const response = await fetch(`${API_BASE}/api/cart/add`, options);
-    
-    if (!response.ok) {
-      console.error('Error adding to cart:', response.status, response.statusText);
-      throw new Error(`Failed to add item to cart: ${response.statusText}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error in addToCart:', error);
-    throw error; // Rethrow to handle in the component
-  }
-}
-
-export async function removeFromCart(gameId, userId) {
-  try {
-    // Ensure we have authentication
-    if (!userId) {
-      throw new Error('User must be logged in to remove items from cart');
-    }
-    
-    const options = {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    
-    const response = await fetch(`${API_BASE}/api/cart/remove/${gameId}?userId=${userId}`, options);
-    
-    if (!response.ok) {
-      console.error('Error removing from cart:', response.status, response.statusText);
-      throw new Error(`Failed to remove item from cart: ${response.statusText}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error in removeFromCart:', error);
-    throw error; // Rethrow to handle in the component
-  }
-}
-
-export async function getCart(userId) {
-  try {
-    // Ensure we have authentication
-    if (!userId) {
-      throw new Error('User must be logged in to view cart');
-    }
-    
-    const response = await fetch(`${API_BASE}/api/cart?userId=${userId}`);
-    
-    if (!response.ok) {
-      console.error('Error fetching cart:', response.status, response.statusText);
-      throw new Error(`Failed to fetch cart: ${response.statusText}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error in getCart:', error);
-    throw error; // Rethrow to handle in the component
-  }
-}
-
 export async function downloadGame(gameId, userId) {
   try {
     // Ensure we have authentication
@@ -437,3 +355,109 @@ export async function fetchUserLibrary(userId, token) {
   return data.data ? data.data.map(game => game.id) : [];
 }
 
+export async function fetchUserCart(userId, token) {
+  try {
+    const response = await fetch(`${API_BASE}/api/cart?userId=${userId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch cart');
+    }
+    
+    const data = await response.json();
+    // Backend returns array of game IDs, convert to cart item format
+    return Array.isArray(data) ? data.map(gameId => ({ gameId, quantity: 1 })) : [];
+  } catch (error) {
+    console.error('Error in fetchUserCart:', error);
+    throw error;
+  }
+}
+
+export async function addToCart(userId, gameId, token, quantity = 1) {
+  try {
+    if (!userId) {
+      throw new Error('User must be logged in to add items to cart');
+    }
+    
+    const response = await fetch(`${API_BASE}/api/cart/add`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        userId: userId,
+        gameId: gameId
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to add to cart');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error in addToCart:', error);
+    throw error;
+  }
+}
+
+export async function removeFromCart(userId, gameId, token) {
+  try {
+    if (!userId) {
+      throw new Error('User must be logged in to remove items from cart');
+    }
+    
+    const response = await fetch(`${API_BASE}/api/cart/remove/${gameId}?userId=${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to remove from cart');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error in removeFromCart:', error);
+    throw error;
+  }
+}
+
+export async function updateCartQuantity(userId, gameId, quantity, token) {
+  try {
+    console.warn('updateCartQuantity not implemented in backend yet');
+    return { message: 'Quantity update not supported yet' };
+  } catch (error) {
+    console.error('Error in updateCartQuantity:', error);
+    throw error;
+  }
+}
+
+export async function clearCart(userId, token) {
+  try {
+    if (!userId) {
+      throw new Error('User must be logged in to clear cart');
+    }
+    
+    const response = await fetch(`${API_BASE}/api/cart/clear?userId=${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to clear cart');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error in clearCart:', error);
+    throw error;
+  }
+}
