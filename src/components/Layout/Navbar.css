@@ -45,11 +45,14 @@
 
 /* User avatar */
 .playheaven-avatar {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: #6c757d;
+  background-color: #253863;
   margin-right: 0.5rem;
+  padding: 1px;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
 /* Username */

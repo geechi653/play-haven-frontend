@@ -490,8 +490,16 @@ export async function clearCart(userId, token) {
   }
 }
 
-export async function fetchGameNews(appId = 440, count = 5, maxlength = 500) {
-  const response = await fetch(`${API_BASE}/api/steam/games/${appId}/news?count=${count}&maxlength=${maxlength}`);
-  if (!response.ok) throw new Error('Failed to fetch news');
+export async function fetchUserProfile(userId, token) {
+  const API_BASE = import.meta.env.VITE_API_URL;
+  const response = await fetch(`${API_BASE}/api/profiles/user/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch user profile');
+  }
   return await response.json();
 }
