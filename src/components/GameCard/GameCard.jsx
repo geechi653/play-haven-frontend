@@ -51,7 +51,10 @@ function GameCard({
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+    if (!game.id) {
+      console.warn('[GameCard] Tried to add to cart but game.id is missing:', game);
+      return;
+    }
     if (isUserLoggedIn && user.userId) {
       try {
         if (!isInCart) {
