@@ -10,7 +10,7 @@ function Footer() {
             
           <div className="col-lg-4 col-md-6 mb-4">
             <div className="playheaven-footer-brand">
-              <img src="/assets/play_heaven_logo (2).svg" alt="Play Haven Logo" className="playheaven-footer-logo" />
+              <img src="public/assets/play_haven_logo_small.svg" alt="Play Haven Logo" className="playheaven-footer-logo" />
               <p className="playheaven-footer-description">
                 Your one-stop destination for discovering, buying and playing the best games. Join millions of gamers worldwide.
               </p>
