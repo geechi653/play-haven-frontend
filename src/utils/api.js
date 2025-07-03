@@ -44,13 +44,14 @@ export async function deleteTodo(todoId, userId) {
 // Steam API endpoints
 export async function fetchTopGames(limit = 15, offset = 0) {
   try {
-    // Try to fetch from the API
     const response = await fetch(`${API_BASE}/api/steam/top-games?limit=${limit}&offset=${offset}`);
     if (!response.ok) {
       console.error('Error fetching top games:', response.status, response.statusText);
       throw new Error(`Failed to fetch top games: ${response.statusText}`);
     }
-    return await response.json();
+    const games = await response.json();
+    // Ensure every game has an id property
+    return games.map(game => ({ ...game, id: game.id || game.appId || game.gameId }));
   } catch (error) {
     console.error('Error in fetchTopGames:', error);
     // If the API call fails, fall back to mock data
@@ -71,7 +72,8 @@ export async function fetchDiscountedGames(limit = 15, offset = 0) {
       console.error('Error fetching discounted games:', response.status, response.statusText);
       throw new Error(`Failed to fetch discounted games: ${response.statusText}`);
     }
-    return await response.json();
+    const games = await response.json();
+    return games.map(game => ({ ...game, id: game.id || game.appId || game.gameId }));
   } catch (error) {
     console.error('Error in fetchDiscountedGames:', error);
     // If the API call fails, fall back to mock data
@@ -92,7 +94,8 @@ export async function fetchFeaturedGames(limit = 10, offset = 0) {
       console.error('Error fetching featured games:', response.status, response.statusText);
       throw new Error(`Failed to fetch featured games: ${response.statusText}`);
     }
-    return await response.json();
+    const games = await response.json();
+    return games.map(game => ({ ...game, id: game.id || game.appId || game.gameId }));
   } catch (error) {
     console.error('Error in fetchFeaturedGames:', error);
     // If the API call fails, fall back to mock data
