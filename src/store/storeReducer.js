@@ -24,6 +24,8 @@ export function storeReducer(state, action) {
         ...state,
         user: {
           ...action.payload.user,
+          userId: action.payload.user.id, // use user.id as userId
+          token: action.payload.token, // store token for API calls
           isAuthenticated: true,
         },
       };
@@ -32,6 +34,8 @@ export function storeReducer(state, action) {
         ...state,
         user: {
           isAuthenticated: false,
+          userId: null,
+          token: null,
           username: '',
           email: '',
           avatar: '',
@@ -131,6 +135,14 @@ export function storeReducer(state, action) {
         cart: {
           ...state.cart,
           items: [],
+        },
+      };
+    case 'SET_PROFILE':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          profile: action.payload.profile,
         },
       };
     default:
