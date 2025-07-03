@@ -86,7 +86,7 @@ function Login() {
           )}
 
           <p className="text-center fw-bold custom-text">
-            New to Play Heaven?{" "}
+            New to Play Haven?{" "}
             <Link className="fw-bolder text-link" to="/signup">
               Sign Up
             </Link>

@@ -73,7 +73,7 @@ function Home() {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-8">
-              <h1 className="display-4 fw-bold mb-3">Welcome to Play Heaven</h1>
+              <h1 className="display-4 fw-bold mb-3">Welcome to Play Haven</h1>
               <p className="lead mb-4">
                 Discover amazing games, connect with fellow gamers, and embark on epic adventures. 
                 Your gaming paradise awaits!
