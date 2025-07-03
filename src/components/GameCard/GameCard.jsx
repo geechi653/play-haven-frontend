@@ -29,6 +29,7 @@ function GameCard({
   const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('Wishlist clicked', { isUserLoggedIn, userId: user.userId, token: user.token });
     if (isUserLoggedIn && user.userId && user.token) {
       try {
         if (!isWishlisted) {
@@ -40,7 +41,10 @@ function GameCard({
         }
         setIsWishlisted(!isWishlisted);
       } catch (err) {
+        console.error('Wishlist error:', err);
       }
+    } else {
+      console.warn('Not logged in or missing user/token');
     }
   };
 
