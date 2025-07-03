@@ -526,17 +526,17 @@ function Profile({ id }) {
         </div>
       </div>
 
-      <div className="profile-page d-flex justify-content-center py-5">
+      <div className="profile-page d-flex justify-content-center py-4">
         <Glass>
           <h2 className="text-center text-light fw-bolder profile-title mb-3">
             My Profile
           </h2>
           <hr />
-          <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
+          <div className="d-flex justify-content-around">
 
-            <div className="d-flex flex-column align-items-center gap-4 me-5">
+            <div className="d-flex flex-column align-items-center gap-4">
             <div
-              className="profile-image-container position-relative mb-2"
+              className="profile-image-container position-relative"
               onClick={handleImageClick}
             >
               <img className="profile-image" src={image} alt="Profile" />
@@ -551,35 +551,13 @@ function Profile({ id }) {
                 onChange={handleImageChange}
               />
             </div>
-          
 
-            <div className="d-flex flex-column gap-4 mt-5">
-                <button
-                  className="button-profile"
-                  onClick={() => getUser(id)}
-                  data-bs-toggle="modal"
-                  data-bs-target={`#editModal-${id}`}
-                >
-                  Update Profile
-                </button>
-
-                <button
-                  className="button-profile"
-                  data-bs-toggle="modal"
-                  data-bs-target={`#passwordModal-${id}`}
-                >
-                  Change Password
-                </button>
-              </div>
-
-               <div> <button className="btn btn-outline-danger border-1 rounded rounded-4 px-3"
+            <div> <button className="btn btn-outline-danger border-0 mt-5"
             data-bs-toggle="modal"
             data-bs-target={`#deleteModal-${id}`}
             >Delete Account</button></div>
 
             </div>
-
-            
 
             <div className="ms-3">
               <div className="fs-4 fw-bold mb-2">
@@ -606,37 +584,32 @@ function Profile({ id }) {
                   {user.username || "name555"}
                 </span>
               </div>
-                   <div className="fs-4 fw-bold mb-2">
+              <div className="fs-4 fw-bold mb-5">
                 <span className="info-label">Address: </span>{" "}
                 <span className="ms-2 info-input">
-                  {user.address || "address"}
+                  {user.address && user.city && user.state && user.zip_code
+                    ? `${user.address}, ${user.city}, ${user.state} ${user.zip_code}`
+                    : "123 Street, City, State 00000"}
                 </span>
               </div>
-                   <div className="fs-4 fw-bold mb-2">
-                <span className="info-label">City: </span>{" "}
-                <span className="ms-2 info-input">
-                  {user.city || "ciry"}
-                </span>
+              <div className="d-flex gap-3 mb-2">
+                <button
+                  className="button-profile py-3"
+                  onClick={() => getUser(id)}
+                  data-bs-toggle="modal"
+                  data-bs-target={`#editModal-${id}`}
+                >
+                  Update Profile
+                </button>
+
+                <button
+                  className="button-profile"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#passwordModal-${id}`}
+                >
+                  Change Password
+                </button>
               </div>
-                   <div className="fs-4 fw-bold mb-2">
-                <span className="info-label">State: </span>{" "}
-                <span className="ms-2 info-input">
-                  {user.state || "state"}
-                </span>
-              </div>
-                   <div className="fs-4 fw-bold mb-2">
-                <span className="info-label">Zip Code: </span>{" "}
-                <span className="ms-2 info-input">
-                  {user.zip_code || "zip code"}
-                </span>
-              </div>
-                   <div className="fs-4 fw-bold mb-2">
-                <span className="info-label">Country: </span>{" "}
-                <span className="ms-2 info-input">
-                  {user.country || "country"}
-                </span>
-              </div>
-              
             </div>
           </div>
         </Glass>
