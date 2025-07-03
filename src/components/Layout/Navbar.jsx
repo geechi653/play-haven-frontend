@@ -28,7 +28,7 @@ function Navbar() {
           className="navbar-brand d-flex align-items-center text-decoration-none"
         >
           <img
-            src="public/assets/play_haven_logo_small.svg"
+            src="/assets/play_haven_logo_small.svg"
             alt="Play Haven Logo"
             className="playheaven-logo-img"
           />
