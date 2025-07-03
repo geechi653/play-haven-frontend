@@ -2,12 +2,66 @@
 .playheaven-navbar {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   border-bottom: 1px solid #333;
-  overflow-x: hidden;
+  overflow: visible;
+  position: relative;
+  z-index: 1000;
 }
 
 .playheaven-navbar .container-fluid {
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: visible;
+  position: relative;
+}
+
+/* Dropdown positioning fix */
+.nav-item.dropdown {
+  position: relative;
+}
+
+.nav-item.dropdown .nav-link {
+  position: relative;
+  z-index: 1001;
+}
+
+/* Prevent layout shift when dropdown opens */
+.playheaven-navbar .dropdown-toggle::after {
+  display: none;
+}
+
+/* Ensure dropdown doesn't cause overflow */
+.playheaven-navbar .dropdown {
+  position: relative;
+}
+
+.playheaven-navbar .dropdown-menu.show {
+  transform: none;
+  will-change: auto;
+}
+
+/* Ensure dropdown doesn't affect navbar layout */
+.playheaven-navbar .nav-item.dropdown {
+  position: relative;
+}
+
+.playheaven-navbar .dropdown-menu.show {
+  position: absolute !important;
+  top: 100% !important;
+  right: 0 !important;
+  left: auto !important;
+  inset: auto 0px auto auto !important;
+  margin: 0px !important;
+  transform: translate3d(0px, 0px, 0px) !important;
+}
+
+/* Prevent navbar overflow when dropdown is open */
+.playheaven-navbar {
+  position: relative;
+  overflow: visible;
+}
+
+.playheaven-navbar .container-fluid {
+  position: relative;
+  overflow: visible;
 }
 
 /* SVG Logo styling */
@@ -119,6 +173,7 @@
   position: absolute !important;
   right: 0;
   left: auto;
+  top: 100%;
   min-width: 180px;
   width: auto;
   background-color: #23272f;
@@ -126,6 +181,12 @@
   color: #f7f7f7;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.25);
   font-size: 1rem;
+  z-index: 1050;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  transform: translateY(0) !important;
+  will-change: transform;
+  overflow: hidden;
 }
 
 .dropdown-item {
@@ -212,6 +273,7 @@
 
   .nav-item.dropdown {
     width: 100%;
+    position: static;
   }
 
   .playheaven-navbar .dropdown-menu {
@@ -221,6 +283,7 @@
     margin-top: 0.5rem;
     box-shadow: none;
     border: 1px solid #444;
+    z-index: auto;
   }
 
   .navbar-brand + .d-flex {
