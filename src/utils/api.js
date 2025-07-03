@@ -3,9 +3,6 @@ import { initialState } from "../store/initialStore.js";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
-
-
-
 // Steam API endpoints
 export async function fetchTopGames(limit = 15, offset = 0) {
   try {
@@ -320,10 +317,13 @@ export async function loginUser({ username, password }) {
     body: JSON.stringify({ username, password }),
   });
   const data = await response.json();
-  if (response.ok && data && data.token) {
-    return data;
+  if (response.ok && data && data.token && data.user) {
+    return {
+      token: data.token,
+      user: data.user
+    };
   } else {
-    throw new Error(data?.message || "Invalid username or password");
+    throw new Error(data?.message || "Invalid credentials");
   }
 }
 
@@ -338,6 +338,7 @@ export async function registerUser(user) {
   });
   const data = await response.json();
   if (response.ok && data) {
+    // Return the data regardless of structure since we're not logging in automatically
     return data;
   } else {
     throw new Error(data?.message || "Registration failed");
@@ -346,7 +347,7 @@ export async function registerUser(user) {
 
 // Wishlist API functions
 export async function fetchUserWishlist(userId, token) {
-  const response = await fetch(`${API_BASE}/api/wishlist_items/user/${userId}/wishlist`, {
+  const response = await fetch(`${API_BASE}/api/wishlist`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -356,12 +357,12 @@ export async function fetchUserWishlist(userId, token) {
     throw new Error("Failed to fetch wishlist");
   }
   const data = await response.json();
-  // Assuming backend returns { success: true, data: [game objects] }
-  return data.data ? data.data.map((game) => game.id) : [];
+  // Backend returns { success: true, data: [wishlist items with steam_game_id] }
+  return data.data ? data.data.map((item) => item.steam_game_id) : [];
 }
 
 export async function addToWishlist(userId, gameId, token) {
-  const response = await fetch(`${API_BASE}/api/wishlist_items/user/${userId}/wishlist/add`, {
+  const response = await fetch(`${API_BASE}/api/wishlist/add`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -370,14 +371,15 @@ export async function addToWishlist(userId, gameId, token) {
     body: JSON.stringify({ steam_game_id: gameId }),
   });
   if (!response.ok) {
-    throw new Error("Failed to add to wishlist");
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to add to wishlist");
   }
   return await response.json();
 }
 
 export async function removeFromWishlist(userId, gameId, token) {
   const response = await fetch(
-    `${API_BASE}/api/wishlist_items/user/${userId}/wishlist/game/${gameId}`,
+    `${API_BASE}/api/wishlist/remove/${gameId}`,
     {
       method: "DELETE",
       headers: {
@@ -387,7 +389,8 @@ export async function removeFromWishlist(userId, gameId, token) {
     }
   );
   if (!response.ok) {
-    throw new Error("Failed to remove from wishlist");
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to remove from wishlist");
   }
   return await response.json();
 }
@@ -399,7 +402,7 @@ export async function addToLibrary(userId, gameId, token) {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ game_id: gameId }),
+    body: JSON.stringify({ steam_game_id: gameId }),
   });
   if (!response.ok) {
     throw new Error("Failed to add to library");
@@ -418,14 +421,28 @@ export async function fetchUserLibrary(userId, token) {
     throw new Error("Failed to fetch library");
   }
   const data = await response.json();
-  // Assuming backend returns { success: true, data: [game objects] }
-  return data.data ? data.data.map((game) => game.id) : [];
+  return data.data ? data.data.map((item) => item.steam_game_id) : [];
+}
+
+export async function fetchUserLibraryItems(userId, token) {
+  const response = await fetch(`${API_BASE}/api/user/${userId}/library`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    }
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch library items');
+  }
+  return await response.json();
 }
 
 export async function fetchUserCart(userId, token) {
   try {
-    const response = await fetch(`${API_BASE}/api/cart?userId=${userId}`, {
+    const response = await fetch(`${API_BASE}/api/cart`, {
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -435,10 +452,10 @@ export async function fetchUserCart(userId, token) {
     }
 
     const data = await response.json();
-    // Backend returns array of game IDs, convert to cart item format
-    return Array.isArray(data)
-      ? data.map((gameId) => ({ gameId, quantity: 1 }))
-      : [];
+    console.log('[DEBUG] Cart API response:', data);
+    
+    // Backend returns { success: true, data: [...] } with game objects
+    return data.success && data.data ? data.data : [];
   } catch (error) {
     console.error("Error in fetchUserCart:", error);
     throw error;
@@ -453,22 +470,28 @@ export async function addToCart(userId, gameId, token, quantity = 1) {
     console.log("[DEBUG] addToCart payload:", {
       userId,
       gameId,
-      token,
+      token: token ? 'present' : 'missing',
       quantity,
-    }); // Debug log
+    });
+    console.log("[DEBUG] Request body:", JSON.stringify({ steam_game_id: gameId }));
+    
     const response = await fetch(`${API_BASE}/api/cart/add`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: userId,
-        gameId: gameId,
+        steam_game_id: gameId,
       }),
     });
+    
     if (!response.ok) {
-      throw new Error("Failed to add to cart");
+      const errorData = await response.json();
+      console.error('[DEBUG] Cart add error response:', errorData);
+      throw new Error(errorData.message || "Failed to add to cart");
     }
+    
     return await response.json();
   } catch (error) {
     console.error("Error in addToCart:", error);
@@ -483,32 +506,24 @@ export async function removeFromCart(userId, gameId, token) {
     }
 
     const response = await fetch(
-      `${API_BASE}/api/cart/remove/${gameId}?userId=${userId}`,
+      `${API_BASE}/api/cart/remove/${gameId}`,
       {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
     );
 
     if (!response.ok) {
-      throw new Error("Failed to remove from cart");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to remove from cart");
     }
 
     return await response.json();
   } catch (error) {
     console.error("Error in removeFromCart:", error);
-    throw error;
-  }
-}
-
-export async function updateCartQuantity(userId, gameId, quantity, token) {
-  try {
-    console.warn("updateCartQuantity not implemented in backend yet");
-    return { message: "Quantity update not supported yet" };
-  } catch (error) {
-    console.error("Error in updateCartQuantity:", error);
     throw error;
   }
 }
@@ -520,17 +535,19 @@ export async function clearCart(userId, token) {
     }
 
     const response = await fetch(
-      `${API_BASE}/api/cart/clear?userId=${userId}`,
+      `${API_BASE}/api/cart/clear`,
       {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
     );
 
     if (!response.ok) {
-      throw new Error("Failed to clear cart");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to clear cart");
     }
 
     return await response.json();
@@ -541,8 +558,7 @@ export async function clearCart(userId, token) {
 }
 
 export async function fetchUserProfile(userId, token) {
-  const API_BASE = import.meta.env.VITE_API_URL;
-  const response = await fetch(`${API_BASE}/api/profiles/user/${userId}`, {
+  const response = await fetch(`${API_BASE}/api/users/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -551,7 +567,8 @@ export async function fetchUserProfile(userId, token) {
   if (!response.ok) {
     throw new Error("Failed to fetch user profile");
   }
-  return await response.json();
+  const data = await response.json();
+  return data.success && data.data ? data.data : data;
 }
 
 export async function fetchGameNews(appId = 440, count = 5, maxlength = 500) {
@@ -572,9 +589,35 @@ export async function fetchUserWishlistItems(userId, token) {
     }
   };
 
-  const response = await fetch(`${API_BASE}/api/wishlist_items/user/${userId}/wishlist`, options);
+  const response = await fetch(`${API_BASE}/api/wishlist`, options);
   if (!response.ok) {
     throw new Error('Failed to fetch wishlist items');
   }
   return await response.json();
+}
+
+export async function purchaseCart(userId, token) {
+  try {
+    if (!userId) {
+      throw new Error("User must be logged in to purchase cart");
+    }
+
+    const response = await fetch(`${API_BASE}/api/cart/purchase`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to purchase cart");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error in purchaseCart:", error);
+    throw error;
+  }
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
-import GameFilters from '../../components/GameFilters/GameFilters.jsx';
 import { useGlobalStore } from '../../hooks/useGlobalStore';
 import { fetchUserWishlistItems } from '../../utils/api';
 import './Wishlist.css';
@@ -122,26 +121,81 @@ function Wishlist() {
           </div>
         ) : (
           <>
-            <GameFilters
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              selectedGenre={selectedGenre}
-              setSelectedGenre={setSelectedGenre}
-              selectedPlatform={selectedPlatform}
-              setSelectedPlatform={setSelectedPlatform}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              allGenres={allGenres}
-              allPlatforms={allPlatforms}
-              searchPlaceholder="Search your wishlist..."
-              sortOptions={[
-                { value: 'recent', label: 'Recently Added' },
-                { value: 'alphabetical', label: 'A-Z' },
-                { value: 'price_low', label: 'Price: Low to High' },
-                { value: 'price_high', label: 'Price: High to Low' },
-                { value: 'release_year', label: 'Release Year' }
-              ]}
-            />
+            <div className="wishlist-controls">
+          <div className="row g-3 align-items-end">
+            <div className="col-md-4">
+              <label htmlFor="search" className="form-label">Search Games</label>
+              <input
+                type="text"
+                id="search"
+                className="form-control wishlist-search"
+                placeholder="Search your wishlist..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-2">
+              <label htmlFor="genre" className="form-label">Genre</label>
+              <select
+                id="genre"
+                className="form-select wishlist-filter"
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}
+              >
+                <option value="all">All Genres</option>
+                {allGenres.map(genre => (
+                  <option key={genre} value={genre}>{genre}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-md-2">
+              <label htmlFor="platform" className="form-label">Platform</label>
+              <select
+                id="platform"
+                className="form-select wishlist-filter"
+                value={selectedPlatform}
+                onChange={(e) => setSelectedPlatform(e.target.value)}
+              >
+                <option value="all">All Platforms</option>
+                {allPlatforms.map(platform => (
+                  <option key={platform} value={platform}>{platform}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-md-2">
+              <label htmlFor="sort" className="form-label">Sort By</label>
+              <select
+                id="sort"
+                className="form-select wishlist-filter"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="recent">Recently Added</option>
+                <option value="alphabetical">A-Z</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+                <option value="release_year">Release Year</option>
+              </select>
+            </div>
+
+            <div className="col-md-2">
+              <button
+                className="btn btn-outline-secondary w-100"
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedGenre('all');
+                  setSelectedPlatform('all');
+                  setSortBy('recent');
+                }}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="wishlist-games">
           {!user.isAuthenticated ? (

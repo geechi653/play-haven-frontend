@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Glass from "../../components/glass/Glass";
 import { useState, useEffect } from "react";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
@@ -8,7 +8,9 @@ import "./Login.css";
 
 function Login() {
   const { store, dispatch } = useGlobalStore();
+  const location = useLocation();
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [userInputs, setUserInput] = useState({
     username: "",
     password: "",
@@ -20,6 +22,17 @@ function Login() {
       navigate("/home", { replace: true });
     }
   }, [store.user.isAuthenticated, navigate]);
+
+  useEffect(() => {
+    // Check for signup success message
+    if (location.state?.signupSuccess) {
+      setSuccessMessage(location.state.message);
+      // Clear the success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 5000);
+    }
+  }, [location.state]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +74,7 @@ function Login() {
             <input
               type="text"
               className="form-control rounded-4 custom-input"
-              id="input-username"
+              id="input-userme"
               placeholder="Username"
               onChange={(e) =>
                 setUserInput({ ...userInputs, username: e.target.value })
@@ -85,6 +98,10 @@ function Login() {
 
           {error && (
             <p className="text-center text-danger fw-bold">{error}</p>
+          )}
+
+          {successMessage && (
+            <p className="text-center text-success fw-bold">{successMessage}</p>
           )}
 
           <p className="text-center fw-bold custom-text">

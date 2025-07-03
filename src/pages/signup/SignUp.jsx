@@ -88,13 +88,18 @@ function SignUp() {
 
     try {
       const data = await registerUser(user);
-      dispatch({
-        type: "LOGIN",
-        payload: { token: data.token, user: data.user },
-      });
+      console.log('[DEBUG] Registration successful:', data);
+      // Don't automatically log in the user, just show success and redirect to login
       setError("");
-      navigate("/home");
+      // Navigate to login page with a success message
+      navigate("/login", { 
+        state: { 
+          signupSuccess: true,
+          message: "Account created successfully! Please log in with your credentials." 
+        } 
+      });
     } catch (err) {
+      console.error('[DEBUG] Registration failed:', err);
       setError(err.message || "Something wrong happened! Please try again...");
     }
   };

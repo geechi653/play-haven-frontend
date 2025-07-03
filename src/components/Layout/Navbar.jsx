@@ -7,16 +7,87 @@ import { IoSearch } from "react-icons/io5";
 import { useGlobalStore } from "../../hooks/useGlobalStore";
 import { useNavigate } from "react-router-dom";
 import { MdExpandMore } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { fetchUserCart } from "../../utils/api";
 
 function Navbar() {
   const { store, dispatch } = useGlobalStore();
   const isUserLoggedIn = store.user && store.user.isAuthenticated;
   const username = isUserLoggedIn ? store.user.username : null;
   const navigate = useNavigate();
+  const [cartItemCount, setCartItemCount] = useState(0);
+
+  // Fetch cart count on mount and when user changes
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (isUserLoggedIn && store.user.userId && store.user.token) {
+        try {
+          const cartItems = await fetchUserCart(store.user.userId, store.user.token);
+          setCartItemCount(cartItems.length);
+        } catch (error) {
+          console.error('Failed to fetch cart count:', error);
+          setCartItemCount(0);
+        }
+      } else {
+        setCartItemCount(0);
+      }
+    };
+
+    fetchCartCount();
+  }, [isUserLoggedIn, store.user.userId, store.user.token]);
+
+  // Listen for cart updates
+  useEffect(() => {
+    const handleCartUpdate = (event) => {
+      const { action } = event.detail;
+      if (action === 'add') {
+        setCartItemCount(prev => prev + 1);
+      } else if (action === 'remove') {
+        setCartItemCount(prev => Math.max(0, prev - 1));
+      }
+    };
+
+    const handleCartCleared = async () => {
+      // Refetch cart count from server to ensure accuracy
+      await syncCartCount();
+    };
+
+    const handleCartSync = async () => {
+      // Force sync cart count from server
+      await syncCartCount();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    window.addEventListener('cartCleared', handleCartCleared);
+    window.addEventListener('cartSync', handleCartSync);
+    
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+      window.removeEventListener('cartCleared', handleCartCleared);
+      window.removeEventListener('cartSync', handleCartSync);
+    };
+  }, [isUserLoggedIn, store.user.userId, store.user.token]);
+
+  // Function to sync cart count with server
+  const syncCartCount = async () => {
+    if (isUserLoggedIn && store.user.userId && store.user.token) {
+      try {
+        const cartItems = await fetchUserCart(store.user.userId, store.user.token);
+        setCartItemCount(cartItems.length);
+        console.log('[DEBUG] Cart count synced:', cartItems.length);
+      } catch (error) {
+        console.error('Failed to sync cart count:', error);
+        setCartItemCount(0);
+      }
+    } else {
+      setCartItemCount(0);
+    }
+  };
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     localStorage.removeItem("playheaven-store");
+    setCartItemCount(0); // Reset cart count on logout
     navigate("/home");
   };
 
@@ -94,31 +165,14 @@ function Navbar() {
                   </Link>
                   <Link
                     to="/wishlist"
-                    className="playheaven-icon-btn text-decoration-none position-relative"
+                    className="playheaven-icon-btn text-decoration-none"
                     title="Wishlist"
                   >
                     <FaRegHeart />
                     {store.wishlist &&
                       store.wishlist.items &&
                       store.wishlist.items.length > 0 && (
-                        <span
-                          style={{
-                            position: "absolute",
-                            bottom: -4,
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "8px",
-                            fontSize: "0.7em",
-                            padding: "0 4px",
-                            minWidth: "16px",
-                            textAlign: "center",
-                            lineHeight: "16px",
-                            fontWeight: 700,
-                            zIndex: 2,
-                          }}
-                        >
+                        <span className="wishlist-badge">
                           {store.wishlist.items.length}
                         </span>
                       )}
@@ -129,6 +183,11 @@ function Navbar() {
                     title="Cart"
                   >
                     <IoCartOutline />
+                    {isUserLoggedIn && cartItemCount > 0 && (
+                        <span className="notification-badge">
+                          {cartItemCount}
+                        </span>
+                      )}
                   </Link>
                   <Link
                     to="/library"

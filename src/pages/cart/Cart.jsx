@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GameCard from '../../components/GameCard/GameCard.jsx';
+import CheckoutModal from '../../components/CheckoutModal/CheckoutModal.jsx';
 import { useGlobalStore } from '../../hooks/useGlobalStore';
-import { fetchUserCart, addToCart, removeFromCart, clearCart } from '../../utils/api';
+import { fetchUserCart, addToCart, removeFromCart, clearCart, purchaseCart, addToLibrary } from '../../utils/api';
 import { IoTrashOutline } from "react-icons/io5";
 import './Cart.css';
 
@@ -16,22 +17,27 @@ function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [removedItems, setRemovedItems] = useState(new Set());
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
 
   const TAX_RATE = 0.08; 
 
   useEffect(() => {
-    if (user.isAuthenticated && user.userId) {
-      fetchUserCart(user.userId)
-        .then(items => {
-          dispatch({ type: 'SET_CART', payload: { items } });
-          setCartItems(items);
+    if (user.isAuthenticated && user.userId && user.token) {
+      fetchUserCart(user.userId, user.token)
+        .then(cartData => {
+          console.log('[DEBUG] Cart data received:', cartData);
+          // Backend returns array of objects with steam_game_id and game details
+          setCartItems(cartData);
         })
-        .catch(() => {
-          dispatch({ type: 'SET_CART', payload: { items: [] } });
+        .catch(error => {
+          console.error('[DEBUG] Failed to fetch cart:', error);
           setCartItems([]);
         });
+    } else {
+      setCartItems([]);
     }
-  }, [user.isAuthenticated, user.userId, dispatch]);
+  }, [user.isAuthenticated, user.userId, user.token]);
 
   useEffect(() => {
     const handleCartUpdate = (event) => {
@@ -50,43 +56,61 @@ function Cart() {
     return () => window.removeEventListener('cartUpdated', handleCartUpdate);
   }, []);
 
-  const cartGames = games.filter(game =>
-    user.isAuthenticated &&
-    cartItems.some(item => item.gameId === game.id) &&
-    !removedItems.has(game.id)
-  );
+  // Extract games from cart items (backend returns game objects directly)
+  const cartGames = cartItems
+    .filter(item => item && item.id && !removedItems.has(item.id))
+    .map(item => item); // items are already game objects
+
+  console.log('[DEBUG] Cart items:', cartItems);
+  console.log('[DEBUG] Cart games:', cartGames);
+  console.log('[DEBUG] Removed items:', removedItems);
 
   const removeItemFromCart = async (gameId) => {
     try {
-      await removeFromCart(user.userId, gameId);
+      await removeFromCart(user.userId, gameId, user.token);
       
-      setCartItems(prev => prev.filter(item => item.gameId !== gameId));
-      
+      setCartItems(prev => prev.filter(item => item.id !== gameId));
       setRemovedItems(prev => new Set([...prev, gameId]));
       
-      dispatch({ type: 'REMOVE_FROM_CART', payload: { gameId } });
+      // Trigger cart update event
+      window.dispatchEvent(new CustomEvent('cartUpdated', { 
+        detail: { gameId: gameId, action: 'remove' } 
+      }));
+      
+      console.log('[DEBUG] Removed from cart:', gameId);
       
     } catch (error) {
-      console.error('Failed to remove from cart:', error);
-      setCartItems(prev => prev.filter(item => item.gameId !== gameId));
+      console.error('[DEBUG] Failed to remove from cart:', error);
+      // Still remove from UI even if API call fails
+      setCartItems(prev => prev.filter(item => item.id !== gameId));
       setRemovedItems(prev => new Set([...prev, gameId]));
-      dispatch({ type: 'REMOVE_FROM_CART', payload: { gameId } });
     }
   };
 
   const clearCartItems = async () => {
     try {
-      await clearCart(user.userId);
+      await clearCart(user.userId, user.token);
       
       setCartItems([]);
       setRemovedItems(new Set());
-      dispatch({ type: 'CLEAR_CART' });
+      
+      // Trigger cart cleared event to update navbar badge
+      window.dispatchEvent(new CustomEvent('cartCleared', { 
+        detail: { action: 'clear' } 
+      }));
+      
+      console.log('[DEBUG] Cart cleared');
       
     } catch (error) {
-      console.error('Failed to clear cart:', error);
+      console.error('[DEBUG] Failed to clear cart:', error);
+      // Still clear UI even if API call fails
       setCartItems([]);
       setRemovedItems(new Set());
-      dispatch({ type: 'CLEAR_CART' });
+      
+      // Trigger cart cleared event even if API fails
+      window.dispatchEvent(new CustomEvent('cartCleared', { 
+        detail: { action: 'clear' } 
+      }));
     }
   };
 
@@ -122,26 +146,73 @@ function Cart() {
     return calculateSubtotal() + calculateTax();
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (cartGames.length === 0) return;
-    
+    setShowCheckoutModal(true);
+  };
+
+  const handlePurchaseComplete = async () => {
     setIsCheckingOut(true);
     
     try {
-      // TODO: Implement actual checkout logic
-      // This could involve payment processing, order creation, etc.
+      const response = await purchaseCart(user.userId, user.token);
+      console.log('[DEBUG] Purchase successful:', response);
       
-      // Simulate checkout process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Add games to library with "new" badge
+      const gameIds = cartGames.map(game => game.id);
+      for (const gameId of gameIds) {
+        try {
+          await addToLibrary(user.userId, gameId, user.token);
+          console.log('[DEBUG] Added to library:', gameId);
+        } catch (error) {
+          console.error('[DEBUG] Failed to add to library:', gameId, error);
+        }
+      }
       
-      clearCartItems();
+      // Store recently purchased games for "new" badge
+      const recentlyPurchased = gameIds.map(id => ({
+        gameId: id,
+        purchaseDate: Date.now()
+      }));
       
-      navigate('/checkout-success');
+      console.log('[DEBUG] Storing recently purchased games:', recentlyPurchased);
+      localStorage.setItem('recentlyPurchased', JSON.stringify(recentlyPurchased));
+      
+      // Clear cart on server and locally
+      try {
+        await clearCart(user.userId, user.token);
+        console.log('[DEBUG] Cart cleared on server');
+      } catch (error) {
+        console.error('[DEBUG] Failed to clear cart on server:', error);
+      }
+      
+      // Clear cart locally
+      setCartItems([]);
+      setRemovedItems(new Set());
+      setPurchaseSuccess(true);
+      
+      // Trigger cart update event to update navbar badge
+      window.dispatchEvent(new CustomEvent('cartCleared', { 
+        detail: { action: 'clear' } 
+      }));
+      
+      // Navigate to library page with success message
+      setTimeout(() => {
+        navigate('/library', { 
+          state: { 
+            purchaseSuccess: true,
+            purchasedGames: cartGames.length,
+            message: `Successfully purchased ${cartGames.length} game${cartGames.length !== 1 ? 's' : ''}!` 
+          } 
+        });
+      }, 2000);
       
     } catch (error) {
-      console.error('Checkout failed:', error);
+      console.error('[DEBUG] Checkout failed:', error);
+      alert(`Checkout failed: ${error.message}`);
     } finally {
       setIsCheckingOut(false);
+      setShowCheckoutModal(false);
     }
   };
 
@@ -155,20 +226,6 @@ function Cart() {
         <div className="cart-item-details">
           <h5 className="cart-item-title">{game.title}</h5>
           <p className="cart-item-description">{game.description}</p>
-          
-          <div className="cart-item-price">
-            {game.discount && game.original_price ? (
-              <>
-                <span className="original-price">${game.original_price}</span>
-                <span className="discounted-price">${getCurrentPrice(game).toFixed(2)}</span>
-                <span className="discount-badge">-{game.discount}%</span>
-              </>
-            ) : (
-              <span className="current-price">
-                {getCurrentPrice(game) === 0 ? 'Free' : `$${getCurrentPrice(game).toFixed(2)}`}
-              </span>
-            )}
-          </div>
         </div>
       </div>
       
@@ -283,6 +340,28 @@ function Cart() {
           </div>
         )}
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        onPurchase={handlePurchaseComplete}
+        totalAmount={calculateTotal()}
+        itemCount={cartGames.length}
+      />
+
+      {/* Purchase Success Message */}
+      {purchaseSuccess && (
+        <div className="success-overlay">
+          <div className="success-message glass-effect">
+            <div className="success-content">
+              <h3>Purchase Complete</h3>
+              <p>Games added to your library</p>
+              <div className="success-indicator"></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
