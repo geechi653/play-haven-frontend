@@ -54,7 +54,13 @@ export async function fetchTopGames(limit = 15, offset = 0) {
       console.log('[DEBUG] First top game object:', games[0]);
     }
     // Ensure every game has an id property
-    return games.map(game => ({ ...game, id: game.id || game.appId || game.gameId || game.steam_appid }));
+    return games.map(game => {
+      const id = game.id || game.appId || game.gameId || game.steam_appid || game.steamId || game._id;
+      if (!id) {
+        console.error('[DEBUG] Game object missing id:', game);
+      }
+      return { ...game, id };
+    });
   } catch (error) {
     console.error('Error in fetchTopGames:', error);
     // If the API call fails, fall back to mock data
@@ -79,7 +85,13 @@ export async function fetchDiscountedGames(limit = 15, offset = 0) {
     if (games && games.length > 0) {
       console.log('[DEBUG] First discounted game object:', games[0]);
     }
-    return games.map(game => ({ ...game, id: game.id || game.appId || game.gameId || game.steam_appid }));
+    return games.map(game => {
+      const id = game.id || game.appId || game.gameId || game.steam_appid || game.steamId || game._id;
+      if (!id) {
+        console.error('[DEBUG] Discounted game object missing id:', game);
+      }
+      return { ...game, id };
+    });
   } catch (error) {
     console.error('Error in fetchDiscountedGames:', error);
     // If the API call fails, fall back to mock data
@@ -104,7 +116,13 @@ export async function fetchFeaturedGames(limit = 10, offset = 0) {
     if (games && games.length > 0) {
       console.log('[DEBUG] First featured game object:', games[0]);
     }
-    return games.map(game => ({ ...game, id: game.id || game.appId || game.gameId || game.steam_appid }));
+    return games.map(game => {
+      const id = game.id || game.appId || game.gameId || game.steam_appid || game.steamId || game._id;
+      if (!id) {
+        console.error('[DEBUG] Featured game object missing id:', game);
+      }
+      return { ...game, id };
+    });
   } catch (error) {
     console.error('Error in fetchFeaturedGames:', error);
     // If the API call fails, fall back to mock data
