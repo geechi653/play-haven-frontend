@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import GameCard from '../../components/GameCard/GameCard.jsx';
 import { useGlobalStore } from '../../hooks/useGlobalStore';
-import { fetchUserWishlist } from '../../utils/api';
+import { fetchUserWishlistItems } from '../../utils/api';
 import './Wishlist.css';
 
 function Wishlist() {
-  const { store, dispatch } = useGlobalStore();
-  const games = store.games.allGames;
+  const { store } = useGlobalStore();
   const user = store.user;
-  const wishlist = store.wishlist.items;
+  const [wishlistGames, setWishlistGames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
@@ -18,15 +18,39 @@ function Wishlist() {
 
   useEffect(() => {
     if (user.isAuthenticated && user.userId && user.token) {
-      fetchUserWishlist(user.userId, user.token)
-        .then(ids => {
-          dispatch({ type: 'SET_WISHLIST', payload: { items: ids } });
+      setLoading(true);
+      fetchUserWishlistItems(user.userId, user.token)
+        .then(data => {
+          console.log('[DEBUG] Wishlist API response:', data);
+          
+          let gamesList = [];
+          if (Array.isArray(data)) {
+            gamesList = data;
+          } else if (data && data.data && Array.isArray(data.data)) {
+            gamesList = data.data.map(item => ({
+              ...item.game,
+              wishlist_id: item.wishlist_id,
+              created_at: item.created_at
+            }));
+          } else if (data && data.games && Array.isArray(data.games)) {
+            gamesList = data.games;
+          } else {
+            console.log('[DEBUG] Unexpected wishlist response structure:', data);
+            gamesList = [];
+          }
+          
+          setWishlistGames(gamesList);
+          setLoading(false);
         })
-        .catch(() => {
-          dispatch({ type: 'SET_WISHLIST', payload: { items: [] } });
+        .catch(error => {
+          console.error('Failed to fetch wishlist:', error);
+          setWishlistGames([]);
+          setLoading(false);
         });
+    } else {
+      setLoading(false);
     }
-  }, [user.isAuthenticated, user.userId, user.token, dispatch]);
+  }, [user.isAuthenticated, user.userId, user.token]);
 
   useEffect(() => {
     const handleWishlistUpdate = (event) => {
@@ -39,18 +63,11 @@ function Wishlist() {
     return () => window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
   }, []);
 
-  const wishlistGames = games.filter(game =>
-    user.isAuthenticated &&
-    wishlist &&
-    wishlist.includes(game.id) &&
-    !removedGames.has(game.id)
-  );
-
-  const displayGames = wishlistGames;
+  const displayGames = Array.isArray(wishlistGames) ? wishlistGames.filter(game => !removedGames.has(game.id)) : [];
 
   const filteredGames = displayGames.filter(game => {
-    const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      game.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (game.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (game.description || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesGenre = selectedGenre === 'all' ||
       (game.genres && game.genres.includes(selectedGenre));
     const matchesPlatform = selectedPlatform === 'all' ||
@@ -82,11 +99,19 @@ function Wishlist() {
         <div className="wishlist-header">
           <h1 className="wishlist-title">Your Wishlist</h1>
           <p className="wishlist-subtitle">
-            {sortedGames.length} game{sortedGames.length !== 1 ? 's' : ''} on your wishlist
+            {loading ? 'Loading...' : `${sortedGames.length} game${sortedGames.length !== 1 ? 's' : ''} on your wishlist`}
           </p>
         </div>
 
-        <div className="wishlist-controls">
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="wishlist-controls">
           <div className="row g-3 align-items-end">
             {/* Search Bar */}
             <div className="col-md-4">
@@ -208,8 +233,10 @@ function Wishlist() {
             </div>
           )}
         </div>
-      </div>
+        </>
+      )}
     </div>
+  </div>
   );
 }
 

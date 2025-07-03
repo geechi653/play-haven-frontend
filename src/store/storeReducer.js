@@ -20,12 +20,16 @@
 export function storeReducer(state, action) {
   switch (action.type) {
     case 'LOGIN':
+      console.log("[DEBUG] LOGIN action payload:", action.payload);
+      const newUser = {
+        ...action.payload.user,
+        isAuthenticated: true,
+        token: action.payload.token,
+        userId: action.payload.user.id || action.payload.user.userId,
+      };
       return {
         ...state,
-        user: {
-          ...action.payload.user,
-          isAuthenticated: true,
-        },
+        user: newUser,
       };
     case 'LOGOUT':
       return {
@@ -35,6 +39,20 @@ export function storeReducer(state, action) {
           username: '',
           email: '',
           avatar: '',
+          token: null,
+          userId: null,
+        },
+        wishlist: {
+          items: [],
+          loading: false,
+        },
+        cart: {
+          items: [],
+          loading: false,
+        },
+        library: {
+          items: [],
+          loading: false,
         },
       };
     case 'SET_WISHLIST':

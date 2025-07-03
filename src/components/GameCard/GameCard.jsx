@@ -11,61 +11,50 @@ function GameCard({
   cardType = 'featured',
   isUserLoggedIn = false 
 }) {
-  const { store, dispatch } = useGlobalStore();
+  const { store } = useGlobalStore();
   const user = store.user;
-  const [isWishlisted, setIsWishlisted] = useState(game.isWishlisted || false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
   const [isInLibrary, setIsInLibrary] = useState(game.isInLibrary || false);
   const navigate = useNavigate();
 
- 
-  useEffect(() => {
-    if (store.cart?.items && game.id) {
-      const isGameInCart = store.cart.items.some(item => item.gameId === game.id);
-      setIsInCart(isGameInCart);
-    }
-  }, [store.cart?.items, game.id]);
-
   const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Wishlist clicked', { isUserLoggedIn, userId: user.userId, token: user.token });
-    if (isUserLoggedIn && user.userId && user.token) {
+    
+    if (user.isAuthenticated && user.userId && user.token) {
       try {
         if (!isWishlisted) {
           await addToWishlist(user.userId, game.id, user.token);
-          dispatch({ type: 'ADD_TO_WISHLIST', payload: { gameId: game.id } });
+          setIsWishlisted(true);
+          console.log('[DEBUG] Added to wishlist:', game.title);
         } else {
           await removeFromWishlist(user.userId, game.id, user.token);
-          dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: { gameId: game.id } });
+          setIsWishlisted(false);
+          console.log('[DEBUG] Removed from wishlist:', game.title);
         }
-        setIsWishlisted(!isWishlisted);
       } catch (err) {
-        console.error('Wishlist error:', err);
+        console.error('[DEBUG] Wishlist error:', err);
       }
     } else {
-      console.warn('Not logged in or missing user/token');
+      console.log('[DEBUG] User not authenticated or missing data');
     }
   };
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('[DEBUG] handleAddToCart game prop:', game);
-    console.log('[DEBUG] handleAddToCart user object:', user);
     if (!game.id) {
-      console.warn('[GameCard] Tried to add to cart but game.id is missing:', game);
+      console.warn('Tried to add to cart but game.id is missing:', game);
       return;
     }
     if (isUserLoggedIn && user.userId) {
       try {
         if (!isInCart) {
           await addToCart(user.userId, game.id, user.token);
-          dispatch({ type: 'ADD_TO_CART', payload: { gameId: game.id, quantity: 1 } });
           setIsInCart(true);
         } else {
           await removeFromCart(user.userId, game.id);
-          dispatch({ type: 'REMOVE_FROM_CART', payload: { gameId: game.id } });
           setIsInCart(false);
         }
       } catch (error) {
@@ -125,7 +114,6 @@ function GameCard({
     if (isUserLoggedIn && user.userId) {
       try {
         await addToCart(user.userId, game.id);
-        dispatch({ type: 'ADD_TO_CART', payload: { gameId: game.id, quantity: 1 } });
         setIsInCart(true);
         console.log('Moving game to cart:', game.title);
         navigate('/cart');
@@ -138,12 +126,17 @@ function GameCard({
   const handleRemoveFromWishlist = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isUserLoggedIn && user.userId && user.token) {
+    if (user.isAuthenticated && user.userId && user.token) {
       try {
         await removeFromWishlist(user.userId, game.id, user.token);
-        dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: { gameId: game.id } });
         setIsWishlisted(false);
+        console.log('Removed from wishlist:', game.title);
+        // Trigger a custom event to notify other components
+        window.dispatchEvent(new CustomEvent('wishlistUpdated', { 
+          detail: { gameId: game.id, action: 'remove' } 
+        }));
       } catch (err) {
+        console.error('Remove from wishlist error:', err);
       }
     }
   };
@@ -166,7 +159,6 @@ function GameCard({
       return "0.00";
     }
     
-    // If there's a discount and original price, calculate the discounted price
     if (game.discount && game.discount > 0 && game.original_price) {
       const originalPrice = typeof game.original_price === 'string' 
         ? parseFloat(game.original_price) 
@@ -174,8 +166,6 @@ function GameCard({
       return ((originalPrice * (100 - game.discount)) / 100).toFixed(2);
     }
     
-    // Otherwise return the regular price or 0 if price is not available
-    // Ensure price is treated as a number and not a string
     const price = typeof game.price === 'string' ? parseFloat(game.price) : game.price || 0;
     return price.toFixed(2);
   };
@@ -235,11 +225,23 @@ function GameCard({
 
   const renderStandardActions = () => (
     <div className="game-card-actions">
-      {isUserLoggedIn && (
+      {isUserLoggedIn ? (
         <button 
           className={`wishlist-btn ${isWishlisted ? 'wishlisted' : ''}`}
           onClick={handleWishlistToggle}
           title={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          <FaRegHeart />
+        </button>
+      ) : (
+        <button 
+          className="wishlist-btn disabled"
+          title="Please login to add to wishlist"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Please login to add to wishlist');
+          }}
         >
           <FaRegHeart />
         </button>

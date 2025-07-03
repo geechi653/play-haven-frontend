@@ -42,6 +42,7 @@ export const initialState = () => ({
     username: null,
     email: null,
     avatar: null,
+    token: null,
     is_active: null,
     is_admin: null,
     created_at: null,

@@ -5,13 +5,13 @@ import { useGlobalStore } from '../../hooks/useGlobalStore';
 import './Store.css';
 
 function Store() {
-  const [games, setGames] = useState([]); // All loaded games
+  const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [page, setPage] = useState(1); // Track which page we're on
+  const [page, setPage] = useState(1);
   const [hasMoreGames, setHasMoreGames] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [visibleGames, setVisibleGames] = useState([]);
@@ -20,7 +20,6 @@ function Store() {
 
   const { store } = useGlobalStore();
   const user = store.user;
-  const wishlist = store.wishlist.items;
   const isUserLoggedIn = user.isAuthenticated;
 
   // Fetch games in pages
@@ -61,13 +60,10 @@ function Store() {
     fetchGamesPage(page);
   }, [page]);
 
-  // Add wishlist status
+  // Add wishlist status (simplified - each GameCard will manage its own state)
   const addWishlistStatus = (gamesList) => {
     if (!gamesList) return [];
-    return gamesList.map(game => ({
-      ...game,
-      isWishlisted: wishlist.includes(game.id)
-    }));
+    return gamesList; // Just return games as-is, GameCard will handle wishlist state
   };
 
   // Filter and search logic
@@ -91,7 +87,7 @@ function Store() {
   useEffect(() => {
     const filtered = addWishlistStatus(getFilteredGames());
     setVisibleGames(filtered.slice(0, Math.min(games.length, MAX_GAMES)));
-  }, [games, searchQuery, activeCategory, wishlist]);
+  }, [games, searchQuery, activeCategory]);
 
   // Categories
   const categories = [...new Set(games.flatMap(game => game.category ? game.category.split(', ') : []))].filter(Boolean);

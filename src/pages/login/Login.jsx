@@ -39,6 +39,8 @@ function Login() {
         username: userInputs.username,
         password: userInputs.password,
       });
+      console.log("[DEBUG] Login response data:", data);
+      console.log("[DEBUG] User object from backend:", data.user);
       dispatch({
         type: "LOGIN",
         payload: { token: data.token, user: data.user },

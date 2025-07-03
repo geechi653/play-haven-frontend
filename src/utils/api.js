@@ -3,43 +3,8 @@ import { initialState } from "../store/initialStore.js";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
-// Base API functions for todos
-export async function fetchTodos(userId) {
-  const response = await fetch(`${API_BASE}/api/todos?user_id=${userId}`);
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  return await response.json();
-}
 
-export async function addTodo(todo) {
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(todo),
-  };
-  const response = await fetch(`${API_BASE}/api/todos`, options);
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  return await response.json();
-}
 
-export async function deleteTodo(todoId, userId) {
-  const options = {
-    method: "DELETE",
-  };
-  const response = await fetch(
-    `${API_BASE}/api/todos/${todoId}?user_id=${userId}`,
-    options
-  );
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  return await response.json();
-}
 
 // Steam API endpoints
 export async function fetchTopGames(limit = 15, offset = 0) {
@@ -381,7 +346,7 @@ export async function registerUser(user) {
 
 // Wishlist API functions
 export async function fetchUserWishlist(userId, token) {
-  const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist`, {
+  const response = await fetch(`${API_BASE}/api/wishlist_items/user/${userId}/wishlist`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -396,13 +361,13 @@ export async function fetchUserWishlist(userId, token) {
 }
 
 export async function addToWishlist(userId, gameId, token) {
-  const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist/add`, {
+  const response = await fetch(`${API_BASE}/api/wishlist_items/user/${userId}/wishlist/add`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ game_id: gameId }),
+    body: JSON.stringify({ steam_game_id: gameId }),
   });
   if (!response.ok) {
     throw new Error("Failed to add to wishlist");
@@ -412,7 +377,7 @@ export async function addToWishlist(userId, gameId, token) {
 
 export async function removeFromWishlist(userId, gameId, token) {
   const response = await fetch(
-    `${API_BASE}/api/user/${userId}/wishlist/game/${gameId}`,
+    `${API_BASE}/api/wishlist_items/user/${userId}/wishlist/game/${gameId}`,
     {
       method: "DELETE",
       headers: {
@@ -595,5 +560,21 @@ export async function fetchGameNews(appId = 440, count = 5, maxlength = 500) {
   );
   if (!response.ok) throw new Error("Failed to fetch news");
 
+  return await response.json();
+}
+
+// New simplified wishlist API function
+export async function fetchUserWishlistItems(userId, token) {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
+  const response = await fetch(`${API_BASE}/api/wishlist_items/user/${userId}/wishlist`, options);
+  if (!response.ok) {
+    throw new Error('Failed to fetch wishlist items');
+  }
   return await response.json();
 }

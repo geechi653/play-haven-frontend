@@ -8,13 +8,6 @@ export default defineConfig({
   plugins: [react()],
   // change the host based on your needs, this is set for the demo of todo app
   server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api'),
-      },
-    },
     middlewareMode: false,
     setupMiddlewares: (middlewares) => {
       middlewares.use(history());
