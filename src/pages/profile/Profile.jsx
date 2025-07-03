@@ -13,6 +13,7 @@ function Profile() {
   const [user, setUser] = useState({
     first_name: "",
     last_name: "",
+    email: "",
     username: "",
     address: "",
     city: "",
@@ -27,28 +28,30 @@ function Profile() {
     confirmPassword: "",
   });
 
-  // Fetch user profile and set state
   const fetchAndSetUserProfile = () => {
     if (store.user.isAuthenticated && userId && token) {
-      console.log("Fetching user profile with:", userId, token);
       fetchUserProfile(userId, token)
         .then((result) => {
-          console.log("Profile API result:", result);
-          const data = result.data || {};
-          const newUser = {
-            first_name: data.first_name || "",
-            last_name: data.last_name || "",
-            username: data.username || "",
-            address: data.profile?.address || "",
-            city: data.profile?.city || "",
-            state: data.profile?.state || "",
-            zip_code: data.profile?.zip_code || "",
-            country: data.profile?.country || "",
-          };
-          console.log("Setting user state to:", newUser);
-          setUser(newUser);
-          if (data.avatar) setImage(data.avatar);
-          dispatch({ type: "SET_PROFILE", payload: { profile: data } });
+          const profile = result.profile || (result.data && result.data.profile) || {};
+          const userData = result.data || result;
+          if (profile.first_name && profile.last_name) {
+            const newUser = {
+              first_name: profile.first_name ?? "",
+              last_name: profile.last_name ?? "",
+              email: userData.email ?? "",
+              username: userData.username ?? "",
+              address: profile.address ?? "",
+              city: profile.city ?? "",
+              state: profile.state ?? "",
+              zip_code: profile.zip_code ?? "",
+              country: profile.country ?? "",
+            };
+            setUser(newUser);
+            if (profile.avatar_url) setImage(profile.avatar_url);
+            dispatch({ type: "SET_PROFILE", payload: { profile } });
+          } else {
+            console.warn("Profile data missing first_name or last_name, not setting user state.");
+          }
         })
         .catch((err) => {
           console.error("Profile fetch error:", err);
@@ -58,7 +61,8 @@ function Profile() {
 
   useEffect(() => {
     fetchAndSetUserProfile();
-  }, [store.user.isAuthenticated, userId, token, dispatch]);
+  }, [store.user.isAuthenticated, userId, token]); // removed dispatch from deps
+
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -76,7 +80,7 @@ function Profile() {
       country: user.country,
     };
 
-    // Add your API call here
+
     console.log("Update data:", body);
   };
 
@@ -95,10 +99,9 @@ function Profile() {
       new_password: passwordData.newPassword,
     };
 
-    // Add password change API call here
+
     console.log("Password change data:", body);
 
-    // Reset form after submission
     setPasswordData({
       currentPassword: "",
       newPassword: "",
@@ -120,7 +123,7 @@ function Profile() {
 
   return (
     <>
-      {/* <div
+     {/* <div
         className="modal fade"
         id={`editModal-${id}`}
         tabIndex="-1"
