@@ -470,7 +470,6 @@ function Profile({ id }) {
         </div>
       </div>
 
-
       <div
         className="modal fade"
         id={`deleteModal-${id}`}
@@ -489,7 +488,7 @@ function Profile({ id }) {
               >
                 Are sure you want to delete your account?
               </h3>
-              
+
               <button
                 type="button"
                 className="btn-close btn-close-white"
@@ -503,7 +502,6 @@ function Profile({ id }) {
                 className="row g-3 needs-validation"
                 noValidate
               >
-
                 <div className="d-flex justify-content-center gap-5 p-1">
                   <button
                     data-bs-dismiss="modal"
@@ -526,37 +524,60 @@ function Profile({ id }) {
         </div>
       </div>
 
-      <div className="profile-page d-flex justify-content-center py-4">
+      <div className="profile-page d-flex justify-content-center py-5">
         <Glass>
           <h2 className="text-center text-light fw-bolder profile-title mb-3">
             My Profile
           </h2>
           <hr />
-          <div className="d-flex justify-content-around">
-
-            <div className="d-flex flex-column align-items-center gap-4">
-            <div
-              className="profile-image-container position-relative"
-              onClick={handleImageClick}
-            >
-              <img className="profile-image" src={image} alt="Profile" />
-              <div className="profile-image-overlay d-flex justify-content-center align-items-center">
-                Change
+          <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
+            <div className="d-flex flex-column align-items-center gap-4 me-5">
+              <div
+                className="profile-image-container position-relative mb-2"
+                onClick={handleImageClick}
+              >
+                <img className="profile-image" src={image} alt="Profile" />
+                <div className="profile-image-overlay d-flex justify-content-center align-items-center">
+                  Change
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
+                />
               </div>
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                onChange={handleImageChange}
-              />
-            </div>
 
-            <div> <button className="btn btn-outline-danger border-0 mt-5"
-            data-bs-toggle="modal"
-            data-bs-target={`#deleteModal-${id}`}
-            >Delete Account</button></div>
+              <div className="d-flex flex-column gap-4 mt-5">
+                <button
+                  className="button-profile"
+                  onClick={() => getUser(id)}
+                  data-bs-toggle="modal"
+                  data-bs-target={`#editModal-${id}`}
+                >
+                  Update Profile
+                </button>
 
+                <button
+                  className="button-profile"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#passwordModal-${id}`}
+                >
+                  Change Password
+                </button>
+              </div>
+
+              <div>
+                {" "}
+                <button
+                  className="btn btn-outline-danger border-1 delete-button"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#deleteModal-${id}`}
+                >
+                  Delete Account
+                </button>
+              </div>
             </div>
 
             <div className="ms-3">
@@ -584,31 +605,25 @@ function Profile({ id }) {
                   {user.username || "name555"}
                 </span>
               </div>
-              <div className="fs-4 fw-bold mb-5">
+              <div className="fs-4 fw-bold mb-2">
                 <span className="info-label">Address: </span>{" "}
                 <span className="ms-2 info-input">
-                  {user.address && user.city && user.state && user.zip_code
-                    ? `${user.address}, ${user.city}, ${user.state} ${user.zip_code}`
-                    : "123 Street, City, State 00000"}
+                  {user.address || "address"}
                 </span>
               </div>
-              <div className="d-flex gap-3 mb-2">
-                <button
-                  className="button-profile py-3"
-                  onClick={() => getUser(id)}
-                  data-bs-toggle="modal"
-                  data-bs-target={`#editModal-${id}`}
-                >
-                  Update Profile
-                </button>
-
-                <button
-                  className="button-profile"
-                  data-bs-toggle="modal"
-                  data-bs-target={`#passwordModal-${id}`}
-                >
-                  Change Password
-                </button>
+              <div className="fs-4 fw-bold mb-2">
+                <span className="info-label">City: </span>{" "}
+                <span className="ms-2 info-input">{user.city || "city"}</span>
+              </div>
+              <div className="fs-4 fw-bold mb-2">
+                <span className="info-label">State: </span>{" "}
+                <span className="ms-2 info-input">{user.state || "state"}</span>
+              </div>
+              <div className="fs-4 fw-bold mb-2">
+                <span className="info-label">Zip Code: </span>{" "}
+                <span className="ms-2 info-input">
+                  {user.zip_code || "zip code"}
+                </span>
               </div>
             </div>
           </div>

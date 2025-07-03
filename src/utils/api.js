@@ -1,5 +1,5 @@
 // Import initialState for mock data
-import { initialState } from '../store/initialStore.js';
+import { initialState } from "../store/initialStore.js";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -14,9 +14,9 @@ export async function fetchTodos(userId) {
 
 export async function addTodo(todo) {
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(todo),
   };
@@ -29,7 +29,7 @@ export async function addTodo(todo) {
 
 export async function deleteTodo(todoId, userId) {
   const options = {
-    method: 'DELETE',
+    method: "DELETE",
   };
   const response = await fetch(
     `${API_BASE}/api/todos/${todoId}?user_id=${userId}`,
@@ -44,25 +44,37 @@ export async function deleteTodo(todoId, userId) {
 // Steam API endpoints
 export async function fetchTopGames(limit = 15, offset = 0) {
   try {
-    const response = await fetch(`${API_BASE}/api/steam/top-games?limit=${limit}&offset=${offset}`);
+    const response = await fetch(
+      `${API_BASE}/api/steam/top-games?limit=${limit}&offset=${offset}`
+    );
     if (!response.ok) {
-      console.error('Error fetching top games:', response.status, response.statusText);
+      console.error(
+        "Error fetching top games:",
+        response.status,
+        response.statusText
+      );
       throw new Error(`Failed to fetch top games: ${response.statusText}`);
     }
     const games = await response.json();
     if (games && games.length > 0) {
-      console.log('[DEBUG] First top game object:', games[0]);
+      console.log("[DEBUG] First top game object:", games[0]);
     }
     // Ensure every game has an id property
-    return games.map(game => {
-      const id = game.id || game.appId || game.gameId || game.steam_appid || game.steamId || game._id;
+    return games.map((game) => {
+      const id =
+        game.id ||
+        game.appId ||
+        game.gameId ||
+        game.steam_appid ||
+        game.steamId ||
+        game._id;
       if (!id) {
-        console.error('[DEBUG] Game object missing id:', game);
+        console.error("[DEBUG] Game object missing id:", game);
       }
       return { ...game, id };
     });
   } catch (error) {
-    console.error('Error in fetchTopGames:', error);
+    console.error("Error in fetchTopGames:", error);
     // If the API call fails, fall back to mock data
     const storeData = initialState();
     const allGames = storeData.games.allGames;
@@ -76,29 +88,43 @@ export async function fetchTopGames(limit = 15, offset = 0) {
 
 export async function fetchDiscountedGames(limit = 15, offset = 0) {
   try {
-    const response = await fetch(`${API_BASE}/api/steam/discounted-games?limit=${limit}&offset=${offset}`);
+    const response = await fetch(
+      `${API_BASE}/api/steam/discounted-games?limit=${limit}&offset=${offset}`
+    );
     if (!response.ok) {
-      console.error('Error fetching discounted games:', response.status, response.statusText);
-      throw new Error(`Failed to fetch discounted games: ${response.statusText}`);
+      console.error(
+        "Error fetching discounted games:",
+        response.status,
+        response.statusText
+      );
+      throw new Error(
+        `Failed to fetch discounted games: ${response.statusText}`
+      );
     }
     const games = await response.json();
     if (games && games.length > 0) {
-      console.log('[DEBUG] First discounted game object:', games[0]);
+      console.log("[DEBUG] First discounted game object:", games[0]);
     }
-    return games.map(game => {
-      const id = game.id || game.appId || game.gameId || game.steam_appid || game.steamId || game._id;
+    return games.map((game) => {
+      const id =
+        game.id ||
+        game.appId ||
+        game.gameId ||
+        game.steam_appid ||
+        game.steamId ||
+        game._id;
       if (!id) {
-        console.error('[DEBUG] Discounted game object missing id:', game);
+        console.error("[DEBUG] Discounted game object missing id:", game);
       }
       return { ...game, id };
     });
   } catch (error) {
-    console.error('Error in fetchDiscountedGames:', error);
+    console.error("Error in fetchDiscountedGames:", error);
     // If the API call fails, fall back to mock data
     const storeData = initialState();
     const allGames = storeData.games.allGames;
     const discountedGames = allGames
-      .filter(game => game.discount && game.discount > 0)
+      .filter((game) => game.discount && game.discount > 0)
       .sort((a, b) => b.discount - a.discount)
       .slice(offset, offset + limit);
     return discountedGames;
@@ -107,60 +133,79 @@ export async function fetchDiscountedGames(limit = 15, offset = 0) {
 
 export async function fetchFeaturedGames(limit = 10, offset = 0) {
   try {
-    const response = await fetch(`${API_BASE}/api/steam/featured-games?limit=${limit}&offset=${offset}`);
+    const response = await fetch(
+      `${API_BASE}/api/steam/featured-games?limit=${limit}&offset=${offset}`
+    );
     if (!response.ok) {
-      console.error('Error fetching featured games:', response.status, response.statusText);
+      console.error(
+        "Error fetching featured games:",
+        response.status,
+        response.statusText
+      );
       throw new Error(`Failed to fetch featured games: ${response.statusText}`);
     }
     const games = await response.json();
     if (games && games.length > 0) {
-      console.log('[DEBUG] First featured game object:', games[0]);
+      console.log("[DEBUG] First featured game object:", games[0]);
     }
-    return games.map(game => {
-      const id = game.id || game.appId || game.gameId || game.steam_appid || game.steamId || game._id;
+    return games.map((game) => {
+      const id =
+        game.id ||
+        game.appId ||
+        game.gameId ||
+        game.steam_appid ||
+        game.steamId ||
+        game._id;
       if (!id) {
-        console.error('[DEBUG] Featured game object missing id:', game);
+        console.error("[DEBUG] Featured game object missing id:", game);
       }
       return { ...game, id };
     });
   } catch (error) {
-    console.error('Error in fetchFeaturedGames:', error);
+    console.error("Error in fetchFeaturedGames:", error);
     // If the API call fails, fall back to mock data
     const storeData = initialState();
     const allGames = storeData.games.allGames;
     const featuredGames = allGames
-      .filter(game => game.featured === true)
+      .filter((game) => game.featured === true)
       .slice(offset, offset + limit);
     return featuredGames;
   }
 }
 
-export async function fetchMoreGames(page = 1, limit = 12, category = 'all') {
+export async function fetchMoreGames(page = 1, limit = 12, category = "all") {
   try {
     const offset = (page - 1) * limit;
     // Try to fetch from API
     try {
-      const response = await fetch(`${API_BASE}/api/steam/games?limit=${limit}&offset=${offset}&category=${encodeURIComponent(category)}`);
+      const response = await fetch(
+        `${API_BASE}/api/steam/games?limit=${limit}&offset=${offset}&category=${encodeURIComponent(
+          category
+        )}`
+      );
       if (response.ok) {
         return await response.json();
       }
     } catch (apiError) {
-      console.error('API fetch failed, falling back to mock data:', apiError);
+      console.error("API fetch failed, falling back to mock data:", apiError);
     }
-    
+
     // Fallback to mock data
     const storeData = initialState();
     const allGames = storeData.games.allGames;
-    
+
     // Filter by category if needed
-    const filteredGames = category === 'all' 
-      ? allGames 
-      : allGames.filter(game => game.category && game.category.includes(category));
-    
+    const filteredGames =
+      category === "all"
+        ? allGames
+        : allGames.filter(
+            (game) => game.category && game.category.includes(category)
+          );
+
     // Calculate pagination
     return filteredGames.slice(offset, offset + limit);
   } catch (error) {
-    console.error('Error in fetchMoreGames:', error);
+    console.error("Error in fetchMoreGames:", error);
     return [];
   }
 }
@@ -169,12 +214,16 @@ export async function fetchGameDetails(appId) {
   try {
     const response = await fetch(`${API_BASE}/api/steam/games/${appId}`);
     if (!response.ok) {
-      console.error('Error fetching game details:', response.status, response.statusText);
+      console.error(
+        "Error fetching game details:",
+        response.status,
+        response.statusText
+      );
       throw new Error(`Failed to fetch game details: ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in fetchGameDetails:', error);
+    console.error("Error in fetchGameDetails:", error);
     throw error; // Rethrow for this one as we need to handle it in the component
   }
 }
@@ -184,44 +233,52 @@ export async function searchGames(query, limit = 20) {
     if (!query || query.length < 3) {
       return [];
     }
-    
+
     // Try to fetch from the API first
     try {
-      const response = await fetch(`${API_BASE}/api/steam/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+      const response = await fetch(
+        `${API_BASE}/api/steam/search?q=${encodeURIComponent(
+          query
+        )}&limit=${limit}`
+      );
       if (response.ok) {
         return await response.json();
       }
     } catch (apiError) {
-      console.error('API search failed, falling back to client-side search:', apiError);
+      console.error(
+        "API search failed, falling back to client-side search:",
+        apiError
+      );
     }
-    
+
     // Fallback to client-side search if API call fails
     const storeData = initialState();
     const allGames = storeData.games.allGames;
-    
+
     // Create a case-insensitive search that handles partial matches
     const searchQuery = query.toLowerCase();
-    
+
     // Enhanced search algorithm with tokenization and scoring
     const results = allGames
-      .map(game => {
+      .map((game) => {
         // Initialize score
         let score = 0;
-        
+
         // Check title match (highest priority)
         if (game.title.toLowerCase() === searchQuery) {
           score += 100; // Exact match gets highest score
         } else if (game.title.toLowerCase().includes(searchQuery)) {
           score += 50; // Partial match gets medium score
         }
-        
+
         // Check individual words in title
         const titleWords = game.title.toLowerCase().split(/\s+/);
         const queryWords = searchQuery.split(/\s+/);
-        
-        queryWords.forEach(queryWord => {
-          if (queryWord.length >= 3) { // Only consider words with 3+ characters
-            titleWords.forEach(titleWord => {
+
+        queryWords.forEach((queryWord) => {
+          if (queryWord.length >= 3) {
+            // Only consider words with 3+ characters
+            titleWords.forEach((titleWord) => {
               if (titleWord === queryWord) {
                 score += 30; // Exact word match
               } else if (titleWord.includes(queryWord)) {
@@ -230,26 +287,32 @@ export async function searchGames(query, limit = 20) {
             });
           }
         });
-        
+
         // Check description match (lower priority)
-        if (game.description && game.description.toLowerCase().includes(searchQuery)) {
+        if (
+          game.description &&
+          game.description.toLowerCase().includes(searchQuery)
+        ) {
           score += 20;
         }
-        
+
         // Check category match (lowest priority)
-        if (game.category && game.category.toLowerCase().includes(searchQuery)) {
+        if (
+          game.category &&
+          game.category.toLowerCase().includes(searchQuery)
+        ) {
           score += 10;
         }
-        
+
         return { ...game, searchScore: score };
       })
-      .filter(game => game.searchScore > 0) // Only keep games with a positive score
+      .filter((game) => game.searchScore > 0) // Only keep games with a positive score
       .sort((a, b) => b.searchScore - a.searchScore) // Sort by score (highest first)
       .slice(0, limit); // Limit results
-    
+
     return results;
   } catch (error) {
-    console.error('Error in searchGames:', error);
+    console.error("Error in searchGames:", error);
     return []; // Return empty array instead of throwing
   }
 }
@@ -258,20 +321,26 @@ export async function downloadGame(gameId, userId) {
   try {
     // Ensure we have authentication
     if (!userId) {
-      throw new Error('User must be logged in to download games');
+      throw new Error("User must be logged in to download games");
     }
-    
-    const response = await fetch(`${API_BASE}/api/steam/download/${gameId}?userId=${userId}`);
-    
+
+    const response = await fetch(
+      `${API_BASE}/api/steam/download/${gameId}?userId=${userId}`
+    );
+
     if (!response.ok) {
-      console.error('Error downloading game:', response.status, response.statusText);
+      console.error(
+        "Error downloading game:",
+        response.status,
+        response.statusText
+      );
       throw new Error(`Failed to download game: ${response.statusText}`);
     }
-    
+
     const gameData = await response.json();
     return gameData;
   } catch (error) {
-    console.error('Error in downloadGame:', error);
+    console.error("Error in downloadGame:", error);
     throw error; // Rethrow to handle in the component
   }
 }
@@ -314,58 +383,61 @@ export async function registerUser(user) {
 export async function fetchUserWishlist(userId, token) {
   const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
   if (!response.ok) {
-    throw new Error('Failed to fetch wishlist');
+    throw new Error("Failed to fetch wishlist");
   }
   const data = await response.json();
   // Assuming backend returns { success: true, data: [game objects] }
-  return data.data ? data.data.map(game => game.id) : [];
+  return data.data ? data.data.map((game) => game.id) : [];
 }
 
 export async function addToWishlist(userId, gameId, token) {
   const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist/add`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ game_id: gameId }),
   });
   if (!response.ok) {
-    throw new Error('Failed to add to wishlist');
+    throw new Error("Failed to add to wishlist");
   }
   return await response.json();
 }
 
 export async function removeFromWishlist(userId, gameId, token) {
-  const response = await fetch(`${API_BASE}/api/user/${userId}/wishlist/game/${gameId}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetch(
+    `${API_BASE}/api/user/${userId}/wishlist/game/${gameId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
   if (!response.ok) {
-    throw new Error('Failed to remove from wishlist');
+    throw new Error("Failed to remove from wishlist");
   }
   return await response.json();
 }
 
 export async function addToLibrary(userId, gameId, token) {
   const response = await fetch(`${API_BASE}/api/user/${userId}/library/add`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ game_id: gameId }),
   });
   if (!response.ok) {
-    throw new Error('Failed to add to library');
+    throw new Error("Failed to add to library");
   }
   return await response.json();
 }
@@ -373,35 +445,37 @@ export async function addToLibrary(userId, gameId, token) {
 export async function fetchUserLibrary(userId, token) {
   const response = await fetch(`${API_BASE}/api/user/${userId}/library`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
   if (!response.ok) {
-    throw new Error('Failed to fetch library');
+    throw new Error("Failed to fetch library");
   }
   const data = await response.json();
   // Assuming backend returns { success: true, data: [game objects] }
-  return data.data ? data.data.map(game => game.id) : [];
+  return data.data ? data.data.map((game) => game.id) : [];
 }
 
 export async function fetchUserCart(userId, token) {
   try {
     const response = await fetch(`${API_BASE}/api/cart?userId=${userId}`, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
-    
+
     if (!response.ok) {
-      throw new Error('Failed to fetch cart');
+      throw new Error("Failed to fetch cart");
     }
-    
+
     const data = await response.json();
     // Backend returns array of game IDs, convert to cart item format
-    return Array.isArray(data) ? data.map(gameId => ({ gameId, quantity: 1 })) : [];
+    return Array.isArray(data)
+      ? data.map((gameId) => ({ gameId, quantity: 1 }))
+      : [];
   } catch (error) {
-    console.error('Error in fetchUserCart:', error);
+    console.error("Error in fetchUserCart:", error);
     throw error;
   }
 }
@@ -409,25 +483,30 @@ export async function fetchUserCart(userId, token) {
 export async function addToCart(userId, gameId, token, quantity = 1) {
   try {
     if (!userId) {
-      throw new Error('User must be logged in to add items to cart');
+      throw new Error("User must be logged in to add items to cart");
     }
-    console.log('[DEBUG] addToCart payload:', { userId, gameId, token, quantity }); // Debug log
+    console.log("[DEBUG] addToCart payload:", {
+      userId,
+      gameId,
+      token,
+      quantity,
+    }); // Debug log
     const response = await fetch(`${API_BASE}/api/cart/add`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         userId: userId,
-        gameId: gameId
+        gameId: gameId,
       }),
     });
     if (!response.ok) {
-      throw new Error('Failed to add to cart');
+      throw new Error("Failed to add to cart");
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in addToCart:', error);
+    console.error("Error in addToCart:", error);
     throw error;
   }
 }
@@ -435,33 +514,36 @@ export async function addToCart(userId, gameId, token, quantity = 1) {
 export async function removeFromCart(userId, gameId, token) {
   try {
     if (!userId) {
-      throw new Error('User must be logged in to remove items from cart');
+      throw new Error("User must be logged in to remove items from cart");
     }
-    
-    const response = await fetch(`${API_BASE}/api/cart/remove/${gameId}?userId=${userId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
+
+    const response = await fetch(
+      `${API_BASE}/api/cart/remove/${gameId}?userId=${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     if (!response.ok) {
-      throw new Error('Failed to remove from cart');
+      throw new Error("Failed to remove from cart");
     }
-    
+
     return await response.json();
   } catch (error) {
-    console.error('Error in removeFromCart:', error);
+    console.error("Error in removeFromCart:", error);
     throw error;
   }
 }
 
 export async function updateCartQuantity(userId, gameId, quantity, token) {
   try {
-    console.warn('updateCartQuantity not implemented in backend yet');
-    return { message: 'Quantity update not supported yet' };
+    console.warn("updateCartQuantity not implemented in backend yet");
+    return { message: "Quantity update not supported yet" };
   } catch (error) {
-    console.error('Error in updateCartQuantity:', error);
+    console.error("Error in updateCartQuantity:", error);
     throw error;
   }
 }
@@ -469,23 +551,26 @@ export async function updateCartQuantity(userId, gameId, quantity, token) {
 export async function clearCart(userId, token) {
   try {
     if (!userId) {
-      throw new Error('User must be logged in to clear cart');
+      throw new Error("User must be logged in to clear cart");
     }
-    
-    const response = await fetch(`${API_BASE}/api/cart/clear?userId=${userId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
+
+    const response = await fetch(
+      `${API_BASE}/api/cart/clear?userId=${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     if (!response.ok) {
-      throw new Error('Failed to clear cart');
+      throw new Error("Failed to clear cart");
     }
-    
+
     return await response.json();
   } catch (error) {
-    console.error('Error in clearCart:', error);
+    console.error("Error in clearCart:", error);
     throw error;
   }
 }
@@ -495,18 +580,20 @@ export async function fetchUserProfile(userId, token) {
   const response = await fetch(`${API_BASE}/api/profiles/user/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
   if (!response.ok) {
-    throw new Error('Failed to fetch user profile');
+    throw new Error("Failed to fetch user profile");
   }
   return await response.json();
 }
 
 export async function fetchGameNews(appId = 440, count = 5, maxlength = 500) {
-  const response = await fetch(`${API_BASE}/api/steam/games/${appId}/news?count=${count}&maxlength=${maxlength}`);
-  if (!response.ok) throw new Error('Failed to fetch news');
+  const response = await fetch(
+    `${API_BASE}/api/steam/games/${appId}/news?count=${count}&maxlength=${maxlength}`
+  );
+  if (!response.ok) throw new Error("Failed to fetch news");
 
   return await response.json();
 }

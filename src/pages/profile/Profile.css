@@ -13,27 +13,35 @@
 }
 
 .info-label {
-background: linear-gradient(135deg, #f59e0b 30%, #d97706 70%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-color: transparent;
-font-size: 18px;
+  background: linear-gradient(135deg, #f59e0b 30%, #d97706 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-size: 18px;
 }
 
 .info-input {
-color: #c3bec9;
-font-size: 19px !important;
+  color: #c3bec9;
+  font-size: 19px !important;
 }
 
 .button-profile {
   background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
   color: rgb(234, 228, 228);
   border: none;
-  border-radius: 6px;
+  border-radius: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 0.5rem 1.5rem;
+  padding: 9px;
+}
+
+.delete-button {
+  border-radius: 15px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 17px;
+  padding-left: 17px;
 }
 
 .button-profile:hover {
@@ -43,10 +51,11 @@ font-size: 19px !important;
 }
 
 .profile-image {
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid rgb(78, 4, 78);
 }
 
 .profile-image-container {
@@ -59,8 +68,8 @@ font-size: 19px !important;
   position: absolute;
   top: 0;
   left: 0;
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;

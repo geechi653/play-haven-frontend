@@ -98,24 +98,30 @@ function Navbar() {
                     title="Wishlist"
                   >
                     <FaRegHeart />
-                    {store.wishlist && store.wishlist.items && store.wishlist.items.length > 0 && (
-                      <span style={{
-                        position: 'absolute',
-                        bottom: -4,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background: '#ef4444',
-                        color: 'white',
-                        borderRadius: '8px',
-                        fontSize: '0.7em',
-                        padding: '0 4px',
-                        minWidth: '16px',
-                        textAlign: 'center',
-                        lineHeight: '16px',
-                        fontWeight: 700,
-                        zIndex: 2
-                      }}>{store.wishlist.items.length}</span>
-                    )}
+                    {store.wishlist &&
+                      store.wishlist.items &&
+                      store.wishlist.items.length > 0 && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            bottom: -4,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            background: "#ef4444",
+                            color: "white",
+                            borderRadius: "8px",
+                            fontSize: "0.7em",
+                            padding: "0 4px",
+                            minWidth: "16px",
+                            textAlign: "center",
+                            lineHeight: "16px",
+                            fontWeight: 700,
+                            zIndex: 2,
+                          }}
+                        >
+                          {store.wishlist.items.length}
+                        </span>
+                      )}
                   </Link>
                   <Link
                     to="/cart"
@@ -142,11 +148,19 @@ function Navbar() {
                     >
                       <span className="btn playheaven-username fs-6">
                         <div className="d-flex justify-content-center align-items-center">
+                          <span>
+                            {" "}
+                            <img
+                              className="playheaven-avatar"
+                              src="https://picsum.photos/id/203/150/250"
+                              alt="image"
+                            />
+                          </span>
                           <span className="fw-bolder">
                             {username || "Profile"}
                           </span>
                           <span>
-                            <MdExpandMore className="fs-5 ms-1 fw-bolder" />
+                            <MdExpandMore className="fs-5 fw-bolder" />
                           </span>
                         </div>
                       </span>
@@ -174,11 +188,6 @@ function Navbar() {
                       </li>
                     </ul>
                   </div>
-                  <img
-                    className="playheaven-avatar"
-                    src="https://picsum.photos/id/203/150/250"
-                    alt="image"
-                  />
                 </div>
               </>
             )}
