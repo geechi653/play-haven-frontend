@@ -381,7 +381,7 @@ export async function addToCart(userId, gameId, token, quantity = 1) {
     if (!userId) {
       throw new Error('User must be logged in to add items to cart');
     }
-    
+    console.log('[DEBUG] addToCart payload:', { userId, gameId, token, quantity }); // Debug log
     const response = await fetch(`${API_BASE}/api/cart/add`, {
       method: 'POST',
       headers: {
@@ -392,11 +392,9 @@ export async function addToCart(userId, gameId, token, quantity = 1) {
         gameId: gameId
       }),
     });
-    
     if (!response.ok) {
       throw new Error('Failed to add to cart');
     }
-    
     return await response.json();
   } catch (error) {
     console.error('Error in addToCart:', error);
