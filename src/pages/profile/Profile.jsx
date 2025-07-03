@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import "./Profile.css";
-import { useGlobalStore } from "../../hooks/useGlobalStore";
-import { ALL_COUNTRIES } from "../../constants/countries";
 import Glass from "../../components/glass/Glass";
+import { useGlobalStore } from "../../hooks/useGlobalStore";
+import { fetchUserProfile } from "../../utils/api";
 
-function Profile({ id }) {
+function Profile() {
+  const { store, dispatch } = useGlobalStore();
+  const userId = store.user.userId;
+  const token = store.user.token || localStorage.getItem("playheaven-token");
+
   const [image, setImage] = useState("https://picsum.photos/id/203/150/250");
   const [user, setUser] = useState({
     first_name: "",
     last_name: "",
-    email: "",
     username: "",
     address: "",
     city: "",
@@ -23,13 +26,45 @@ function Profile({ id }) {
     newPassword: "",
     confirmPassword: "",
   });
-  const { store, dispatch } = useGlobalStore();
+
+  // Fetch user profile and set state
+  const fetchAndSetUserProfile = () => {
+    if (store.user.isAuthenticated && userId && token) {
+      console.log("Fetching user profile with:", userId, token);
+      fetchUserProfile(userId, token)
+        .then((result) => {
+          console.log("Profile API result:", result);
+          const data = result.data || {};
+          const newUser = {
+            first_name: data.first_name || "",
+            last_name: data.last_name || "",
+            username: data.username || "",
+            address: data.profile?.address || "",
+            city: data.profile?.city || "",
+            state: data.profile?.state || "",
+            zip_code: data.profile?.zip_code || "",
+            country: data.profile?.country || "",
+          };
+          console.log("Setting user state to:", newUser);
+          setUser(newUser);
+          if (data.avatar) setImage(data.avatar);
+          dispatch({ type: "SET_PROFILE", payload: { profile: data } });
+        })
+        .catch((err) => {
+          console.error("Profile fetch error:", err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetUserProfile();
+  }, [store.user.isAuthenticated, userId, token, dispatch]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
 
     const body = {
-      user_id: store.user.user_id,
+      user_id: userId, // use userId from store
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
@@ -43,32 +78,6 @@ function Profile({ id }) {
 
     // Add your API call here
     console.log("Update data:", body);
-
-    setUser({
-      first_name: "",
-      last_name: "",
-      email: "",
-      username: "",
-      address: "",
-      city: "",
-      state: "",
-      zip_code: "",
-      country: "",
-    });
-  };
-
-  const getUser = async (id) => {
-    setUser({
-      first_name: "John",
-      last_name: "Doe",
-      email: "john@example.com",
-      username: "johndoe",
-      address: "123 Main St",
-      city: "New York",
-      state: "NY",
-      zip_code: "10001",
-      country: "US",
-    });
   };
 
   const handlePasswordChange = async (e) => {
@@ -97,10 +106,6 @@ function Profile({ id }) {
     });
   };
 
-  useEffect(() => {
-    getUser(id);
-  }, [id]);
-
   const handleImageClick = () => {
     fileInputRef.current.click();
   };
@@ -115,7 +120,7 @@ function Profile({ id }) {
 
   return (
     <>
-      <div
+      {/* <div
         className="modal fade"
         id={`editModal-${id}`}
         tabIndex="-1"
@@ -331,7 +336,7 @@ function Profile({ id }) {
         </div>
       </div>
 
-      {/* Change Password Modal */}
+     
       <div
         className="modal fade"
         id={`passwordModal-${id}`}
@@ -522,7 +527,7 @@ function Profile({ id }) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="profile-page d-flex justify-content-center py-5">
         <Glass>
@@ -552,9 +557,9 @@ function Profile({ id }) {
               <div className="d-flex flex-column gap-4 mt-5">
                 <button
                   className="button-profile"
-                  onClick={() => getUser(id)}
+                  // onClick={() => getUser(id)}
                   data-bs-toggle="modal"
-                  data-bs-target={`#editModal-${id}`}
+                  data-bs-target={`#editModal-${userId}`}
                 >
                   Update Profile
                 </button>
@@ -562,7 +567,7 @@ function Profile({ id }) {
                 <button
                   className="button-profile"
                   data-bs-toggle="modal"
-                  data-bs-target={`#passwordModal-${id}`}
+                  data-bs-target={`#passwordModal-${userId}`}
                 >
                   Change Password
                 </button>
@@ -573,7 +578,7 @@ function Profile({ id }) {
                 <button
                   className="btn btn-outline-danger border-1 delete-button"
                   data-bs-toggle="modal"
-                  data-bs-target={`#deleteModal-${id}`}
+                  data-bs-target={`#deleteModal-${userId}`}
                 >
                   Delete Account
                 </button>
