@@ -1,6 +1,9 @@
 .signup-container {
   background: linear-gradient(135deg, #0e1015 0%, #263242 100%);
-  padding: 4rem
+  padding: 4rem;
+  min-height: calc(
+    100vh - 420px
+  );
 }
 
 .custom-button {
@@ -58,21 +61,21 @@
 }
 
 .custom-text {
-    color: rgb(190, 199, 199);
+  color: rgb(190, 199, 199);
 }
 
 .text-link {
-    color: rgb(190, 199, 199) !important;
-    text-decoration: none;
-    border-bottom: 1px solid rgb(190, 199, 199);
-    cursor: pointer;
-    pointer-events: auto;
+  color: rgb(190, 199, 199) !important;
+  text-decoration: none;
+  border-bottom: 1px solid rgb(190, 199, 199);
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .text-link:hover {
-    color: #ffffff !important;
-    text-decoration: none;
-    border-bottom: 1px solid #ffffff;
-    cursor: pointer;
-    pointer-events: auto;
+  color: #ffffff !important;
+  text-decoration: none;
+  border-bottom: 1px solid #ffffff;
+  cursor: pointer;
+  pointer-events: auto;
 }
