@@ -51,6 +51,8 @@ function GameCard({
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('[DEBUG] handleAddToCart game prop:', game);
+    console.log('[DEBUG] handleAddToCart user object:', user);
     if (!game.id) {
       console.warn('[GameCard] Tried to add to cart but game.id is missing:', game);
       return;
@@ -58,7 +60,7 @@ function GameCard({
     if (isUserLoggedIn && user.userId) {
       try {
         if (!isInCart) {
-          await addToCart(user.userId, game.id);
+          await addToCart(user.userId, game.id, user.token);
           dispatch({ type: 'ADD_TO_CART', payload: { gameId: game.id, quantity: 1 } });
           setIsInCart(true);
         } else {
