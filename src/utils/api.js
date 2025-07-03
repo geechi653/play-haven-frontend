@@ -503,3 +503,10 @@ export async function fetchUserProfile(userId, token) {
   }
   return await response.json();
 }
+
+export async function fetchGameNews(appId = 440, count = 5, maxlength = 500) {
+  const response = await fetch(`${API_BASE}/api/steam/games/${appId}/news?count=${count}&maxlength=${maxlength}`);
+  if (!response.ok) throw new Error('Failed to fetch news');
+
+  return await response.json();
+}
