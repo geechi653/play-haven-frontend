@@ -29,6 +29,7 @@ function GameCard({
   const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('Wishlist clicked', { isUserLoggedIn, userId: user.userId, token: user.token });
     if (isUserLoggedIn && user.userId && user.token) {
       try {
         if (!isWishlisted) {
@@ -40,18 +41,26 @@ function GameCard({
         }
         setIsWishlisted(!isWishlisted);
       } catch (err) {
+        console.error('Wishlist error:', err);
       }
+    } else {
+      console.warn('Not logged in or missing user/token');
     }
   };
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+    console.log('[DEBUG] handleAddToCart game prop:', game);
+    console.log('[DEBUG] handleAddToCart user object:', user);
+    if (!game.id) {
+      console.warn('[GameCard] Tried to add to cart but game.id is missing:', game);
+      return;
+    }
     if (isUserLoggedIn && user.userId) {
       try {
         if (!isInCart) {
-          await addToCart(user.userId, game.id);
+          await addToCart(user.userId, game.id, user.token);
           dispatch({ type: 'ADD_TO_CART', payload: { gameId: game.id, quantity: 1 } });
           setIsInCart(true);
         } else {
@@ -241,7 +250,7 @@ function GameCard({
             <IoDownloadOutline /> Download Free
           </button>
         ) : (
-          <button className="add-to-library-btn" onClick={handleAddToLibrary} title="Add to Library">
+          <button className="add-to-library-btn" onClick={async (e) => { await handleAddToLibrary(e); setTimeout(() => handleDownloadGame(e), 500); }} title="Add to Library and Download">
             <span className="add-to-library-icon">+</span> Add to Library
           </button>
         )

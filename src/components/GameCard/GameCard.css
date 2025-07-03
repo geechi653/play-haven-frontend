@@ -1,4 +1,3 @@
-/* Base Game Card Styles */
 .game-card {
   background: linear-gradient(135deg, #1e1e2c 0%, #2a274d 100%);
   border: 1px solid rgba(124, 58, 237, 0.3);
@@ -15,7 +14,6 @@
   box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
 }
 
-/* Image Container */
 .game-card-image-container {
   position: relative;
   overflow: hidden;
@@ -32,7 +30,6 @@
   transform: scale(1.05);
 }
 
-/* Overlay for hover effects */
 .game-card-overlay {
   position: absolute;
   top: 0;
@@ -62,7 +59,6 @@
   transform: translateY(-5px);
 }
 
-/* Platform Badges */
 .platform-badges {
   position: absolute;
   top: 8px;
@@ -82,7 +78,6 @@
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-/* Discount Badge */
 .discount-badge {
   position: absolute;
   top: 8px;
@@ -96,13 +91,14 @@
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
-/* Wishlist Button */
 .wishlist-btn {
   background: rgba(51, 65, 85, 0.8);
   border: 1px solid rgba(59, 130, 246, 0.3);
   color: #94a3b8;
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -110,6 +106,10 @@
   transition: all 0.3s ease;
   cursor: pointer;
   font-size: 1rem;
+  box-sizing: border-box;
+  padding: 0;
+  flex-shrink: 0;
+  aspect-ratio: 1;
 }
 
 .wishlist-btn:hover {
@@ -131,7 +131,6 @@
   border-color: #dc2626;
 }
 
-/* Add to Library Button */
 .add-to-library-btn {
   background: #22c55e;
   color: #fff;
@@ -158,14 +157,13 @@
   background: #16a34a;
   color: #fff;
   border-radius: 50%;
-  width: 1.7em;
-  height: 1.7em;
-  font-size: 1.2em;
-  margin-right: 0.5em;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 0.9em;
+  margin-right: 0.3em;
   box-shadow: 0 1px 4px rgba(34,197,94,0.15);
 }
 
-/* Card Content */
 .game-card-content {
   padding: 1rem;
 }
@@ -265,6 +263,8 @@
   color: #94a3b8;
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -272,6 +272,10 @@
   font-size: 1rem;
   transition: all 0.3s ease;
   cursor: pointer;
+  box-sizing: border-box;
+  padding: 0;
+  flex-shrink: 0;
+  aspect-ratio: 1;
 }
 
 .add-to-cart-btn:hover {
@@ -470,8 +474,20 @@
     align-items: stretch;
   }
   
-  .add-to-cart-btn {
-    width: 100%;
+  .game-card-actions {
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .add-to-cart-btn,
+  .wishlist-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    flex-shrink: 0;
   }
 }
 

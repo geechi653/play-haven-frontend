@@ -255,6 +255,12 @@ export const initialState = () => ({
     loading: false
   },
 
+  // User library
+  library: {
+    items: [], // Array of game IDs
+    loading: false
+  },
+
   // Application UI state
   ui: {
     theme: "dark", // dark, light
