@@ -142,19 +142,11 @@ function Navbar() {
                     >
                       <span className="btn playheaven-username fs-6">
                         <div className="d-flex justify-content-center align-items-center">
-                          <span>
-                            <img
-                              className="playheaven-avatar"
-                              src="https://picsum.photos/id/203/150/250"
-                              alt="image"
-                            />
-                          </span>
                           <span className="fw-bolder">
                             {username || "Profile"}
                           </span>
-
                           <span>
-                            <MdExpandMore className="fs-5 fw-bolder" />
+                            <MdExpandMore className="fs-5 ms-1 fw-bolder" />
                           </span>
                         </div>
                       </span>
@@ -182,6 +174,11 @@ function Navbar() {
                       </li>
                     </ul>
                   </div>
+                  <img
+                    className="playheaven-avatar"
+                    src="https://picsum.photos/id/203/150/250"
+                    alt="image"
+                  />
                 </div>
               </>
             )}
