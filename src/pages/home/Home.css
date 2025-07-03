@@ -31,7 +31,6 @@
   position: relative;
   overflow: hidden;
   min-height: 350px;
-  max-height: 280px;
 }
 
 .section-title {
@@ -65,6 +64,8 @@
 @media (max-width: 768px) {
   .hero-section {
     padding: 3rem 0;
+    min-height: auto;
+    max-height: none;
   }
   
   .hero-section .display-4 {
@@ -74,9 +75,29 @@
   .hero-section .d-flex {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem !important;
+  }
+  
+  .hero-section .btn {
+    width: 100%; 
+    margin-bottom: 0.5rem;
   }
   
   .section-title {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 2rem 0; 
+  }
+  
+  .hero-section .display-4 {
+    font-size: 2rem;
+  }
+  
+  .hero-section .lead {
+    font-size: 1rem;
   }
 }

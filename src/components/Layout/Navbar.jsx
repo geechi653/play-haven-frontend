@@ -29,7 +29,7 @@ function Navbar() {
         >
           <img
             src="/assets/play_heaven_logo (2).svg"
-            alt="Play Heaven Logo"
+            alt="Play Haven Logo"
             className="playheaven-logo-img"
           />
         </Link>
