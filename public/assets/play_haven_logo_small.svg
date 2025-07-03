@@ -40,9 +40,9 @@
     <circle cx="22" cy="10.5" r="1.5" fill="#4ECDC4"/>
   </g>
   
-  <!-- Main text "PLAY HEAVEN" inline -->
+  <!-- Main text "PLAY HAVEN" inline -->
   <text x="45" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="url(#playGradient)" filter="url(#glow)">PLAY</text>
-  <text x="120" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="normal" fill="url(#heavenGradient)" filter="url(#heavenGlow)">HEAVEN</text>
+  <text x="120" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="normal" fill="url(#heavenGradient)" filter="url(#heavenGlow)">HAVEN</text>
   
   <!-- Sparkle effects -->
   <g fill="#00D4FF" opacity="0.8">
